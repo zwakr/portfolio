@@ -461,7 +461,8 @@
 
   <!-- ONGLETS -->
   <div class="nav-tabs">
-    <button class="tab-button active" onclick="switchSection('projects', event)">🎨 Projets &amp; Médias (<span id="count-projects">0</span>)</button>
+    <button class="tab-button active" onclick="switchSection('projects', event)">🎨 Projets &amp; Galerie (<span id="count-projects">0</span>)</button>
+    <button class="tab-button" onclick="switchSection('detail-page', event)">📖 Pages Détaillées des Projets</button>
     <button class="tab-button" onclick="switchSection('categories', event)">📁 Catégories (<span id="count-categories">0</span>)</button>
     <button class="tab-button" onclick="switchSection('info', event)">📝 Page Info &amp; CV (FR / EN / AR)</button>
   </div>
@@ -631,6 +632,78 @@
 
   </section>
 
+  <!-- ==================================================== -->
+  <!-- SECTION 4 : ÉDITEUR DE PAGE PROJET DÉTAILLÉE        -->
+  <!-- ==================================================== -->
+  <section id="section-detail-page" class="content-section">
+    <div class="panel-card" style="border: 2px solid var(--site-black);">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <label style="font-size:12px; margin-bottom:0.4rem; display:block;">Sélectionnez le projet à personnaliser en détail :</label>
+          <select id="detail-project-picker" onchange="changeDetailProject(this.value)" style="font-weight:700; font-size:14px; min-width:320px; padding:0.65rem 1rem;">
+            <!-- Rempli en JS -->
+          </select>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <a id="btn-view-detail-page" href="#" target="_blank" class="btn btn-outline">👁️ Voir la page en direct</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- En-tête du projet (Header) -->
+    <div class="panel-card">
+      <h3 style="font-family:'Monument Extended',sans-serif; font-size:13px; text-transform:uppercase; margin-bottom:1.25rem;">
+        1. En-tête éditorial du projet
+      </h3>
+      <div class="form-grid">
+        <div class="form-group col-span-8">
+          <label>Titre principal sur la page</label>
+          <input type="text" id="dp-title" onchange="updateDetailHeader('title', this.value)" placeholder="Ex: 45 Degrés">
+        </div>
+        <div class="form-group col-span-4">
+          <label>Année</label>
+          <input type="text" id="dp-year" onchange="updateDetailHeader('year', this.value)" placeholder="2026">
+        </div>
+        <div class="form-group col-span-8">
+          <label>Sous-titre / Accroche éditoriale</label>
+          <textarea id="dp-subtitle" onchange="updateDetailHeader('subtitle', this.value)" style="min-height:70px;" placeholder="Ex: Exploration Visuelle &amp; Recherche en Direction Artistique..."></textarea>
+        </div>
+        <div class="form-group col-span-4">
+          <label>Discipline(s)</label>
+          <input type="text" id="dp-discipline" onchange="updateDetailHeader('discipline', this.value)" placeholder="Ex: Direction Artistique, Typographie, 3D">
+          
+          <label style="margin-top:0.6rem;">Client / Lieu</label>
+          <input type="text" id="dp-client" onchange="updateDetailHeader('client', this.value)" placeholder="Ex: Marrakech — Studio">
+        </div>
+      </div>
+    </div>
+
+    <!-- Blocs modulaires de contenu -->
+    <div class="panel-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem;">
+        <div>
+          <h3 style="font-family:'Monument Extended',sans-serif; font-size:13px; text-transform:uppercase; margin-bottom:0.25rem;">
+            2. Composition de la page (Images, Vidéos &amp; Récits)
+          </h3>
+          <p style="font-size:12.5px; color:var(--text-muted);">
+            Ajoutez, déplacez et organisez vos médias et textes pour composer la page exacte que vous souhaitez.
+          </p>
+        </div>
+        
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media')">+ Grande Image/Vidéo (100%)</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-2')">+ Duo 2 Colonnes</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-asym')">+ Duo Asymétrique (1.4 : 1)</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('narrative')">+ Paragraphe / Récit</button>
+        </div>
+      </div>
+
+      <div id="detail-blocks-container">
+        <!-- Rendu dynamique des blocs -->
+      </div>
+    </div>
+  </section>
+
   <!-- TOAST NOTIFICATION -->
   <div id="saveToast">✅ Modifs enregistrées !</div>
 
@@ -695,6 +768,7 @@
       renderProjectsList();
       renderCategoriesList();
       populateInfoFields();
+      populateDetailProjectPicker();
     }
 
     function updateCounts() {
@@ -704,10 +778,20 @@
 
     function switchSection(sectionId, event) {
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      if (event && event.target) {
+        event.target.classList.add('active');
+      } else {
+        const btn = document.querySelector(`.tab-button[onclick*="'${sectionId}'"]`);
+        if (btn) btn.classList.add('active');
+      }
 
       document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById('section-' + sectionId).classList.add('active');
+      const targetSec = document.getElementById('section-' + sectionId);
+      if (targetSec) targetSec.classList.add('active');
+
+      if (sectionId === 'detail-page') {
+        populateDetailProjectPicker();
+      }
     }
 
     // ==========================================
@@ -883,8 +967,9 @@
             
             <div class="card-actions">
               ${!isText ? `
-                <a href="${activeLink}" target="_blank" class="btn btn-outline btn-sm" title="Ouvrir la page de ce projet dans une nouvelle fenêtre">👁️ Ouvrir Page Projet</a>
-                <button class="btn btn-outline btn-sm" onclick="exportProjectHTML(${index})" title="Télécharger un fichier HTML autonome pour ce projet">📄 Exporter HTML</button>
+                <button class="btn btn-outline btn-sm" onclick="openDetailEditorFor('${item.id}')" title="Composer les visuels, vidéos et textes de la page dédiée">📖 Éditer page détaillée</button>
+                <a href="${activeLink}" target="_blank" class="btn btn-outline btn-sm" title="Ouvrir la page de ce projet dans une nouvelle fenêtre">👁️ Ouvrir</a>
+                <button class="btn btn-outline btn-sm" onclick="exportProjectHTML(${index})" title="Télécharger un fichier HTML autonome pour ce projet">📄 HTML</button>
               ` : ''}
               <button class="btn btn-outline btn-sm" onclick="duplicateItem(${index})" title="Dupliquer">📋 Copier</button>
               <button class="btn btn-outline btn-sm" onclick="moveItem(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
@@ -1183,6 +1268,253 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       showToast(`📄 Fichier ${cleanSlug}.html exporté !`);
+    }
+
+    // ==========================================
+    // CMS DÉTAILLÉ DE PAGE PROJET SPÉCIFIQUE
+    // ==========================================
+    let currentDetailProjectId = null;
+
+    function populateDetailProjectPicker() {
+      const picker = document.getElementById('detail-project-picker');
+      if (!picker) return;
+      picker.innerHTML = '';
+      
+      const visualProjects = state.projects.filter(p => p.type !== 'text');
+      visualProjects.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        const cleanTitle = (p.title || p.id).replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        opt.textContent = `${cleanTitle} (${p.id})`;
+        picker.appendChild(opt);
+      });
+
+      if (!currentDetailProjectId && visualProjects.length > 0) {
+        currentDetailProjectId = visualProjects[0].id;
+      }
+      if (currentDetailProjectId) {
+        picker.value = currentDetailProjectId;
+        renderDetailProjectEditor();
+      }
+    }
+
+    function changeDetailProject(id) {
+      currentDetailProjectId = id;
+      renderDetailProjectEditor();
+    }
+
+    function openDetailEditorFor(id) {
+      currentDetailProjectId = id;
+      switchSection('detail-page');
+      const picker = document.getElementById('detail-project-picker');
+      if (picker) picker.value = id;
+      renderDetailProjectEditor();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function getCurrentDetailProject() {
+      return state.projects.find(p => p.id === currentDetailProjectId);
+    }
+
+    function ensureProjectDetailStructure(proj) {
+      if (!proj.detail) {
+        const cleanTitle = (proj.title || 'Projet').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        proj.detail = {
+          title: cleanTitle,
+          subtitle: proj.subtitle || "Direction Artistique & Exploration Graphique",
+          discipline: "Direction Artistique, Design",
+          year: proj.year || "2026",
+          client: proj.client || "Marrakech — Studio",
+          blocks: [
+            {
+              id: "blk_" + Date.now(),
+              type: "full-media",
+              media: proj.media || proj.image || "",
+              mediaType: proj.type === 'video' ? 'video' : 'image',
+              caption: "01 / 01    Vue principale du projet"
+            },
+            {
+              id: "blk_" + (Date.now() + 1),
+              type: "narrative",
+              text: proj.narrative || `Le projet <b>${cleanTitle}</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée.`
+            }
+          ]
+        };
+      }
+      if (!Array.isArray(proj.detail.blocks)) {
+        proj.detail.blocks = [];
+      }
+    }
+
+    function renderDetailProjectEditor() {
+      const proj = getCurrentDetailProject();
+      if (!proj) return;
+      ensureProjectDetailStructure(proj);
+
+      const viewBtn = document.getElementById('btn-view-detail-page');
+      if (viewBtn) {
+        viewBtn.href = `project-detail.html?id=${proj.id}`;
+      }
+
+      document.getElementById('dp-title').value = proj.detail.title || '';
+      document.getElementById('dp-year').value = proj.detail.year || '';
+      document.getElementById('dp-subtitle').value = proj.detail.subtitle || '';
+      document.getElementById('dp-discipline').value = proj.detail.discipline || '';
+      document.getElementById('dp-client').value = proj.detail.client || '';
+
+      renderDetailBlocksList(proj);
+    }
+
+    function updateDetailHeader(field, val) {
+      const proj = getCurrentDetailProject();
+      if (!proj) return;
+      ensureProjectDetailStructure(proj);
+      proj.detail[field] = val;
+      markUnsaved();
+    }
+
+    function renderDetailBlocksList(proj) {
+      const container = document.getElementById('detail-blocks-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (proj.detail.blocks.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:2.5rem; background:#fafafa; border:1px dashed #ccc; border-radius:8px; color:#777; font-size:13px;">
+            Aucun bloc de contenu dans cette page. Cliquez sur l'un des boutons ci-dessus pour ajouter des photos, vidéos ou textes !
+          </div>
+        `;
+        return;
+      }
+
+      proj.detail.blocks.forEach((block, idx) => {
+        const card = document.createElement('div');
+        card.className = 'panel-card';
+        card.style.background = '#fafafa';
+        card.style.border = '1px solid #dcdce0';
+        card.style.marginBottom = '1.25rem';
+
+        let blockTitle = '';
+        let formContent = '';
+
+        if (block.type === 'full-media') {
+          blockTitle = '🖼️ Grande Image / Vidéo (100% Pleine largeur)';
+          formContent = `
+            <div class="form-grid">
+              <div class="form-group col-span-3">
+                <label>Type de média</label>
+                <select onchange="updateBlock(${idx}, 'mediaType', this.value); renderDetailBlocksList(getCurrentDetailProject());">
+                  <option value="image" ${block.mediaType !== 'video' ? 'selected' : ''}>📷 Image / Photo</option>
+                  <option value="video" ${block.mediaType === 'video' ? 'selected' : ''}>🎬 Vidéo (MP4)</option>
+                </select>
+              </div>
+              <div class="form-group col-span-5">
+                <label>Fichier Média (Nom de fichier ou URL)</label>
+                <input type="text" value="${block.media || ''}" onchange="updateBlock(${idx}, 'media', this.value)" placeholder="mon-image.jpg ou video.mp4">
+              </div>
+              <div class="form-group col-span-4">
+                <label>Légende</label>
+                <input type="text" value="${block.caption || ''}" onchange="updateBlock(${idx}, 'caption', this.value)" placeholder="01 / 06    Légende">
+              </div>
+            </div>
+          `;
+        } else if (block.type === 'narrative') {
+          blockTitle = '✍️ Paragraphe Narratif / Récit';
+          formContent = `
+            <div class="form-group">
+              <label>Texte explicatif du projet (HTML autorisé : &lt;b&gt;, &lt;br&gt;)</label>
+              <textarea onchange="updateBlock(${idx}, 'text', this.value)" style="min-height:90px;" placeholder="Écrivez le concept, la démarche et les détails du projet...">${block.text || ''}</textarea>
+            </div>
+          `;
+        } else if (block.type === 'grid-2' || block.type === 'grid-asym') {
+          blockTitle = block.type === 'grid-2' ? '👥 Duo d\'Images (2 Colonnes Égales)' : '📐 Duo Asymétrique (1.4 : 1 Style Trabuc.co)';
+          formContent = `
+            <div class="form-grid">
+              <div class="form-group col-span-6">
+                <label>Média 1 (${block.type === 'grid-asym' ? 'Grand format 1.4fr gauche' : 'Gauche'})</label>
+                <input type="text" value="${block.media1 || ''}" onchange="updateBlock(${idx}, 'media1', this.value)" placeholder="image1.jpg ou video.mp4">
+                <input type="text" value="${block.caption1 || ''}" onchange="updateBlock(${idx}, 'caption1', this.value)" placeholder="Légende 1" style="margin-top:0.4rem;">
+              </div>
+              <div class="form-group col-span-6">
+                <label>Média 2 (${block.type === 'grid-asym' ? 'Format vertical 1fr droite' : 'Droite'})</label>
+                <input type="text" value="${block.media2 || ''}" onchange="updateBlock(${idx}, 'media2', this.value)" placeholder="image2.jpg ou video.mp4">
+                <input type="text" value="${block.caption2 || ''}" onchange="updateBlock(${idx}, 'caption2', this.value)" placeholder="Légende 2" style="margin-top:0.4rem;">
+              </div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #e0e0e0; padding-bottom:0.6rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <span class="order-badge">#${idx + 1}</span>
+              <span style="font-size:12px; font-weight:800; text-transform:uppercase;">${blockTitle}</span>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-outline btn-sm" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
+              <button class="btn btn-outline btn-sm" onclick="moveBlock(${idx}, 1)" ${idx === proj.detail.blocks.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+              <button class="btn btn-outline btn-sm btn-red" onclick="deleteBlock(${idx})">🗑️</button>
+            </div>
+          </div>
+          ${formContent}
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function updateBlock(idx, field, val) {
+      const proj = getCurrentDetailProject();
+      if (!proj || !proj.detail || !proj.detail.blocks[idx]) return;
+      proj.detail.blocks[idx][field] = val;
+      markUnsaved();
+    }
+
+    function moveBlock(idx, dir) {
+      const proj = getCurrentDetailProject();
+      if (!proj || !proj.detail) return;
+      const target = idx + dir;
+      if (target < 0 || target >= proj.detail.blocks.length) return;
+      const temp = proj.detail.blocks[idx];
+      proj.detail.blocks[idx] = proj.detail.blocks[target];
+      proj.detail.blocks[target] = temp;
+      markUnsaved();
+      renderDetailBlocksList(proj);
+    }
+
+    function deleteBlock(idx) {
+      const proj = getCurrentDetailProject();
+      if (!proj || !proj.detail) return;
+      if (confirm("Supprimer ce bloc de la page du projet ?")) {
+        proj.detail.blocks.splice(idx, 1);
+        markUnsaved();
+        renderDetailBlocksList(proj);
+      }
+    }
+
+    function addDetailBlock(type) {
+      const proj = getCurrentDetailProject();
+      if (!proj) return;
+      ensureProjectDetailStructure(proj);
+
+      let newBlock = { id: "blk_" + Date.now(), type: type };
+      if (type === 'full-media') {
+        newBlock.media = "";
+        newBlock.mediaType = "image";
+        newBlock.caption = "";
+      } else if (type === 'narrative') {
+        newBlock.text = "";
+      } else if (type === 'grid-2' || type === 'grid-asym') {
+        newBlock.media1 = "";
+        newBlock.caption1 = "";
+        newBlock.media2 = "";
+        newBlock.caption2 = "";
+      }
+
+      proj.detail.blocks.push(newBlock);
+      markUnsaved();
+      renderDetailBlocksList(proj);
+      showToast("Bloc ajouté à la page du projet !");
     }
 
     // ==========================================
