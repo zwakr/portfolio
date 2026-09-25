@@ -337,6 +337,10 @@
       gap: 0.4rem;
       min-height: 100px;
     }
+    .btn-xs {
+      padding: 0.2rem 0.5rem;
+      font-size: 10px;
+    }
     .media-dropzone:hover, .media-dropzone.dragover {
       border-color: var(--site-red);
       background: #fff8f8;
@@ -349,13 +353,43 @@
       justify-content: center;
       overflow: hidden;
       border-radius: 6px;
-      background: #000;
+      background: #111;
       margin-top: 0.5rem;
     }
     .media-preview-container img, 
     .media-preview-container video {
       max-width: 100%;
       max-height: 180px;
+      object-fit: contain;
+    }
+    /* Médiathèque dynamique */
+    .media-gallery-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .media-gallery-card:hover {
+      border-color: var(--site-black);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .media-gallery-thumb {
+      width: 100%;
+      height: 110px;
+      background: #181818;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .media-gallery-thumb img, .media-gallery-thumb video {
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
     }
 
@@ -678,12 +712,35 @@
       </div>
     </div>
 
-    <!-- Blocs modulaires de contenu -->
+    <!-- 2. Médiathèque & Médias disponibles -->
+    <div class="panel-card" style="background:#fcfcfd; border: 1.5px solid #dcdce2;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.75rem;">
+        <div>
+          <h3 style="font-family:'Monument Extended',sans-serif; font-size:12.5px; text-transform:uppercase; margin-bottom:0.25rem;">
+            📁 Médiathèque : Images &amp; Vidéos Disponibles
+          </h3>
+          <p style="font-size:12px; color:var(--text-muted); margin:0;">
+            Voici les visuels et vidéos que vous pouvez ajouter à ce projet. Cliquez sur un média pour l'insérer immédiatement ou importez un nouveau fichier depuis votre ordinateur !
+          </p>
+        </div>
+        
+        <label class="btn btn-sm btn-red" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem;">
+          <span>+ Importer un fichier depuis l'ordinateur</span>
+          <input type="file" id="detail-library-upload" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleDetailLibraryUpload(this)">
+        </label>
+      </div>
+
+      <div id="detail-media-gallery" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.85rem; margin-top: 1rem;">
+        <!-- Rendu dynamique des cartes médias avec prévisualisation et boutons d'insertion rapide -->
+      </div>
+    </div>
+
+    <!-- 3. Blocs modulaires de contenu -->
     <div class="panel-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem;">
         <div>
           <h3 style="font-family:'Monument Extended',sans-serif; font-size:13px; text-transform:uppercase; margin-bottom:0.25rem;">
-            2. Composition de la page (Images, Vidéos &amp; Récits)
+            3. Composition de la page (Images, Vidéos &amp; Récits)
           </h3>
           <p style="font-size:12.5px; color:var(--text-muted);">
             Ajoutez, déplacez et organisez vos médias et textes pour composer la page exacte que vous souhaitez.
@@ -691,10 +748,11 @@
         </div>
         
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media')">+ Grande Image/Vidéo (100%)</button>
-          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-2')">+ Duo 2 Colonnes</button>
-          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-asym')">+ Duo Asymétrique (1.4 : 1)</button>
-          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('narrative')">+ Paragraphe / Récit</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media', 'image')">🖼️ + Grande Image (100%)</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media', 'video')">🎬 + Grande Vidéo MP4 (100%)</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-2')">👥 + Duo 2 Colonnes</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-asym')">📐 + Duo Asymétrique (1.4 : 1)</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('narrative')">✍️ + Paragraphe / Récit</button>
         </div>
       </div>
 
@@ -1140,12 +1198,16 @@
       });
     }
 
+    let uploadedMediaFiles = {}; // filename -> objectUrl/dataUrl
+
     function getPreviewHTML(media, type) {
       if (!media) return '<span style="color:#777; font-size:12px;">Aucun média spécifié</span>';
-      if (type === 'video') {
-        return `<video src="${media}" autoplay muted loop playsinline></video>`;
+      const actualSrc = uploadedMediaFiles[media] || media;
+      const isVid = (type === 'video') || (typeof media === 'string' && media.match(/\.(mp4|webm|mov)$/i));
+      if (isVid) {
+        return `<video src="${actualSrc}" autoplay muted loop playsinline></video>`;
       }
-      return `<img src="${media}" onerror="this.src='favicon.png'; this.style.opacity=0.3;" alt="Aperçu">`;
+      return `<img src="${actualSrc}" onerror="this.src='favicon.png'; this.style.opacity=0.3;" alt="Aperçu">`;
     }
 
     function updatePreview(index, media, type) {
@@ -1346,6 +1408,164 @@
       }
     }
 
+    function getAvailableMediaList() {
+      const defaultMedia = [
+        { name: "video_404.mp4", type: "video", label: "Vidéo Motion (MP4)" },
+        { name: "gif lnfa motion design reveal.gif", type: "gif", label: "Motion Design LNFA (GIF)" },
+        { name: "poster_45_degres_01.svg", type: "image", label: "Affiche 45° 01 (SVG)" },
+        { name: "poster_45_degres_02.svg", type: "image", label: "Affiche 45° 02 Matière (SVG)" },
+        { name: "poster_45_degres_03.svg", type: "image", label: "Affiche 45° 03 Volume (SVG)" },
+        { name: "logo.png", type: "image", label: "Logo Zakaria (PNG)" },
+        { name: "favicon.png", type: "image", label: "Favicon Carré (PNG)" }
+      ];
+
+      const map = new Map();
+      defaultMedia.forEach(m => map.set(m.name, m));
+
+      if (Array.isArray(state.projects)) {
+        state.projects.forEach(p => {
+          if (p.media && !map.has(p.media)) {
+            let t = p.type || 'image';
+            if (p.media.match(/\.(mp4|webm|mov)$/i)) t = 'video';
+            else if (p.media.match(/\.gif$/i)) t = 'gif';
+            map.set(p.media, { name: p.media, type: t, label: p.title ? p.title.replace(/&nbsp;/g, ' ').substring(0, 28) : p.media });
+          }
+          if (p.detail && Array.isArray(p.detail.blocks)) {
+            p.detail.blocks.forEach(b => {
+              if (b.media && !map.has(b.media)) {
+                let t = b.mediaType || (b.media.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'image');
+                map.set(b.media, { name: b.media, type: t, label: b.caption ? b.caption.replace(/&nbsp;/g, ' ').substring(0, 28) : b.media });
+              }
+              if (b.media1 && !map.has(b.media1)) {
+                let t = b.media1Type || (b.media1.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'image');
+                map.set(b.media1, { name: b.media1, type: t, label: b.caption1 ? b.caption1.replace(/&nbsp;/g, ' ').substring(0, 28) : b.media1 });
+              }
+              if (b.media2 && !map.has(b.media2)) {
+                let t = b.media2Type || (b.media2.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'image');
+                map.set(b.media2, { name: b.media2, type: t, label: b.caption2 ? b.caption2.replace(/&nbsp;/g, ' ').substring(0, 28) : b.media2 });
+              }
+            });
+          }
+        });
+      }
+
+      Object.keys(uploadedMediaFiles).forEach(name => {
+        let t = name.match(/\.(mp4|webm|mov)$/i) ? 'video' : (name.match(/\.gif$/i) ? 'gif' : 'image');
+        map.set(name, { name: name, type: t, label: name, isUploaded: true });
+      });
+
+      return Array.from(map.values());
+    }
+
+    function renderDetailMediaGallery() {
+      const container = document.getElementById('detail-media-gallery');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const mediaList = getAvailableMediaList();
+      mediaList.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'media-gallery-card';
+
+        const actualSrc = uploadedMediaFiles[m.name] || m.name;
+        const isVid = m.type === 'video' || (typeof m.name === 'string' && m.name.match(/\.(mp4|webm|mov)$/i));
+
+        let thumbHtml = '';
+        if (isVid) {
+          thumbHtml = `<video src="${actualSrc}" autoplay muted loop playsinline></video>`;
+        } else {
+          thumbHtml = `<img src="${actualSrc}" onerror="this.src='favicon.png'; this.style.opacity=0.3;" alt="${m.name}">`;
+        }
+
+        let badgeClass = 'badge-image';
+        let badgeLabel = '📷 IMAGE';
+        if (isVid) { badgeClass = 'badge-video'; badgeLabel = '🎬 VIDÉO MP4'; }
+        else if (m.type === 'gif' || m.name.match(/\.gif$/i)) { badgeClass = 'badge-gif'; badgeLabel = '🎞️ GIF ANIMÉ'; }
+        else if (m.name.match(/\.svg$/i)) { badgeClass = 'badge-image'; badgeLabel = '📐 VECTOR SVG'; }
+
+        card.innerHTML = `
+          <div class="media-gallery-thumb">
+            ${thumbHtml}
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="item-type-badge ${badgeClass}">${badgeLabel}</span>
+            <span style="font-size:11px; color:#888; font-weight:600;">${m.isUploaded ? '☁️ Importé' : 'Dossier'}</span>
+          </div>
+          <div style="font-size:11.5px; font-weight:700; word-break:break-all; line-height:1.3; min-height:28px;" title="${m.name}">
+            ${m.name}
+          </div>
+          <div style="display:flex; gap:0.4rem; margin-top:auto; flex-wrap:wrap;">
+            <button class="btn btn-xs btn-outline" style="flex:1;" onclick="insertMediaIntoProject('${m.name}', '${isVid ? 'video' : 'image'}', 'full-media')">+ En Grand</button>
+            <button class="btn btn-xs btn-outline" style="flex:1;" onclick="insertMediaIntoProject('${m.name}', '${isVid ? 'video' : 'image'}', 'grid-2')">+ En Duo</button>
+            <button class="btn btn-xs btn-outline" title="Copier le nom" onclick="copyMediaName('${m.name}')">📋</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function copyMediaName(name) {
+      navigator.clipboard.writeText(name).then(() => {
+        showToast(`Nom copié : "${name}"`);
+      }).catch(() => {
+        showToast(`Fichier : ${name}`);
+      });
+    }
+
+    function insertMediaIntoProject(mediaName, mediaType, layoutType) {
+      const proj = getCurrentDetailProject();
+      if (!proj) return;
+      ensureProjectDetailStructure(proj);
+
+      let newBlock = { id: "blk_" + Date.now(), type: layoutType };
+      if (layoutType === 'full-media') {
+        newBlock.media = mediaName;
+        newBlock.mediaType = mediaType;
+        newBlock.caption = "Visuel — " + mediaName;
+      } else if (layoutType === 'grid-2' || layoutType === 'grid-asym') {
+        newBlock.media1 = mediaName;
+        newBlock.media1Type = mediaType;
+        newBlock.caption1 = "Visuel 1";
+        newBlock.media2 = "";
+        newBlock.media2Type = "image";
+        newBlock.caption2 = "Visuel 2";
+      }
+
+      proj.detail.blocks.push(newBlock);
+      markUnsaved();
+      renderDetailBlocksList(proj);
+      showToast(`Média "${mediaName}" ajouté au projet !`);
+    }
+
+    function handleDetailLibraryUpload(input) {
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      const filename = file.name;
+      const objectUrl = URL.createObjectURL(file);
+      uploadedMediaFiles[filename] = objectUrl;
+
+      let isVid = filename.match(/\.(mp4|webm|mov)$/i);
+      let mediaType = isVid ? 'video' : 'image';
+
+      const proj = getCurrentDetailProject();
+      if (proj) {
+        ensureProjectDetailStructure(proj);
+        proj.detail.blocks.push({
+          id: "blk_" + Date.now(),
+          type: "full-media",
+          media: filename,
+          mediaType: mediaType,
+          caption: "Visuel — " + filename
+        });
+        markUnsaved();
+        renderDetailBlocksList(proj);
+      }
+
+      renderDetailMediaGallery();
+      showToast(`✅ "${filename}" importé et ajouté au projet !`);
+      input.value = '';
+    }
+
     function renderDetailProjectEditor() {
       const proj = getCurrentDetailProject();
       if (!proj) return;
@@ -1362,6 +1582,7 @@
       document.getElementById('dp-discipline').value = proj.detail.discipline || '';
       document.getElementById('dp-client').value = proj.detail.client || '';
 
+      renderDetailMediaGallery();
       renderDetailBlocksList(proj);
     }
 
@@ -1381,40 +1602,76 @@
       if (proj.detail.blocks.length === 0) {
         container.innerHTML = `
           <div style="text-align:center; padding:2.5rem; background:#fafafa; border:1px dashed #ccc; border-radius:8px; color:#777; font-size:13px;">
-            Aucun bloc de contenu dans cette page. Cliquez sur l'un des boutons ci-dessus pour ajouter des photos, vidéos ou textes !
+            Aucun bloc de contenu dans cette page. Cliquez sur l'un des boutons ci-dessus ou sur la médiathèque pour ajouter des photos, vidéos ou textes !
           </div>
         `;
         return;
       }
 
+      const availableMedia = getAvailableMediaList();
+
       proj.detail.blocks.forEach((block, idx) => {
         const card = document.createElement('div');
         card.className = 'panel-card';
         card.style.background = '#fafafa';
-        card.style.border = '1px solid #dcdce0';
-        card.style.marginBottom = '1.25rem';
+        card.style.border = '1.5px solid #dcdce0';
+        card.style.marginBottom = '1.5rem';
 
         let blockTitle = '';
         let formContent = '';
 
         if (block.type === 'full-media') {
-          blockTitle = '🖼️ Grande Image / Vidéo (100% Pleine largeur)';
+          const isVid = block.mediaType === 'video' || (typeof block.media === 'string' && block.media.match(/\.(mp4|webm|mov)$/i));
+          blockTitle = isVid ? '🎬 Grande Vidéo MP4 (100% Pleine largeur)' : '🖼️ Grande Image / Photo (100% Pleine largeur)';
+          
           formContent = `
             <div class="form-grid">
               <div class="form-group col-span-3">
                 <label>Type de média</label>
                 <select onchange="updateBlock(${idx}, 'mediaType', this.value); renderDetailBlocksList(getCurrentDetailProject());">
-                  <option value="image" ${block.mediaType !== 'video' ? 'selected' : ''}>📷 Image / Photo</option>
-                  <option value="video" ${block.mediaType === 'video' ? 'selected' : ''}>🎬 Vidéo (MP4)</option>
+                  <option value="image" ${!isVid ? 'selected' : ''}>📷 Image / Photo / GIF</option>
+                  <option value="video" ${isVid ? 'selected' : ''}>🎬 Vidéo (MP4/WebM)</option>
                 </select>
               </div>
-              <div class="form-group col-span-5">
-                <label>Fichier Média (Nom de fichier ou URL)</label>
-                <input type="text" value="${block.media || ''}" onchange="updateBlock(${idx}, 'media', this.value)" placeholder="mon-image.jpg ou video.mp4">
-              </div>
+
               <div class="form-group col-span-4">
-                <label>Légende</label>
-                <input type="text" value="${block.caption || ''}" onchange="updateBlock(${idx}, 'caption', this.value)" placeholder="01 / 06    Légende">
+                <label>Choisir un média disponible</label>
+                <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media', this.value, 'mediaType'); }">
+                  <option value="">-- Médias disponibles --</option>
+                  ${availableMedia.map(m => `
+                    <option value="${m.name}" ${m.name === block.media ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
+                  `).join('')}
+                </select>
+              </div>
+
+              <div class="form-group col-span-5">
+                <label>Nom du fichier ou Parcourir</label>
+                <div style="display:flex; gap:0.4rem;">
+                  <input type="text" value="${block.media || ''}" oninput="updateBlockMedia(${idx}, 'media', this.value, 'mediaType')" placeholder="mon-image.jpg ou video.mp4" style="flex:1;">
+                  <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
+                    📁 Parcourir
+                    <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media', 'mediaType', this)">
+                  </label>
+                </div>
+              </div>
+
+              <!-- Dropzone glisser-déposer -->
+              <div class="col-span-12">
+                <div class="media-dropzone" id="detail-dz-${idx}-media" style="min-height:75px; padding:0.6rem;">
+                  <span style="font-size:11.5px; color:#555;">📁 Glissez-déposez votre photo ou vidéo directement ici</span>
+                </div>
+              </div>
+
+              <div class="form-group col-span-7">
+                <label>Légende du média</label>
+                <input type="text" value="${block.caption || ''}" onchange="updateBlock(${idx}, 'caption', this.value)" placeholder="01 / 06    Légende de l'image">
+              </div>
+
+              <div class="form-group col-span-5">
+                <label>Aperçu en direct</label>
+                <div class="media-preview-container" id="detail-prev-${idx}-media">
+                  ${getPreviewHTML(block.media, block.mediaType)}
+                </div>
               </div>
             </div>
           `;
@@ -1423,22 +1680,93 @@
           formContent = `
             <div class="form-group">
               <label>Texte explicatif du projet (HTML autorisé : &lt;b&gt;, &lt;br&gt;)</label>
-              <textarea onchange="updateBlock(${idx}, 'text', this.value)" style="min-height:90px;" placeholder="Écrivez le concept, la démarche et les détails du projet...">${block.text || ''}</textarea>
+              <textarea onchange="updateBlock(${idx}, 'text', this.value)" style="min-height:95px;" placeholder="Écrivez le concept, la démarche et les détails du projet...">${block.text || ''}</textarea>
             </div>
           `;
         } else if (block.type === 'grid-2' || block.type === 'grid-asym') {
-          blockTitle = block.type === 'grid-2' ? '👥 Duo d\'Images (2 Colonnes Égales)' : '📐 Duo Asymétrique (1.4 : 1 Style Trabuc.co)';
+          blockTitle = block.type === 'grid-2' ? '👥 Duo d\'Images / Vidéos (2 Colonnes Égales)' : '📐 Duo Asymétrique (1.4 : 1 Style Trabuc.co)';
+          const label1 = block.type === 'grid-asym' ? 'Média 1 (Grand format gauche 1.4fr)' : 'Média 1 (Gauche)';
+          const label2 = block.type === 'grid-asym' ? 'Média 2 (Format vertical droite 1fr)' : 'Média 2 (Droite)';
+
+          const isVid1 = block.media1Type === 'video' || (typeof block.media1 === 'string' && block.media1.match(/\.(mp4|webm|mov)$/i));
+          const isVid2 = block.media2Type === 'video' || (typeof block.media2 === 'string' && block.media2.match(/\.(mp4|webm|mov)$/i));
+
           formContent = `
             <div class="form-grid">
-              <div class="form-group col-span-6">
-                <label>Média 1 (${block.type === 'grid-asym' ? 'Grand format 1.4fr gauche' : 'Gauche'})</label>
-                <input type="text" value="${block.media1 || ''}" onchange="updateBlock(${idx}, 'media1', this.value)" placeholder="image1.jpg ou video.mp4">
-                <input type="text" value="${block.caption1 || ''}" onchange="updateBlock(${idx}, 'caption1', this.value)" placeholder="Légende 1" style="margin-top:0.4rem;">
+              <!-- Colonne Gauche (Média 1) -->
+              <div class="form-group col-span-6" style="background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:0.85rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                  <label style="font-weight:800; color:var(--site-black);">${label1}</label>
+                  <select onchange="updateBlock(${idx}, 'media1Type', this.value); renderDetailBlocksList(getCurrentDetailProject());" style="width:auto; padding:0.2rem 0.5rem; font-size:11px;">
+                    <option value="image" ${!isVid1 ? 'selected' : ''}>📷 Image</option>
+                    <option value="video" ${isVid1 ? 'selected' : ''}>🎬 Vidéo</option>
+                  </select>
+                </div>
+
+                <div style="margin-bottom:0.5rem;">
+                  <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media1', this.value, 'media1Type'); }" style="font-size:11px;">
+                    <option value="">-- Choisir un média existant --</option>
+                    ${availableMedia.map(m => `
+                      <option value="${m.name}" ${m.name === block.media1 ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
+                    `).join('')}
+                  </select>
+                </div>
+
+                <div style="display:flex; gap:0.4rem; margin-bottom:0.5rem;">
+                  <input type="text" value="${block.media1 || ''}" oninput="updateBlockMedia(${idx}, 'media1', this.value, 'media1Type')" placeholder="image1.jpg ou video.mp4" style="flex:1;">
+                  <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
+                    📁 Parcourir
+                    <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media1', 'media1Type', this)">
+                  </label>
+                </div>
+
+                <div class="media-dropzone" id="detail-dz-${idx}-media1" style="min-height:60px; padding:0.4rem; margin-bottom:0.5rem;">
+                  <span style="font-size:11px; color:#666;">📁 Glissez le média 1 ici</span>
+                </div>
+
+                <input type="text" value="${block.caption1 || ''}" onchange="updateBlock(${idx}, 'caption1', this.value)" placeholder="Légende 1">
+
+                <div class="media-preview-container" id="detail-prev-${idx}-media1" style="margin-top:0.5rem; max-height:140px;">
+                  ${getPreviewHTML(block.media1, block.media1Type)}
+                </div>
               </div>
-              <div class="form-group col-span-6">
-                <label>Média 2 (${block.type === 'grid-asym' ? 'Format vertical 1fr droite' : 'Droite'})</label>
-                <input type="text" value="${block.media2 || ''}" onchange="updateBlock(${idx}, 'media2', this.value)" placeholder="image2.jpg ou video.mp4">
-                <input type="text" value="${block.caption2 || ''}" onchange="updateBlock(${idx}, 'caption2', this.value)" placeholder="Légende 2" style="margin-top:0.4rem;">
+
+              <!-- Colonne Droite (Média 2) -->
+              <div class="form-group col-span-6" style="background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:0.85rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                  <label style="font-weight:800; color:var(--site-black);">${label2}</label>
+                  <select onchange="updateBlock(${idx}, 'media2Type', this.value); renderDetailBlocksList(getCurrentDetailProject());" style="width:auto; padding:0.2rem 0.5rem; font-size:11px;">
+                    <option value="image" ${!isVid2 ? 'selected' : ''}>📷 Image</option>
+                    <option value="video" ${isVid2 ? 'selected' : ''}>🎬 Vidéo</option>
+                  </select>
+                </div>
+
+                <div style="margin-bottom:0.5rem;">
+                  <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media2', this.value, 'media2Type'); }" style="font-size:11px;">
+                    <option value="">-- Choisir un média existant --</option>
+                    ${availableMedia.map(m => `
+                      <option value="${m.name}" ${m.name === block.media2 ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
+                    `).join('')}
+                  </select>
+                </div>
+
+                <div style="display:flex; gap:0.4rem; margin-bottom:0.5rem;">
+                  <input type="text" value="${block.media2 || ''}" oninput="updateBlockMedia(${idx}, 'media2', this.value, 'media2Type')" placeholder="image2.jpg ou video.mp4" style="flex:1;">
+                  <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
+                    📁 Parcourir
+                    <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media2', 'media2Type', this)">
+                  </label>
+                </div>
+
+                <div class="media-dropzone" id="detail-dz-${idx}-media2" style="min-height:60px; padding:0.4rem; margin-bottom:0.5rem;">
+                  <span style="font-size:11px; color:#666;">📁 Glissez le média 2 ici</span>
+                </div>
+
+                <input type="text" value="${block.caption2 || ''}" onchange="updateBlock(${idx}, 'caption2', this.value)" placeholder="Légende 2">
+
+                <div class="media-preview-container" id="detail-prev-${idx}-media2" style="margin-top:0.5rem; max-height:140px;">
+                  ${getPreviewHTML(block.media2, block.media2Type)}
+                </div>
               </div>
             </div>
           `;
@@ -1460,6 +1788,93 @@
         `;
 
         container.appendChild(card);
+      });
+
+      // Attacher les écouteurs de Drag & Drop sur chaque dropzone de bloc
+      setupDetailBlockDropzones(proj);
+    }
+
+    function updateBlockMedia(idx, field, val, typeField) {
+      const proj = getCurrentDetailProject();
+      if (!proj || !proj.detail || !proj.detail.blocks[idx]) return;
+
+      proj.detail.blocks[idx][field] = val;
+      if (val.match(/\.(mp4|webm|mov)$/i)) {
+        proj.detail.blocks[idx][typeField] = 'video';
+      }
+      markUnsaved();
+
+      // Mettre à jour l'aperçu immédiatement
+      const prev = document.getElementById(`detail-prev-${idx}-${field}`);
+      if (prev) {
+        prev.innerHTML = getPreviewHTML(val, proj.detail.blocks[idx][typeField]);
+      }
+    }
+
+    function handleBlockFileChange(idx, field, typeField, fileInput) {
+      if (!fileInput.files || fileInput.files.length === 0) return;
+      const file = fileInput.files[0];
+      const filename = file.name;
+      uploadedMediaFiles[filename] = URL.createObjectURL(file);
+
+      const proj = getCurrentDetailProject();
+      if (!proj || !proj.detail || !proj.detail.blocks[idx]) return;
+
+      proj.detail.blocks[idx][field] = filename;
+      if (filename.match(/\.(mp4|webm|mov)$/i)) {
+        proj.detail.blocks[idx][typeField] = 'video';
+      } else {
+        proj.detail.blocks[idx][typeField] = 'image';
+      }
+
+      markUnsaved();
+      renderDetailBlocksList(proj);
+      renderDetailMediaGallery();
+      showToast(`Fichier "${filename}" sélectionné !`);
+    }
+
+    function setupDetailBlockDropzones(proj) {
+      proj.detail.blocks.forEach((block, idx) => {
+        if (block.type === 'full-media') {
+          attachBlockDropzone(`detail-dz-${idx}-media`, idx, 'media', 'mediaType');
+        } else if (block.type === 'grid-2' || block.type === 'grid-asym') {
+          attachBlockDropzone(`detail-dz-${idx}-media1`, idx, 'media1', 'media1Type');
+          attachBlockDropzone(`detail-dz-${idx}-media2`, idx, 'media2', 'media2Type');
+        }
+      });
+    }
+
+    function attachBlockDropzone(dzId, idx, field, typeField) {
+      const dz = document.getElementById(dzId);
+      if (!dz) return;
+      dz.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dz.classList.add('dragover');
+      });
+      dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+      dz.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dz.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          const filename = file.name;
+          uploadedMediaFiles[filename] = URL.createObjectURL(file);
+
+          const proj = getCurrentDetailProject();
+          if (!proj || !proj.detail || !proj.detail.blocks[idx]) return;
+
+          proj.detail.blocks[idx][field] = filename;
+          if (filename.match(/\.(mp4|webm|mov)$/i)) {
+            proj.detail.blocks[idx][typeField] = 'video';
+          } else {
+            proj.detail.blocks[idx][typeField] = 'image';
+          }
+
+          markUnsaved();
+          renderDetailBlocksList(proj);
+          renderDetailMediaGallery();
+          showToast(`Fichier déposé : "${filename}"`);
+        }
       });
     }
 
@@ -1492,7 +1907,7 @@
       }
     }
 
-    function addDetailBlock(type) {
+    function addDetailBlock(type, mediaTypeHint) {
       const proj = getCurrentDetailProject();
       if (!proj) return;
       ensureProjectDetailStructure(proj);
@@ -1500,14 +1915,16 @@
       let newBlock = { id: "blk_" + Date.now(), type: type };
       if (type === 'full-media') {
         newBlock.media = "";
-        newBlock.mediaType = "image";
+        newBlock.mediaType = mediaTypeHint || "image";
         newBlock.caption = "";
       } else if (type === 'narrative') {
         newBlock.text = "";
       } else if (type === 'grid-2' || type === 'grid-asym') {
         newBlock.media1 = "";
+        newBlock.media1Type = "image";
         newBlock.caption1 = "";
         newBlock.media2 = "";
+        newBlock.media2Type = "image";
         newBlock.caption2 = "";
       }
 

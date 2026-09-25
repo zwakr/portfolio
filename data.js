@@ -27,7 +27,7 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "",
+      "media": "poster_45_degres_01.svg",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
       "category": "direction",
       "link": "project-detail.html?id=proj_021",
@@ -42,7 +42,7 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_1",
             "type": "full-media",
-            "media": "",
+            "media": "poster_45_degres_01.svg",
             "mediaType": "image",
             "caption": "01 / 06 &nbsp; &nbsp;Identité &amp; composition spatiale à 45 degrés"
           },
@@ -54,27 +54,27 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_3",
             "type": "grid-2",
-            "media1": "",
+            "media1": "gif lnfa motion design reveal.gif",
             "media1Type": "image",
-            "caption1": "02 / 06 &nbsp; &nbsp;Étude typographique et contraste de matière",
-            "media2": "",
+            "caption1": "02 / 06 &nbsp; &nbsp;Motion design &amp; animation cinétique reveal",
+            "media2": "poster_45_degres_02.svg",
             "media2Type": "image",
-            "caption2": "03 / 06 &nbsp; &nbsp;Rendu volumétrique et cadrage d'intention"
+            "caption2": "03 / 06 &nbsp; &nbsp;Étude typographique et contraste de matière"
           },
           {
             "id": "blk_4",
             "type": "grid-asym",
-            "media1": "",
-            "media1Type": "image",
-            "caption1": "04 / 06 &nbsp; &nbsp;Déploiement du système graphique",
-            "media2": "",
+            "media1": "video_404.mp4",
+            "media1Type": "video",
+            "caption1": "04 / 06 &nbsp; &nbsp;Déploiement cinétique et mouvement vidéo",
+            "media2": "poster_45_degres_03.svg",
             "media2Type": "image",
-            "caption2": "05 / 06 &nbsp; &nbsp;Texture et perception tactile"
+            "caption2": "05 / 06 &nbsp; &nbsp;Volume 3D &amp; Cadrage oblique"
           },
           {
             "id": "blk_5",
             "type": "full-media",
-            "media": "",
+            "media": "gif lnfa motion design reveal.gif",
             "mediaType": "image",
             "caption": "06 / 06 &nbsp; &nbsp;Vue globale du système d'identité"
           }
@@ -86,10 +86,10 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "",
+      "media": "poster_45_degres_02.svg",
       "title": "020 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
       "category": "branding",
-      "link": "45-degres.html",
+      "link": "project-detail.html?id=proj_020",
       "textContent": ""
     },
     {
@@ -108,10 +108,10 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "",
+      "media": "poster_45_degres_03.svg",
       "title": "017 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
       "category": "branding",
-      "link": "",
+      "link": "project-detail.html?id=proj_017",
       "textContent": ""
     },
     {
@@ -119,10 +119,10 @@ window.PORTFOLIO_DATA = {
       "type": "video",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "",
+      "media": "video_404.mp4",
       "title": "018 &nbsp; &nbsp;PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
       "category": "direction",
-      "link": "",
+      "link": "project-detail.html?id=proj_018",
       "textContent": ""
     },
     {
@@ -130,10 +130,10 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "",
+      "media": "gif lnfa motion design reveal.gif",
       "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
       "category": "direction",
-      "link": "",
+      "link": "project-detail.html?id=proj_016",
       "textContent": ""
     }
   ],

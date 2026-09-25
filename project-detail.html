@@ -368,8 +368,9 @@
 
     // Fonctions d'aide pour générer les blocs HTML
     function renderMediaHtml(src, isVideo, alt, caption) {
+      const isVid = isVideo || (typeof src === 'string' && src.match(/\.(mp4|webm|mov)$/i));
       let mediaTag = '';
-      if (isVideo) {
+      if (isVid) {
         mediaTag = src 
           ? `<video src="${src}" autoplay loop muted playsinline class="project-media"></video>`
           : `<div class="project-media" style="min-height:450px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">VIDÉO PRINCIPALE</div>`;
