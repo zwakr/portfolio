@@ -23,60 +23,70 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
-      "id": "proj_021",
+      "id": "proj_1790374376519",
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "poster_45_degres_01.svg",
-      "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
-      "category": "direction",
-      "link": "project-detail.html?id=proj_021",
-      "textContent": "",
+      "media": "",
+      "title": "NOUVEAU PROJET",
+      "category": "branding",
+      "link": "project-detail.html?id=proj_1790374376519",
+      "subtitle": "Direction Artistique & Exploration Graphique",
+      "year": "2026",
+      "client": "Marrakech — Studio",
+      "narrative": "",
+      "openInNewTab": false,
       "detail": {
-        "title": "45 Degrés",
-        "subtitle": "Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.",
-        "discipline": "Direction Artistique, Exploration 3D, Typographie",
+        "title": "NOUVEAU PROJET",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
         "year": "2026",
-        "client": "Marrakech — Projet Studio",
+        "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1",
+            "id": "blk_1790374376519",
             "type": "full-media",
-            "media": "poster_45_degres_01.svg",
+            "media": "",
             "mediaType": "image",
-            "caption": "01 / 06 &nbsp; &nbsp;Identité &amp; composition spatiale à 45 degrés"
+            "caption": "01 / 01    NOUVEAU PROJET"
           },
           {
-            "id": "blk_2",
+            "id": "blk_1790374376520",
             "type": "narrative",
-            "text": "Le projet <b>45 Degrés</b> explore la tension entre structure rigide et rupture cinétique. En déconstruisant les règles de composition traditionnelles, chaque élément typographique et volumétrique est orienté pour créer un équilibre asymétrique immersif."
-          },
+            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
+    },
+    {
+      "id": "proj_021",
+      "type": "gif",
+      "layout": "col-6",
+      "aspectRatio": "aspect-auto",
+      "media": "gif lnfa motion design reveal.gif",
+      "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
+      "category": "direction",
+      "link": "45-degres.html",
+      "textContent": "",
+      "openInNewTab": false,
+      "detail": {
+        "title": "021 45 DEGRÉS, Direction Artistique & Typographie.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
           {
-            "id": "blk_3",
-            "type": "grid-2",
-            "media1": "gif lnfa motion design reveal.gif",
-            "media1Type": "image",
-            "caption1": "02 / 06 &nbsp; &nbsp;Motion design &amp; animation cinétique reveal",
-            "media2": "poster_45_degres_02.svg",
-            "media2Type": "image",
-            "caption2": "03 / 06 &nbsp; &nbsp;Étude typographique et contraste de matière"
-          },
-          {
-            "id": "blk_4",
-            "type": "grid-asym",
-            "media1": "video_404.mp4",
-            "media1Type": "video",
-            "caption1": "04 / 06 &nbsp; &nbsp;Déploiement cinétique et mouvement vidéo",
-            "media2": "poster_45_degres_03.svg",
-            "media2Type": "image",
-            "caption2": "05 / 06 &nbsp; &nbsp;Volume 3D &amp; Cadrage oblique"
-          },
-          {
-            "id": "blk_5",
+            "id": "blk_1790374365124",
             "type": "full-media",
             "media": "gif lnfa motion design reveal.gif",
             "mediaType": "image",
-            "caption": "06 / 06 &nbsp; &nbsp;Vue globale du système d'identité"
+            "caption": "01 / 01    021 45 DEGRÉS, Direction Artistique & Typographie."
+          },
+          {
+            "id": "blk_1790374365125",
+            "type": "narrative",
+            "text": "Le projet <b>021 45 DEGRÉS, Direction Artistique & Typographie.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
         ]
       }
@@ -86,10 +96,10 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "poster_45_degres_02.svg",
+      "media": "",
       "title": "020 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
       "category": "branding",
-      "link": "project-detail.html?id=proj_020",
+      "link": "45-degres.html",
       "textContent": "",
       "detail": {
         "title": "020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
@@ -99,14 +109,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372755766",
+            "id": "blk_1790374365124",
             "type": "full-media",
-            "media": "poster_45_degres_02.svg",
+            "media": "",
             "mediaType": "image",
             "caption": "01 / 01    020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis."
           },
           {
-            "id": "blk_1790372755767",
+            "id": "blk_1790374365125",
             "type": "narrative",
             "text": "Le projet <b>020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
@@ -114,14 +124,25 @@ window.PORTFOLIO_DATA = {
       }
     },
     {
+      "id": "proj_019",
+      "type": "text",
+      "layout": "col-12",
+      "aspectRatio": "aspect-auto",
+      "media": "",
+      "title": "",
+      "textContent": "019 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fringilla massa massa, sit amet molestie orci suscipit sed. Ut tincidunt eleifend felis sit amet suscipit. Nulla accumsan diam enim. Integer scelerisque, velit vitae accumsan tempor, quam ex vestibulum elit, eget volutpat elit ipsum id ante.",
+      "category": "all",
+      "link": ""
+    },
+    {
       "id": "proj_017",
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "poster_45_degres_03.svg",
+      "media": "",
       "title": "017 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
       "category": "branding",
-      "link": "project-detail.html?id=proj_017",
+      "link": "",
       "textContent": "",
       "detail": {
         "title": "017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
@@ -131,14 +152,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372755766",
+            "id": "blk_1790374365124",
             "type": "full-media",
-            "media": "poster_45_degres_03.svg",
+            "media": "",
             "mediaType": "image",
             "caption": "01 / 01    017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra."
           },
           {
-            "id": "blk_1790372755767",
+            "id": "blk_1790374365125",
             "type": "narrative",
             "text": "Le projet <b>017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
@@ -150,10 +171,10 @@ window.PORTFOLIO_DATA = {
       "type": "video",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "video_404.mp4",
+      "media": "",
       "title": "018 &nbsp; &nbsp;PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
       "category": "direction",
-      "link": "project-detail.html?id=proj_018",
+      "link": "",
       "textContent": "",
       "detail": {
         "title": "018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
@@ -163,14 +184,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372755766",
+            "id": "blk_1790374365124",
             "type": "full-media",
-            "media": "video_404.mp4",
+            "media": "",
             "mediaType": "video",
             "caption": "01 / 01    018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue."
           },
           {
-            "id": "blk_1790372755767",
+            "id": "blk_1790374365125",
             "type": "narrative",
             "text": "Le projet <b>018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
@@ -182,10 +203,10 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "gif lnfa motion design reveal.gif",
+      "media": "",
       "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
       "category": "direction",
-      "link": "project-detail.html?id=proj_016",
+      "link": "",
       "textContent": "",
       "detail": {
         "title": "016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
@@ -195,14 +216,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372755766",
+            "id": "blk_1790374365124",
             "type": "full-media",
-            "media": "gif lnfa motion design reveal.gif",
+            "media": "",
             "mediaType": "image",
             "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
           },
           {
-            "id": "blk_1790372755767",
+            "id": "blk_1790374365125",
             "type": "narrative",
             "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
