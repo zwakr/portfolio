@@ -27,7 +27,7 @@ window.PORTFOLIO_DATA = {
       "type": "gif",
       "layout": "col-7",
       "aspectRatio": "aspect-auto",
-      "media": "1-ezgif.com-video-to-gif-converter.gif",
+      "media": "gif lnfa motion design reveal.gif",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
       "category": "direction",
       "link": "45-degres.html",
