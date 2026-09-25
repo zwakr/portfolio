@@ -24,14 +24,62 @@ window.PORTFOLIO_DATA = {
   "projects": [
     {
       "id": "proj_021",
-      "type": "gif",
+      "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "gif lnfa motion design reveal.gif",
+      "media": "",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
       "category": "direction",
-      "link": "45-degres.html",
-      "textContent": ""
+      "link": "project-detail.html?id=proj_021",
+      "textContent": "",
+      "detail": {
+        "title": "45 Degrés",
+        "subtitle": "Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.",
+        "discipline": "Direction Artistique, Exploration 3D, Typographie",
+        "year": "2026",
+        "client": "Marrakech — Projet Studio",
+        "blocks": [
+          {
+            "id": "blk_1",
+            "type": "full-media",
+            "media": "",
+            "mediaType": "image",
+            "caption": "01 / 06 &nbsp; &nbsp;Identité &amp; composition spatiale à 45 degrés"
+          },
+          {
+            "id": "blk_2",
+            "type": "narrative",
+            "text": "Le projet <b>45 Degrés</b> explore la tension entre structure rigide et rupture cinétique. En déconstruisant les règles de composition traditionnelles, chaque élément typographique et volumétrique est orienté pour créer un équilibre asymétrique immersif."
+          },
+          {
+            "id": "blk_3",
+            "type": "grid-2",
+            "media1": "",
+            "media1Type": "image",
+            "caption1": "02 / 06 &nbsp; &nbsp;Étude typographique et contraste de matière",
+            "media2": "",
+            "media2Type": "image",
+            "caption2": "03 / 06 &nbsp; &nbsp;Rendu volumétrique et cadrage d'intention"
+          },
+          {
+            "id": "blk_4",
+            "type": "grid-asym",
+            "media1": "",
+            "media1Type": "image",
+            "caption1": "04 / 06 &nbsp; &nbsp;Déploiement du système graphique",
+            "media2": "",
+            "media2Type": "image",
+            "caption2": "05 / 06 &nbsp; &nbsp;Texture et perception tactile"
+          },
+          {
+            "id": "blk_5",
+            "type": "full-media",
+            "media": "",
+            "mediaType": "image",
+            "caption": "06 / 06 &nbsp; &nbsp;Vue globale du système d'identité"
+          }
+        ]
+      }
     },
     {
       "id": "proj_020",
