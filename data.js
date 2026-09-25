@@ -15,6 +15,10 @@ window.PORTFOLIO_DATA = {
     {
       "id": "3d",
       "label": "3D & Volume"
+    },
+    {
+      "id": "poster",
+      "label": "poster"
     }
   ],
   "projects": [
