@@ -25,7 +25,7 @@ window.PORTFOLIO_DATA = {
     {
       "id": "proj_021",
       "type": "gif",
-      "layout": "col-7",
+      "layout": "col-6",
       "aspectRatio": "aspect-auto",
       "media": "gif lnfa motion design reveal.gif",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
