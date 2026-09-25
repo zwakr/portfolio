@@ -23,19 +23,76 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
-      "id": "proj_1790371208955",
+      "id": "proj_1790372711745",
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
       "media": "",
       "title": "NOUVEAU PROJET",
       "category": "branding",
-      "link": "project-detail.html?id=proj_1790371208955",
+      "link": "project-detail.html?id=proj_1790372711745",
       "subtitle": "Direction Artistique & Exploration Graphique",
       "year": "2026",
       "client": "Marrakech — Studio",
       "narrative": "",
-      "openInNewTab": false
+      "openInNewTab": false,
+      "detail": {
+        "title": "NOUVEAU PROJET",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790372711745",
+            "type": "full-media",
+            "media": "",
+            "mediaType": "image",
+            "caption": "01 / 01    NOUVEAU PROJET"
+          },
+          {
+            "id": "blk_1790372711746",
+            "type": "narrative",
+            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
+    },
+    {
+      "id": "proj_1790372699378",
+      "type": "image",
+      "layout": "col-6",
+      "aspectRatio": "aspect-auto",
+      "media": "",
+      "title": "NOUVEAU PROJET",
+      "category": "branding",
+      "link": "project-detail.html?id=proj_1790372699378",
+      "subtitle": "Direction Artistique & Exploration Graphique",
+      "year": "2026",
+      "client": "Marrakech — Studio",
+      "narrative": "",
+      "openInNewTab": false,
+      "detail": {
+        "title": "NOUVEAU PROJET",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790372699378",
+            "type": "full-media",
+            "media": "",
+            "mediaType": "image",
+            "caption": "01 / 01    NOUVEAU PROJET"
+          },
+          {
+            "id": "blk_1790372699379",
+            "type": "narrative",
+            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     },
     {
       "id": "proj_021",
@@ -105,7 +162,28 @@ window.PORTFOLIO_DATA = {
       "title": "020 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
       "category": "branding",
       "link": "project-detail.html?id=proj_020",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790372692158",
+            "type": "full-media",
+            "media": "poster_45_degres_02.svg",
+            "mediaType": "image",
+            "caption": "01 / 01    020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis."
+          },
+          {
+            "id": "blk_1790372692159",
+            "type": "narrative",
+            "text": "Le projet <b>020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     },
     {
       "id": "proj_019",
@@ -127,7 +205,28 @@ window.PORTFOLIO_DATA = {
       "title": "017 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
       "category": "branding",
       "link": "project-detail.html?id=proj_017",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790372692158",
+            "type": "full-media",
+            "media": "poster_45_degres_03.svg",
+            "mediaType": "image",
+            "caption": "01 / 01    017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra."
+          },
+          {
+            "id": "blk_1790372692159",
+            "type": "narrative",
+            "text": "Le projet <b>017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     },
     {
       "id": "proj_018",
@@ -138,7 +237,28 @@ window.PORTFOLIO_DATA = {
       "title": "018 &nbsp; &nbsp;PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
       "category": "direction",
       "link": "project-detail.html?id=proj_018",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790372692158",
+            "type": "full-media",
+            "media": "video_404.mp4",
+            "mediaType": "video",
+            "caption": "01 / 01    018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue."
+          },
+          {
+            "id": "blk_1790372692159",
+            "type": "narrative",
+            "text": "Le projet <b>018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     },
     {
       "id": "proj_016",
@@ -149,7 +269,28 @@ window.PORTFOLIO_DATA = {
       "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
       "category": "direction",
       "link": "project-detail.html?id=proj_016",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790372692158",
+            "type": "full-media",
+            "media": "gif lnfa motion design reveal.gif",
+            "mediaType": "image",
+            "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
+          },
+          {
+            "id": "blk_1790372692159",
+            "type": "narrative",
+            "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     }
   ],
   "info": {
