@@ -452,6 +452,7 @@
     
     <div class="header-actions">
       <div id="saveStatus" class="save-indicator">✓ À jour</div>
+      <button class="btn btn-outline btn-sm" onclick="configureGitHubToken()" title="Configurer la synchronisation directe vers GitHub">☁️ Clé GitHub</button>
       <a href="work.html" target="_blank" class="btn btn-outline btn-sm">👁️ Voir Galerie</a>
       <button class="btn btn-outline btn-sm" onclick="downloadBackup()">📥 Télécharger data.js</button>
       <button class="btn btn-red" id="saveBtn" onclick="savePortfolioData()">💾 Enregistrer les Modifications</button>
@@ -512,7 +513,7 @@
       </p>
 
       <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-        <input type="text" id="new-cat-label" placeholder="Ex: Packaging, Typographie, 3D Render, Motion..." style="max-width:380px;">
+        <input type="text" id="new-cat-label" placeholder="Ex: Packaging, Typographie, 3D Render, Motion..." style="max-width:380px;" onkeydown="if(event.key==='Enter'){ event.preventDefault(); createCategory(); }">
         <button class="btn" onclick="createCategory()">+ Ajouter la catégorie</button>
       </div>
     </div>
@@ -770,6 +771,7 @@
       input.value = '';
       markUnsaved();
       renderAll();
+      showToast("✅ Catégorie '" + label + "' ajoutée ! Cliquez sur 'Enregistrer' pour la publier.");
     }
 
     function updateCategoryLabel(index, val) {
@@ -1239,23 +1241,37 @@
     }
 
     // ==========================================
-    // SAUVEGARDE DIRECTE / TÉLÉCHARGEMENT
+    // SAUVEGARDE DIRECTE (GITHUB API / FILE SYSTEM / BLOB)
     // ==========================================
     async function savePortfolioData() {
       syncInfoInputs();
 
       const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
+      const ghToken = localStorage.getItem('portfolio_gh_token');
 
-      // 1. Sauvegarde directe via File System Access API (si supportée : Chrome, Edge, Brave, Opera)
+      // 1. Priorité Cloud : Enregistrement direct sur GitHub si un token est configuré
+      if (ghToken) {
+        showToast("⏳ Envoi à GitHub en cours...");
+        try {
+          const success = await saveToGitHub(ghToken, jsCode);
+          if (success) {
+            markSaved();
+            showToast("🚀 Enregistré sur GitHub ! Vercel met à jour le site en direct.");
+            return;
+          }
+        } catch(e) {
+          console.warn("Échec GitHub API, bascule vers sauvegarde locale", e);
+        }
+      }
+
+      // 2. Sauvegarde directe locale via File System Access API
       if ('showSaveFilePicker' in window && !fileHandle) {
         try {
           fileHandle = await window.showSaveFilePicker({
             suggestedName: 'data.js',
             types: [{ description: 'Fichier JavaScript', accept: { 'text/javascript': ['.js'] } }]
           });
-        } catch(err) {
-          // L'utilisateur a annulé le sélecteur, on bascule en téléchargement
-        }
+        } catch(err) {}
       }
 
       if (fileHandle) {
@@ -1267,14 +1283,54 @@
           showToast("💾 Enregistré directement dans data.js !");
           return;
         } catch(e) {
-          fileHandle = null; // Réinitialise en cas d'erreur
+          fileHandle = null;
         }
       }
 
-      // 2. Repli standard : Téléchargement Blob propre
+      // 3. Repli standard : Téléchargement Blob propre
       downloadBlob(jsCode, "data.js");
       markSaved();
       showToast("💾 data.js téléchargé ! Remplacez-le dans votre dossier.");
+    }
+
+    async function saveToGitHub(token, content) {
+      const owner = "zwakr";
+      const repo = "portfolio";
+      const path = "data.js";
+      
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!getRes.ok) throw new Error("Fichier introuvable sur GitHub");
+      const fileData = await getRes.json();
+      
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: "Mise à jour portfolio via CMS",
+          content: btoa(unescape(encodeURIComponent(content))),
+          sha: fileData.sha
+        })
+      });
+      return putRes.ok;
+    }
+
+    function configureGitHubToken() {
+      const current = localStorage.getItem('portfolio_gh_token') || '';
+      const token = prompt("Collez votre Token secret GitHub (ghp_...) pour sauvegarder en direct sur le cloud :", current);
+      if (token !== null) {
+        if (token.trim()) {
+          localStorage.setItem('portfolio_gh_token', token.trim());
+          alert("✅ Token GitHub enregistré ! Vos futures sauvegardes s'enverront directement sur GitHub.");
+        } else {
+          localStorage.removeItem('portfolio_gh_token');
+          alert("Token supprimé.");
+        }
+      }
     }
 
     function downloadBackup() {

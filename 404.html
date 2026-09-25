@@ -34,7 +34,8 @@
       text-transform: uppercase;
       text-decoration: none;
       z-index: 10;
-      mix-blend-mode: difference; /* Permet au texte de rester lisible sur la vidéo */
+      mix-blend-mode: difference;
+      transition: opacity 0.2s ease;
     }
     
     .back-home:hover {
@@ -49,12 +50,26 @@
       width: 100vw;
       height: 100vh;
       z-index: 1;
+      background: #000000;
     }
 
     video {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Recadre la vidéo pour remplir tout l'écran sans déformer */
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Message de secours si la vidéo met du temps ou est absente */
+    .fallback-message {
+      position: absolute;
+      bottom: 2rem;
+      left: 2vw;
+      color: #666;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      z-index: 5;
     }
   </style>
 </head>
@@ -63,12 +78,30 @@
   <a href="index.html" class="back-home">ZAKARIA BAIT</a>
 
   <div class="video-container">
-    <!-- Remplace "video_404.mp4" par le nom de ton fichier vidéo -->
-    <video autoplay loop muted playsinline>
+    <video id="bgVideo" src="video_404.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto">
       <source src="video_404.mp4" type="video/mp4">
-      Ton navigateur ne supporte pas la vidéo.
     </video>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.getElementById('bgVideo');
+      if (video) {
+        video.muted = true;
+        
+        // Forcer la lecture automatique compatible iOS/Safari/Chrome
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.warn("Lecture automatique en attente d'interaction :", error);
+            // Relancer dès la première interaction
+            document.body.addEventListener('click', () => video.play(), { once: true });
+            document.body.addEventListener('touchstart', () => video.play(), { once: true });
+          });
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>
