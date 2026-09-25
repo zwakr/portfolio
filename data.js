@@ -23,6 +23,21 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
+      "id": "proj_1790370431942",
+      "type": "image",
+      "layout": "col-6",
+      "aspectRatio": "aspect-auto",
+      "media": "",
+      "title": "NOUVEAU PROJET",
+      "category": "branding",
+      "link": "project-detail.html?id=proj_1790370431942",
+      "subtitle": "Direction Artistique & Exploration Graphique",
+      "year": "2026",
+      "client": "Marrakech — Studio",
+      "narrative": "",
+      "openInNewTab": false
+    },
+    {
       "id": "proj_021",
       "type": "image",
       "layout": "col-6",
