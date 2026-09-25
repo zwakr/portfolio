@@ -23,78 +23,6 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
-      "id": "proj_1790372711745",
-      "type": "image",
-      "layout": "col-6",
-      "aspectRatio": "aspect-auto",
-      "media": "",
-      "title": "NOUVEAU PROJET",
-      "category": "branding",
-      "link": "project-detail.html?id=proj_1790372711745",
-      "subtitle": "Direction Artistique & Exploration Graphique",
-      "year": "2026",
-      "client": "Marrakech — Studio",
-      "narrative": "",
-      "openInNewTab": false,
-      "detail": {
-        "title": "NOUVEAU PROJET",
-        "subtitle": "Direction Artistique & Exploration Graphique",
-        "discipline": "Direction Artistique, Design",
-        "year": "2026",
-        "client": "Marrakech — Studio",
-        "blocks": [
-          {
-            "id": "blk_1790372711745",
-            "type": "full-media",
-            "media": "",
-            "mediaType": "image",
-            "caption": "01 / 01    NOUVEAU PROJET"
-          },
-          {
-            "id": "blk_1790372711746",
-            "type": "narrative",
-            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
-          }
-        ]
-      }
-    },
-    {
-      "id": "proj_1790372699378",
-      "type": "image",
-      "layout": "col-6",
-      "aspectRatio": "aspect-auto",
-      "media": "",
-      "title": "NOUVEAU PROJET",
-      "category": "branding",
-      "link": "project-detail.html?id=proj_1790372699378",
-      "subtitle": "Direction Artistique & Exploration Graphique",
-      "year": "2026",
-      "client": "Marrakech — Studio",
-      "narrative": "",
-      "openInNewTab": false,
-      "detail": {
-        "title": "NOUVEAU PROJET",
-        "subtitle": "Direction Artistique & Exploration Graphique",
-        "discipline": "Direction Artistique, Design",
-        "year": "2026",
-        "client": "Marrakech — Studio",
-        "blocks": [
-          {
-            "id": "blk_1790372699378",
-            "type": "full-media",
-            "media": "",
-            "mediaType": "image",
-            "caption": "01 / 01    NOUVEAU PROJET"
-          },
-          {
-            "id": "blk_1790372699379",
-            "type": "narrative",
-            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
-          }
-        ]
-      }
-    },
-    {
       "id": "proj_021",
       "type": "image",
       "layout": "col-6",
@@ -171,30 +99,19 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372692158",
+            "id": "blk_1790372755766",
             "type": "full-media",
             "media": "poster_45_degres_02.svg",
             "mediaType": "image",
             "caption": "01 / 01    020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis."
           },
           {
-            "id": "blk_1790372692159",
+            "id": "blk_1790372755767",
             "type": "narrative",
             "text": "Le projet <b>020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
         ]
       }
-    },
-    {
-      "id": "proj_019",
-      "type": "text",
-      "layout": "col-12",
-      "aspectRatio": "aspect-auto",
-      "media": "",
-      "title": "",
-      "textContent": "019 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fringilla massa massa, sit amet molestie orci suscipit sed. Ut tincidunt eleifend felis sit amet suscipit. Nulla accumsan diam enim. Integer scelerisque, velit vitae accumsan tempor, quam ex vestibulum elit, eget volutpat elit ipsum id ante.",
-      "category": "all",
-      "link": ""
     },
     {
       "id": "proj_017",
@@ -214,14 +131,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372692158",
+            "id": "blk_1790372755766",
             "type": "full-media",
             "media": "poster_45_degres_03.svg",
             "mediaType": "image",
             "caption": "01 / 01    017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra."
           },
           {
-            "id": "blk_1790372692159",
+            "id": "blk_1790372755767",
             "type": "narrative",
             "text": "Le projet <b>017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
@@ -246,14 +163,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372692158",
+            "id": "blk_1790372755766",
             "type": "full-media",
             "media": "video_404.mp4",
             "mediaType": "video",
             "caption": "01 / 01    018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue."
           },
           {
-            "id": "blk_1790372692159",
+            "id": "blk_1790372755767",
             "type": "narrative",
             "text": "Le projet <b>018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
@@ -278,14 +195,14 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Studio",
         "blocks": [
           {
-            "id": "blk_1790372692158",
+            "id": "blk_1790372755766",
             "type": "full-media",
             "media": "gif lnfa motion design reveal.gif",
             "mediaType": "image",
             "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
           },
           {
-            "id": "blk_1790372692159",
+            "id": "blk_1790372755767",
             "type": "narrative",
             "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
