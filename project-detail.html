@@ -130,7 +130,7 @@
       margin-bottom: 0.2rem;
     }
 
-    /* Contenu du projet (Grille de médias / images / vidéos) */
+    /* Flux d'images et contenu modulaire du projet */
     .project-media-flow {
       display: flex;
       flex-direction: column;
@@ -182,7 +182,7 @@
       font-size: 15px;
       line-height: 1.65;
       max-width: 820px;
-      margin: 2rem 0;
+      margin: 1.5rem 0;
       font-weight: 500;
     }
 
@@ -260,7 +260,7 @@
     </div>
   </header>
 
-  <!-- Flux d'images et contenu dynamique -->
+  <!-- Flux d'images et blocs modulaires de la page projet -->
   <main class="project-media-flow" id="proj-flow">
     <!-- Généré dynamiquement en JS -->
   </main>
@@ -274,77 +274,120 @@
   <script src="data.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      if (!window.PORTFOLIO_DATA || !window.PORTFOLIO_DATA.projects) {
+      // 1. Récupération des données (Priorité au brouillon CMS en direct dans localStorage)
+      let data = window.PORTFOLIO_DATA || { projects: [], categories: [] };
+      try {
+        const draft = localStorage.getItem('portfolio_cms_draft');
+        if (draft) {
+          const parsed = JSON.parse(draft);
+          if (parsed && Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+            data = parsed;
+          }
+        }
+      } catch (e) {}
+
+      if (!data || !data.projects) {
         return;
       }
 
       const params = new URLSearchParams(window.location.search);
       const projId = params.get('id');
 
-      // Trouver le projet correspondant ou prendre le premier par défaut
-      const projects = window.PORTFOLIO_DATA.projects.filter(p => p.type !== 'text');
+      const projects = (data.projects || []).filter(p => p.type !== 'text');
       let currentIndex = projects.findIndex(p => p.id === projId);
-      if (currentIndex === -1) currentIndex = 0;
+      
+      // Si l'ID demandé n'est pas trouvé dans la liste
+      if (currentIndex === -1) {
+        if (projId) {
+          // Nouveau projet en cours de création
+          const tempProj = {
+            id: projId,
+            title: "Nouveau Projet",
+            subtitle: "Page détaillée du projet",
+            year: "2026",
+            client: "Marrakech — Studio",
+            category: "direction",
+            detail: {
+              title: "Nouveau Projet",
+              subtitle: "Page détaillée en cours de composition",
+              blocks: []
+            }
+          };
+          projects.unshift(tempProj);
+          currentIndex = 0;
+        } else {
+          currentIndex = 0;
+        }
+      }
 
       const project = projects[currentIndex];
       if (!project) return;
 
+      const detail = project.detail || {};
+
       // Catégorie lisible
-      const catObj = (window.PORTFOLIO_DATA.categories || []).find(c => c.id === project.category);
+      const catObj = (data.categories || []).find(c => c.id === project.category);
       const catLabel = catObj ? catObj.label : (project.category || 'Direction Artistique');
 
-      // Nettoyage du titre pour la balise <title>
-      const rawTitle = project.title ? project.title.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim() : 'PROJET';
+      // Titres & Métadonnées
+      const rawTitle = (detail.title || project.title || 'PROJET').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
       document.getElementById('page-title').textContent = `${rawTitle} — ZAKARIA BAIT`;
-      document.getElementById('proj-title').innerHTML = project.title || 'Projet';
+      document.getElementById('proj-title').innerHTML = detail.title || project.title || 'Projet';
       
-      document.getElementById('proj-subtitle').textContent = project.subtitle || project.cleanCaption || rawTitle;
-      document.getElementById('proj-discipline').textContent = catLabel;
-      document.getElementById('proj-year').textContent = project.year || '2026';
-      document.getElementById('proj-client').textContent = project.client || 'Marrakech — Studio';
+      document.getElementById('proj-subtitle').innerHTML = detail.subtitle || project.subtitle || rawTitle;
+      document.getElementById('proj-discipline').textContent = detail.discipline || catLabel;
+      document.getElementById('proj-year').textContent = detail.year || project.year || '2026';
+      document.getElementById('proj-client').textContent = detail.client || project.client || 'Marrakech — Studio';
 
-      // Médias
+      // Rendu du flux modulaire (Media Flow)
       const flow = document.getElementById('proj-flow');
       flow.innerHTML = '';
 
-      const mainMedia = project.media || project.image || '';
-      const isVideo = project.type === 'video';
-
-      // 1. Média Héro Principal
-      const heroFig = document.createElement('figure');
-      heroFig.className = 'media-full';
-      if (isVideo) {
-        heroFig.innerHTML = mainMedia 
-          ? `<video src="${mainMedia}" autoplay loop muted playsinline class="project-media" style="min-height:480px;"></video>`
-          : `<div class="project-media" style="min-height:480px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#888;">VIDÉO PRINCIPALE</div>`;
-      } else {
-        heroFig.innerHTML = mainMedia 
-          ? `<img src="${mainMedia}" class="project-media" alt="${rawTitle}">`
-          : `<div class="project-media" style="min-height:480px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#888;">VISUEL PRINCIPAL DU PROJET</div>`;
-      }
-      heroFig.innerHTML += `<figcaption>01 &nbsp; &nbsp; ${rawTitle}</figcaption>`;
-      flow.appendChild(heroFig);
-
-      // 2. Texte narratif éditorial
-      const narrativeText = project.narrative || project.textContent || `Le projet <b>${rawTitle}</b> explore la stratégie visuelle et l'identité de marque à travers un langage graphique singulier et précis, articulé autour de la composition et du contraste typographique.`;
-      const narrativeDiv = document.createElement('div');
-      narrativeDiv.className = 'project-narrative';
-      narrativeDiv.innerHTML = narrativeText;
-      flow.appendChild(narrativeDiv);
-
-      // 3. Médias additionnels si présents (galerie)
-      if (Array.isArray(project.gallery) && project.gallery.length > 0) {
-        const grid2 = document.createElement('div');
-        grid2.className = 'media-grid-2';
-        project.gallery.forEach((gMedia, gIdx) => {
-          grid2.innerHTML += `
-            <figure>
-              <img src="${gMedia}" class="project-media" alt="Détail ${gIdx + 2}">
-              <figcaption>0${gIdx + 2} &nbsp; &nbsp; Étude visuelle et déclinaison</figcaption>
-            </figure>
-          `;
+      // SI LE PROJET CONTIENT DES BLOCS MODULAIRES ÉDITÉS DANS LE CMS
+      if (Array.isArray(detail.blocks) && detail.blocks.length > 0) {
+        detail.blocks.forEach((block, idx) => {
+          if (block.type === 'full-media') {
+            flow.appendChild(createFullMediaElement(block, idx));
+          } else if (block.type === 'narrative') {
+            const div = document.createElement('div');
+            div.className = 'project-narrative';
+            div.innerHTML = block.text || '';
+            flow.appendChild(div);
+          } else if (block.type === 'grid-2') {
+            flow.appendChild(createGridElement(block, 'media-grid-2'));
+          } else if (block.type === 'grid-asym') {
+            flow.appendChild(createGridElement(block, 'media-grid-asym'));
+          }
         });
-        flow.appendChild(grid2);
+      } else {
+        // MODE PAR DÉFAUT (Si le projet n'a pas encore de blocs personnalisés)
+        const mainMedia = project.media || project.image || '';
+        const isVideo = project.type === 'video';
+
+        const heroFig = document.createElement('figure');
+        heroFig.className = 'media-full';
+        heroFig.innerHTML = renderMediaHtml(mainMedia, isVideo, rawTitle, '01 &nbsp; &nbsp; ' + rawTitle);
+        flow.appendChild(heroFig);
+
+        const narrativeText = project.narrative || project.textContent || `Le projet <b>${rawTitle}</b> explore la stratégie visuelle et l'identité de marque à travers un langage graphique singulier et précis, articulé autour de la composition et du contraste typographique.`;
+        const narrativeDiv = document.createElement('div');
+        narrativeDiv.className = 'project-narrative';
+        narrativeDiv.innerHTML = narrativeText;
+        flow.appendChild(narrativeDiv);
+
+        if (Array.isArray(project.gallery) && project.gallery.length > 0) {
+          const grid2 = document.createElement('div');
+          grid2.className = 'media-grid-2';
+          project.gallery.forEach((gMedia, gIdx) => {
+            grid2.innerHTML += `
+              <figure>
+                <img src="${gMedia}" class="project-media" alt="Détail ${gIdx + 2}">
+                <figcaption>0${gIdx + 2} &nbsp; &nbsp; Étude visuelle et déclinaison</figcaption>
+              </figure>
+            `;
+          });
+          flow.appendChild(grid2);
+        }
       }
 
       // Lien Projet Suivant
@@ -353,9 +396,47 @@
       const nextBtn = document.getElementById('next-proj-link');
       if (nextProj) {
         nextBtn.href = `project-detail.html?id=${nextProj.id}`;
-        nextBtn.textContent = `PROJET SUIVANT (${nextProj.id}) →`;
+        const nextTitleClean = (nextProj.title || nextProj.id).replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        nextBtn.textContent = `PROJET SUIVANT →`;
       }
     });
+
+    // Fonctions d'aide pour générer les blocs HTML
+    function renderMediaHtml(src, isVideo, alt, caption) {
+      const isVid = isVideo || (typeof src === 'string' && src.match(/\.(mp4|webm|mov)$/i));
+      let mediaTag = '';
+      if (isVid) {
+        mediaTag = src 
+          ? `<video src="${src}" autoplay loop muted playsinline class="project-media"></video>`
+          : `<div class="project-media" style="min-height:450px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">VIDÉO PRINCIPALE</div>`;
+      } else {
+        mediaTag = src 
+          ? `<img src="${src}" class="project-media" alt="${alt || ''}">`
+          : `<div class="project-media" style="min-height:450px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">IMAGE / VISUEL</div>`;
+      }
+      return `${mediaTag}${caption ? `<figcaption>${caption}</figcaption>` : ''}`;
+    }
+
+    function createFullMediaElement(block, idx) {
+      const fig = document.createElement('figure');
+      fig.className = 'media-full';
+      fig.innerHTML = renderMediaHtml(block.media, block.mediaType === 'video', 'Visuel', block.caption);
+      return fig;
+    }
+
+    function createGridElement(block, gridClass) {
+      const div = document.createElement('div');
+      div.className = gridClass;
+      div.innerHTML = `
+        <figure>
+          ${renderMediaHtml(block.media1, block.media1Type === 'video', 'Détail 1', block.caption1)}
+        </figure>
+        <figure>
+          ${renderMediaHtml(block.media2, block.media2Type === 'video', 'Détail 2', block.caption2)}
+        </figure>
+      `;
+      return div;
+    }
   </script>
 </body>
 </html>
