@@ -273,9 +273,33 @@
       </div>
 
       <div class="col" id="col-cv-exp">
+        <hr>
+        <div class="section-title">Expériences</div>
+        <div class="project-block">
+          <b>Hivernage Collection</b>
+          Graphiste — Direction visuelle 360° pour marques premium (print &amp; digital).<br>
+          Depuis Oct. 2025
+        </div>
+        <div class="project-block">
+          <b>Vinca Digital</b>
+          Direction Artistique &amp; Event Branding — Identité sportive, signalétique grand format.<br>
+          Juil. – Août 2025
+        </div>
+        <div class="project-block">
+          <b>Brandoo Agency</b>
+          Design Graphique — Création d'identités visuelles et campagnes à impact social.<br>
+          Juin – Juil. 2024
+        </div>
       </div>
 
       <div class="col" id="col-cv-edu">
+        <hr>
+        <div class="section-title">Formation</div>
+        <div class="project-block">
+          <b>École Supérieure des Arts Visuels (ESAV)</b>
+          Diplôme en Design Graphique Numérique.<br>
+          Marrakech, 2023 - 2025
+        </div>
       </div>
     </div>
 
@@ -386,6 +410,13 @@
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('btn-' + lang).classList.add('active');
     }
+
+    // Chargement automatique au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.info) {
+        switchLang('fr');
+      }
+    });
   </script>
 </body>
 </html>
