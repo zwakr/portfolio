@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>45 DEGRÉS — ZAKARIA BAIT</title>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link href="https://fonts.cdnfonts.com/css/monument-extended" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13.5px;
+      line-height: 1.45;
+      padding: 1.5vw 2vw 6vw 2vw;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Navigation supérieure unifiée style éditorial / trabuc.co */
+    .top-nav {
+      font-family: 'Monument Extended', -apple-system, sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.1rem, 2.8vw, 2.5rem);
+      line-height: 1;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 100%;
+      padding-bottom: 1.2rem;
+      border-bottom: 1.5px solid #000000;
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* Style des boutons Work & About / Info */
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.85rem;
+      border: 1.5px solid #000000;
+      border-radius: 999px; /* Pill button style */
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      background: transparent;
+      text-decoration: none !important;
+    }
+
+    .nav-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .nav-btn.active {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* En-tête du projet façon Trabuc.co */
+    .project-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #000000;
+    }
+
+    .project-title {
+      font-family: 'Monument Extended', -apple-system, sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 4vw, 4rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-subtitle {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.4;
+      max-width: 650px;
+    }
+
+    .project-meta {
+      font-size: 12px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .meta-group b {
+      font-weight: 700;
+      display: block;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+
+    /* Contenu du projet (Grille de médias / images) */
+    .project-media-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    .media-full {
+      width: 100%;
+    }
+
+    .media-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .media-grid-asym {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-img {
+      width: 100%;
+      height: auto;
+      background: #f0f0f0;
+      min-height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
+    figcaption {
+      margin-top: 0.75rem;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      opacity: 0.85;
+    }
+
+    .project-narrative {
+      font-size: 14.5px;
+      line-height: 1.6;
+      max-width: 780px;
+      margin: 2rem 0;
+      font-weight: 500;
+    }
+
+    /* Navigation entre projets en bas de page */
+    .project-footer-nav {
+      margin-top: 6rem;
+      padding-top: 2rem;
+      border-top: 1.5px solid #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Monument Extended', -apple-system, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    /* Responsive mobile */
+    @media (max-width: 820px) {
+      body {
+        padding: 5vw 4vw;
+      }
+      .top-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .project-header {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .media-grid-2, .media-grid-asym {
+        grid-template-columns: 1fr;
+      }
+      .project-img {
+        min-height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation principale avec boutons Work / About / Mail -->
+  <nav class="top-nav">
+    <a href="index.html">ZAKARIA BAIT</a>
+    <div class="nav-links">
+      <a href="work.html" class="nav-btn active">WORK</a>
+      <a href="info.html" class="nav-btn">ABOUT</a>
+      <a href="mailto:zakaria-bait@outlook.com" class="nav-btn">MAIL</a>
+    </div>
+  </nav>
+
+  <!-- En-tête éditorial du projet -->
+  <header class="project-header">
+    <div>
+      <h1 class="project-title">45 Degrés</h1>
+      <p class="project-subtitle">
+        Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.
+      </p>
+    </div>
+    
+    <div class="project-meta">
+      <div class="meta-group">
+        <b>Discipline</b>
+        <span>Direction Artistique, Exploration 3D, Typographie</span>
+      </div>
+      <div class="meta-group">
+        <b>Année</b>
+        <span>2026</span>
+      </div>
+      <div class="meta-group">
+        <b>Lieu / Statut</b>
+        <span>Marrakech — Projet Studio</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Flux d'images et contenu inspiré de la mise en page Trabuc.co / RISD -->
+  <main class="project-media-flow">
+
+    <!-- Image 1 : Grande image héro -->
+    <figure class="media-full">
+      <img src="" class="project-img" alt="45 Degrés — Vue principale">
+      <figcaption>01 / 06 &nbsp; &nbsp;Identité &amp; composition spatiale à 45 degrés</figcaption>
+    </figure>
+
+    <!-- Paragraphe narratif éditorial -->
+    <div class="project-narrative">
+      Le projet <b>45 Degrés</b> explore la tension entre structure rigide et rupture cinétique. En déconstruisant les règles de composition traditionnelles, chaque élément typographique et volumétrique est orienté pour créer un équilibre asymétrique immersif.
+    </div>
+
+    <!-- Image 2 & 3 : Grille duo -->
+    <div class="media-grid-2">
+      <figure>
+        <img src="" class="project-img" alt="45 Degrés — Détail 1">
+        <figcaption>02 / 06 &nbsp; &nbsp;Étude typographique et contraste de matière</figcaption>
+      </figure>
+      <figure>
+        <img src="" class="project-img" alt="45 Degrés — Détail 2">
+        <figcaption>03 / 06 &nbsp; &nbsp;Rendu volumétrique et cadrage d'intention</figcaption>
+      </figure>
+    </div>
+
+    <!-- Image 4 & 5 : Grille asymétrique -->
+    <div class="media-grid-asym">
+      <figure>
+        <img src="" class="project-img" alt="45 Degrés — Rendu large">
+        <figcaption>04 / 06 &nbsp; &nbsp;Déploiement du système graphique</figcaption>
+      </figure>
+      <figure>
+        <img src="" class="project-img" alt="45 Degrés — Rendu détail vertical">
+        <figcaption>05 / 06 &nbsp; &nbsp;Texture et perception tactile</figcaption>
+      </figure>
+    </div>
+
+    <!-- Image 6 : Grande image de clôture -->
+    <figure class="media-full">
+      <img src="" class="project-img" alt="45 Degrés — Vue d'ensemble">
+      <figcaption>06 / 06 &nbsp; &nbsp;Vue globale du système d'identité</figcaption>
+    </figure>
+
+  </main>
+
+  <!-- Navigation de bas de page vers d'autres projets -->
+  <footer class="project-footer-nav">
+    <a href="work.html">← TOUS LES PROJETS</a>
+    <a href="work.html">PROJET SUIVANT →</a>
+  </footer>
+
+</body>
+</html>
