@@ -274,16 +274,51 @@
   <script src="data.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      if (!window.PORTFOLIO_DATA || !window.PORTFOLIO_DATA.projects) {
+      // 1. Récupération des données (Priorité au brouillon CMS en direct dans localStorage)
+      let data = window.PORTFOLIO_DATA || { projects: [], categories: [] };
+      try {
+        const draft = localStorage.getItem('portfolio_cms_draft');
+        if (draft) {
+          const parsed = JSON.parse(draft);
+          if (parsed && Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+            data = parsed;
+          }
+        }
+      } catch (e) {}
+
+      if (!data || !data.projects) {
         return;
       }
 
       const params = new URLSearchParams(window.location.search);
       const projId = params.get('id');
 
-      const projects = window.PORTFOLIO_DATA.projects.filter(p => p.type !== 'text');
+      const projects = (data.projects || []).filter(p => p.type !== 'text');
       let currentIndex = projects.findIndex(p => p.id === projId);
-      if (currentIndex === -1) currentIndex = 0;
+      
+      // Si l'ID demandé n'est pas trouvé dans la liste
+      if (currentIndex === -1) {
+        if (projId) {
+          // Nouveau projet en cours de création
+          const tempProj = {
+            id: projId,
+            title: "Nouveau Projet",
+            subtitle: "Page détaillée du projet",
+            year: "2026",
+            client: "Marrakech — Studio",
+            category: "direction",
+            detail: {
+              title: "Nouveau Projet",
+              subtitle: "Page détaillée en cours de composition",
+              blocks: []
+            }
+          };
+          projects.unshift(tempProj);
+          currentIndex = 0;
+        } else {
+          currentIndex = 0;
+        }
+      }
 
       const project = projects[currentIndex];
       if (!project) return;
@@ -291,7 +326,7 @@
       const detail = project.detail || {};
 
       // Catégorie lisible
-      const catObj = (window.PORTFOLIO_DATA.categories || []).find(c => c.id === project.category);
+      const catObj = (data.categories || []).find(c => c.id === project.category);
       const catLabel = catObj ? catObj.label : (project.category || 'Direction Artistique');
 
       // Titres & Métadonnées

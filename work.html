@@ -296,14 +296,25 @@
       const filtersContainer = document.getElementById('filters-container');
       const portfolioContainer = document.getElementById('portfolio-container');
       
-      if (!window.PORTFOLIO_DATA) {
+      let data = window.PORTFOLIO_DATA || { projects: [], categories: [] };
+      try {
+        const draft = localStorage.getItem('portfolio_cms_draft');
+        if (draft) {
+          const parsed = JSON.parse(draft);
+          if (parsed && Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+            data = parsed;
+          }
+        }
+      } catch (e) {}
+
+      if (!data || !data.projects) {
         console.error("Données portfolio introuvables.");
         return;
       }
 
       // 1. GÉNÉRATION DYNAMIQUE DES FILTRES DE CATÉGORIES
       filtersContainer.innerHTML = '';
-      window.PORTFOLIO_DATA.categories.forEach((cat, index) => {
+      (data.categories || []).forEach((cat, index) => {
         const btn = document.createElement('button');
         btn.className = 'filter-btn' + (index === 0 ? ' active' : '');
         btn.setAttribute('data-filter', cat.id);
@@ -313,7 +324,7 @@
 
       // 2. GÉNÉRATION DES PROJETS & BLOCS MÉDIAS / TEXTE
       portfolioContainer.innerHTML = '';
-      window.PORTFOLIO_DATA.projects.forEach(proj => {
+      (data.projects || []).forEach(proj => {
         const layoutClass = proj.layout || 'col-6';
         const aspectClass = proj.aspectRatio || 'aspect-auto';
         const mediaSrc = (proj.media || proj.image || '').trim();

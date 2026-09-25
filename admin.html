@@ -1025,7 +1025,7 @@
             
             <div class="card-actions">
               ${!isText ? `
-                <button class="btn btn-outline btn-sm" onclick="openDetailEditorFor('${item.id}')" title="Composer les visuels, vidéos et textes de la page dédiée">📖 Éditer page détaillée</button>
+                <button class="btn btn-sm" style="background:#000; color:#fff; border-color:#000; font-weight:700;" onclick="openDetailEditorFor('${item.id}')" title="Composer les visuels, vidéos et textes de la page dédiée">📖 Éditer page détaillée</button>
                 <a href="${activeLink}" target="_blank" class="btn btn-outline btn-sm" title="Ouvrir la page de ce projet dans une nouvelle fenêtre">👁️ Ouvrir</a>
                 <button class="btn btn-outline btn-sm" onclick="exportProjectHTML(${index})" title="Télécharger un fichier HTML autonome pour ce projet">📄 HTML</button>
               ` : ''}
@@ -1239,7 +1239,34 @@
     }
 
     function updateItem(index, key, val) {
-      state.projects[index][key] = val;
+      const proj = state.projects[index];
+      if (!proj) return;
+      proj[key] = val;
+
+      // Synchronisation intelligente avec la page détaillée
+      if (proj.type !== 'text') {
+        ensureProjectDetailStructure(proj);
+        if (key === 'title') {
+          const clean = val.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+          proj.detail.title = clean;
+          const opt = document.querySelector(`#detail-project-picker option[value="${proj.id}"]`);
+          if (opt) opt.textContent = `${clean} (${proj.id})`;
+        } else if (key === 'subtitle') {
+          proj.detail.subtitle = val;
+        } else if (key === 'year') {
+          proj.detail.year = val;
+        } else if (key === 'client') {
+          proj.detail.client = val;
+        } else if (key === 'media') {
+          if (proj.detail.blocks && proj.detail.blocks.length > 0 && proj.detail.blocks[0].type === 'full-media') {
+            proj.detail.blocks[0].media = val;
+            if (val.match(/\.(mp4|webm|mov)$/i)) {
+              proj.detail.blocks[0].mediaType = 'video';
+            }
+          }
+        }
+      }
+
       markUnsaved();
     }
 
@@ -1259,14 +1286,22 @@
       clone.id = newId;
       clone.title = (clone.title || '') + " (Copie)";
       clone.link = `project-detail.html?id=${newId}`;
+      ensureProjectDetailStructure(clone);
+      clone.detail.title = clone.title;
       state.projects.splice(index + 1, 0, clone);
+      currentDetailProjectId = newId;
       markUnsaved();
-      renderProjectsList();
+      renderAll();
+      showToast("Projet dupliqué !");
     }
 
     function deleteItem(index) {
       if (confirm("Supprimer cet élément définitivement ?")) {
+        const deletedId = state.projects[index] ? state.projects[index].id : null;
         state.projects.splice(index, 1);
+        if (currentDetailProjectId === deletedId) {
+          currentDetailProjectId = null;
+        }
         markUnsaved();
         renderAll();
       }
@@ -1275,7 +1310,7 @@
     // AJOUT D'UN NOUVEAU PROJET : Toujours automatiquement lié à sa propre page !
     function addNewItem() {
       const newId = "proj_" + Date.now();
-      state.projects.unshift({
+      const newProject = {
         id: newId,
         type: "image",
         layout: "col-6",
@@ -1289,10 +1324,14 @@
         client: "Marrakech — Studio",
         narrative: "",
         openInNewTab: false
-      });
+      };
+      ensureProjectDetailStructure(newProject);
+      state.projects.unshift(newProject);
+      currentDetailProjectId = newId; // Sélectionne directement le nouveau projet dans l'onglet des pages détaillées !
       markUnsaved();
       renderAll();
       window.scrollTo({ top: 160, behavior: 'smooth' });
+      showToast("Nouveau projet ajouté ! Prêt pour personnalisation détaillée.");
     }
 
     // EXPORTATION D'UN FICHIER HTML INDIVIDUEL AUTONOME
@@ -1344,15 +1383,18 @@
       
       const visualProjects = state.projects.filter(p => p.type !== 'text');
       visualProjects.forEach(p => {
+        ensureProjectDetailStructure(p);
         const opt = document.createElement('option');
         opt.value = p.id;
-        const cleanTitle = (p.title || p.id).replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        const cleanTitle = (p.detail && p.detail.title ? p.detail.title : p.title || p.id).replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
         opt.textContent = `${cleanTitle} (${p.id})`;
         picker.appendChild(opt);
       });
 
-      if (!currentDetailProjectId && visualProjects.length > 0) {
-        currentDetailProjectId = visualProjects[0].id;
+      if (!currentDetailProjectId || !visualProjects.some(p => p.id === currentDetailProjectId)) {
+        if (visualProjects.length > 0) {
+          currentDetailProjectId = visualProjects[0].id;
+        }
       }
       if (currentDetailProjectId) {
         picker.value = currentDetailProjectId;
@@ -1368,10 +1410,12 @@
     function openDetailEditorFor(id) {
       currentDetailProjectId = id;
       switchSection('detail-page');
+      populateDetailProjectPicker();
       const picker = document.getElementById('detail-project-picker');
       if (picker) picker.value = id;
       renderDetailProjectEditor();
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast("Édition de la page détaillée ouverte !");
     }
 
     function getCurrentDetailProject() {
@@ -1379,32 +1423,40 @@
     }
 
     function ensureProjectDetailStructure(proj) {
+      if (!proj) return;
+      const cleanTitle = (proj.title || 'Projet').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
       if (!proj.detail) {
-        const cleanTitle = (proj.title || 'Projet').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
         proj.detail = {
           title: cleanTitle,
           subtitle: proj.subtitle || "Direction Artistique & Exploration Graphique",
           discipline: "Direction Artistique, Design",
           year: proj.year || "2026",
           client: proj.client || "Marrakech — Studio",
-          blocks: [
-            {
-              id: "blk_" + Date.now(),
-              type: "full-media",
-              media: proj.media || proj.image || "",
-              mediaType: proj.type === 'video' ? 'video' : 'image',
-              caption: "01 / 01    Vue principale du projet"
-            },
-            {
-              id: "blk_" + (Date.now() + 1),
-              type: "narrative",
-              text: proj.narrative || `Le projet <b>${cleanTitle}</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée.`
-            }
-          ]
+          blocks: []
         };
       }
+      if (!proj.detail.title) proj.detail.title = cleanTitle;
+      if (!proj.detail.subtitle) proj.detail.subtitle = proj.subtitle || "Direction Artistique & Exploration Graphique";
+      if (!proj.detail.year) proj.detail.year = proj.year || "2026";
+      if (!proj.detail.client) proj.detail.client = proj.client || "Marrakech — Studio";
+
       if (!Array.isArray(proj.detail.blocks)) {
         proj.detail.blocks = [];
+      }
+      if (proj.detail.blocks.length === 0) {
+        const isVid = proj.type === 'video' || (typeof proj.media === 'string' && proj.media.match(/\.(mp4|webm|mov)$/i));
+        proj.detail.blocks.push({
+          id: "blk_" + Date.now(),
+          type: "full-media",
+          media: proj.media || proj.image || "",
+          mediaType: isVid ? 'video' : 'image',
+          caption: "01 / 01    " + cleanTitle
+        });
+        proj.detail.blocks.push({
+          id: "blk_" + (Date.now() + 1),
+          type: "narrative",
+          text: proj.narrative || `Le projet <b>${cleanTitle}</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée.`
+        });
       }
     }
 
