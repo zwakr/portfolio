@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS DASHBOARD — ZAKARIA BAIT</title>
+  
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link href="https://fonts.cdnfonts.com/css/monument-extended" rel="stylesheet">
+  
+  <style>
+    :root {
+      --site-red: #ef202b;
+      --site-black: #000000;
+      --bg-gray: #f4f4f6;
+      --card-bg: #ffffff;
+      --border-color: #e2e2e5;
+      --text-muted: #66666e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-gray);
+      color: #121214;
+      line-height: 1.45;
+      padding: 1.5rem 2rem 5rem 2rem;
+      min-height: 100vh;
+    }
+
+    /* En-tête fixe / sticky */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      padding: 1rem 1.75rem;
+      border: 1.5px solid var(--site-black);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      position: sticky;
+      top: 1rem;
+      z-index: 1000;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    .brand-title {
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge-admin {
+      background: var(--site-black);
+      color: #fff;
+      font-size: 10px;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Boutons universels */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--site-black);
+      color: #ffffff;
+      border: 1.5px solid var(--site-black);
+      padding: 0.55rem 1.15rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: #2a2a2a;
+      border-color: #2a2a2a;
+    }
+
+    .btn-red {
+      background: var(--site-red);
+      border-color: var(--site-red);
+    }
+    .btn-red:hover {
+      background: #c8141d;
+      border-color: #c8141d;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--site-black);
+    }
+    .btn-outline:hover {
+      background: var(--site-black);
+      color: #ffffff;
+    }
+
+    .btn-sm {
+      padding: 0.32rem 0.75rem;
+      font-size: 11px;
+    }
+
+    /* Onglets */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 1.5px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .tab-button {
+      background: transparent;
+      border: none;
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 0.6rem 1.1rem;
+      cursor: pointer;
+      color: #777;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-button.active, .tab-button:hover {
+      color: var(--site-black);
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .tab-button.active {
+      border-bottom: 2.5px solid var(--site-red);
+    }
+
+    /* Barre d'outils (Filtres & Recherche) */
+    .toolbar-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      background: #fff;
+      padding: 0.85rem 1.25rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 0.55rem 0.85rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: 999px;
+      font-size: 13px;
+      width: 280px;
+      background: #fafafa;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--site-black);
+      background: #fff;
+    }
+
+    /* Conteneur principal */
+    .content-section {
+      display: none;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .content-section.active {
+      display: block;
+    }
+
+    /* Cartes & Panneaux */
+    .panel-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .panel-card.is-dragging {
+      opacity: 0.4;
+      border: 2px dashed var(--site-red);
+    }
+
+    .panel-card.drag-over {
+      border-top: 3px solid var(--site-red);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .drag-handle {
+      cursor: grab;
+      font-size: 16px;
+      color: #999;
+      user-select: none;
+      padding: 0 4px;
+    }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .order-badge {
+      background: #e9ecef;
+      color: #333;
+      font-family: 'Monument Extended', sans-serif;
+      font-size: 11px;
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    .item-type-badge {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+    }
+    .badge-image { background: #e3f2fd; color: #0d47a1; }
+    .badge-video { background: #fce4ec; color: #880e4f; }
+    .badge-gif   { background: #e8f5e9; color: #1b5e20; }
+    .badge-text  { background: #fff3e0; color: #e65100; }
+
+    /* Formulaire en grille */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .col-span-12 { grid-column: span 12; }
+    .col-span-8  { grid-column: span 8; }
+    .col-span-6  { grid-column: span 6; }
+    .col-span-4  { grid-column: span 4; }
+    .col-span-3  { grid-column: span 3; }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #444;
+      letter-spacing: 0.03em;
+    }
+
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      background: #fafafa;
+      color: #111;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--site-black);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+    }
+
+    textarea {
+      min-height: 90px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    /* Zone d'aperçu & Dropzone média */
+    .media-dropzone {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 0.85rem;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-height: 100px;
+    }
+    .media-dropzone:hover, .media-dropzone.dragover {
+      border-color: var(--site-red);
+      background: #fff8f8;
+    }
+    .media-preview-container {
+      width: 100%;
+      max-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 6px;
+      background: #000;
+      margin-top: 0.5rem;
+    }
+    .media-preview-container img, 
+    .media-preview-container video {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Détails pliables pour la page de projet */
+    details.project-detail-accordion {
+      background: #fafafa;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+    }
+    details.project-detail-accordion summary {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: #333;
+      user-select: none;
+    }
+
+    /* Table Catégories */
+    .cat-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .cat-table th, .cat-table td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .cat-table th {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #777;
+    }
+
+    /* Indicateur de statut de sauvegarde */
+    .save-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #2e7d32;
+      background: #e8f5e9;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+    }
+    .save-indicator.unsaved {
+      color: #d84315;
+      background: #fbe9e7;
+    }
+
+    /* Notification flottante */
+    #saveToast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #000;
+      color: #fff;
+      padding: 1rem 1.75rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 9999;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EN-TÊTE FIXE DU CMS -->
+  <header>
+    <div class="brand-title">
+      ZAKARIA BAIT <span class="badge-admin">CMS PRO</span>
+    </div>
+    
+    <div class="header-actions">
+      <div id="saveStatus" class="save-indicator">✓ À jour</div>
+      <button class="btn btn-outline btn-sm" onclick="configureGitHubToken()" title="Configurer la synchronisation directe vers GitHub">☁️ Clé GitHub</button>
+      <a href="work.html" target="_blank" class="btn btn-outline btn-sm">👁️ Voir Galerie</a>
+      <button class="btn btn-outline btn-sm" onclick="downloadBackup()">📥 Télécharger data.js</button>
+      <button class="btn btn-red" id="saveBtn" onclick="savePortfolioData()">💾 Enregistrer les Modifications</button>
+    </div>
+  </header>
+
+  <!-- ONGLETS -->
+  <div class="nav-tabs">
+    <button class="tab-button active" onclick="switchSection('projects', event)">🎨 Projets &amp; Médias (<span id="count-projects">0</span>)</button>
+    <button class="tab-button" onclick="switchSection('categories', event)">📁 Catégories (<span id="count-categories">0</span>)</button>
+    <button class="tab-button" onclick="switchSection('info', event)">📝 Page Info &amp; CV (FR / EN / AR)</button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 1 : GESTION DES PROJETS & MÉDIAS  -->
+  <!-- ========================================== -->
+  <section id="section-projects" class="content-section active">
+    
+    <!-- Barre d'outils & Filtres -->
+    <div class="toolbar-bar">
+      <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+        <input type="text" id="filter-search" class="search-input" placeholder="🔍 Rechercher un projet..." oninput="applyFilters()">
+        
+        <select id="filter-category" onchange="applyFilters()" style="width:auto; padding:0.55rem 0.85rem; border-radius:999px;">
+          <option value="all">Toutes les catégories</option>
+        </select>
+
+        <select id="filter-type" onchange="applyFilters()" style="width:auto; padding:0.55rem 0.85rem; border-radius:999px;">
+          <option value="all">Tous les types</option>
+          <option value="image">📷 Photos</option>
+          <option value="video">🎬 Vidéos</option>
+          <option value="gif">🎞️ GIFs</option>
+          <option value="text">✍️ Textes</option>
+        </select>
+      </div>
+
+      <button class="btn btn-sm" onclick="addNewItem()">+ Ajouter un Élément</button>
+    </div>
+
+    <!-- Conteneur des cartes de projets -->
+    <div id="projects-container"></div>
+
+    <div style="text-align:center; padding: 2rem 0;">
+      <button class="btn btn-outline" onclick="addNewItem()">+ Ajouter un autre élément</button>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 2 : CATÉGORIES PERSONNALISÉES     -->
+  <!-- ========================================== -->
+  <section id="section-categories" class="content-section">
+    <div class="panel-card">
+      <h2 style="font-family:'Monument Extended',sans-serif; font-size:1.05rem; text-transform:uppercase; margin-bottom:1rem;">
+        Créer une nouvelle catégorie
+      </h2>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:1.25rem;">
+        Ces catégories apparaîtront automatiquement en haut de votre page <b>WORK</b> sous forme de filtres interactifs.
+      </p>
+
+      <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+        <input type="text" id="new-cat-label" placeholder="Ex: Packaging, Typographie, 3D Render, Motion..." style="max-width:380px;">
+        <button class="btn" onclick="createCategory()">+ Ajouter la catégorie</button>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <h3 style="font-size:13px; font-weight:800; text-transform:uppercase; margin-bottom:1rem;">
+        Catégories Actives
+      </h3>
+      <table class="cat-table">
+        <thead>
+          <tr>
+            <th>Nom affiché</th>
+            <th>ID technique</th>
+            <th>Éléments associés</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="categories-list-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 3 : TEXTES MULTILINGUES (INFO & CV) -->
+  <!-- ========================================== -->
+  <section id="section-info" class="content-section">
+    
+    <!-- Version Française -->
+    <div class="panel-card">
+      <h2 style="font-family:'Monument Extended',sans-serif; font-size:1.05rem; text-transform:uppercase; margin-bottom:1.5rem;">
+        🇫🇷 Version Française (FR)
+      </h2>
+      <div class="form-grid">
+        <div class="form-group col-span-12">
+          <label>Profil / Bio</label>
+          <textarea id="info-fr-profil" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-12">
+          <label>Approche</label>
+          <textarea id="info-fr-approche" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-6">
+          <label>Expériences (CV)</label>
+          <textarea id="info-fr-cvexp" style="min-height:140px;" onchange="markUnsaved()"></textarea>
+          <div style="font-size:11px; color:#777;">Format HTML autorisé (&lt;b&gt;titre&lt;/b&gt;, &lt;br&gt;)</div>
+        </div>
+        <div class="form-group col-span-6">
+          <label>Formation &amp; Éducation (CV)</label>
+          <textarea id="info-fr-cvedu" style="min-height:140px;" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-12">
+          <label>Contact &amp; Réseaux</label>
+          <textarea id="info-fr-contact" onchange="markUnsaved()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Version Anglaise -->
+    <div class="panel-card">
+      <h2 style="font-family:'Monument Extended',sans-serif; font-size:1.05rem; text-transform:uppercase; margin-bottom:1.5rem;">
+        🇬🇧 Version Anglaise (EN)
+      </h2>
+      <div class="form-grid">
+        <div class="form-group col-span-12">
+          <label>Profile (English)</label>
+          <textarea id="info-en-profil" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-12">
+          <label>Approach (English)</label>
+          <textarea id="info-en-approche" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-6">
+          <label>Experience (English)</label>
+          <textarea id="info-en-cvexp" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-6">
+          <label>Education (English)</label>
+          <textarea id="info-en-cvedu" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-12">
+          <label>Contact (English)</label>
+          <textarea id="info-en-contact" onchange="markUnsaved()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Version Arabe (RTL) -->
+    <div class="panel-card">
+      <h2 style="font-family:'Monument Extended',sans-serif; font-size:1.05rem; text-transform:uppercase; margin-bottom:1.5rem;">
+        🇲🇦 Version Arabe (AR - RTL)
+      </h2>
+      <div class="form-grid">
+        <div class="form-group col-span-12">
+          <label>نبذة (Profil Arabe)</label>
+          <textarea id="info-ar-profil" dir="rtl" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-12">
+          <label>الرؤية والمنهج (Approche Arabe)</label>
+          <textarea id="info-ar-approche" dir="rtl" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-6">
+          <label>الخبرة المهنية (Expérience Arabe)</label>
+          <textarea id="info-ar-cvexp" dir="rtl" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-6">
+          <label>التعليم (Éducation Arabe)</label>
+          <textarea id="info-ar-cvedu" dir="rtl" onchange="markUnsaved()"></textarea>
+        </div>
+        <div class="form-group col-span-12">
+          <label>اتصال (Contact Arabe)</label>
+          <textarea id="info-ar-contact" dir="rtl" onchange="markUnsaved()"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="saveToast">✅ Modifs enregistrées !</div>
+
+  <!-- CHARGEMENT DU FICHIER DE DONNÉES -->
+  <script src="data.js"></script>
+
+  <script>
+    let state = {
+      categories: [
+        { id: "all", label: "TOUT" },
+        { id: "branding", label: "IDENTITÉS" },
+        { id: "3d", label: "3D & VOLUME" }
+      ],
+      projects: [],
+      info: { fr: {}, en: {}, ar: {} }
+    };
+
+    let isModified = false;
+    let fileHandle = null; // Pour l'enregistrement direct File System API
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Vérification si un brouillon auto-save existe en localStorage
+      const draft = localStorage.getItem('portfolio_cms_draft');
+      
+      if (window.PORTFOLIO_DATA) {
+        state = JSON.parse(JSON.stringify(window.PORTFOLIO_DATA));
+        if (draft && confirm("Un brouillon non enregistré a été détecté. Voulez-vous le restaurer ?")) {
+          try {
+            state = JSON.parse(draft);
+            markUnsaved();
+          } catch(e) {}
+        }
+      } else if (draft) {
+        try {
+          state = JSON.parse(draft);
+        } catch(e) {}
+      }
+
+      renderAll();
+    });
+
+    function markUnsaved() {
+      isModified = true;
+      const status = document.getElementById('saveStatus');
+      status.textContent = "● Modifié (non enregistré)";
+      status.className = "save-indicator unsaved";
+      localStorage.setItem('portfolio_cms_draft', JSON.stringify(state));
+    }
+
+    function markSaved() {
+      isModified = false;
+      const status = document.getElementById('saveStatus');
+      status.textContent = "✓ À jour";
+      status.className = "save-indicator";
+      localStorage.removeItem('portfolio_cms_draft');
+    }
+
+    function renderAll() {
+      updateCounts();
+      populateFilterCategories();
+      renderProjectsList();
+      renderCategoriesList();
+      populateInfoFields();
+    }
+
+    function updateCounts() {
+      document.getElementById('count-projects').textContent = state.projects.length;
+      document.getElementById('count-categories').textContent = state.categories.length;
+    }
+
+    function switchSection(sectionId, event) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById('section-' + sectionId).classList.add('active');
+    }
+
+    // ==========================================
+    // GESTION DES CATÉGORIES
+    // ==========================================
+    function populateFilterCategories() {
+      const select = document.getElementById('filter-category');
+      select.innerHTML = '<option value="all">Toutes les catégories</option>';
+      state.categories.forEach(cat => {
+        if (cat.id !== 'all') {
+          const opt = document.createElement('option');
+          opt.value = cat.id;
+          opt.textContent = cat.label;
+          select.appendChild(opt);
+        }
+      });
+    }
+
+    function renderCategoriesList() {
+      const tbody = document.getElementById('categories-list-body');
+      tbody.innerHTML = '';
+
+      state.categories.forEach((cat, index) => {
+        const count = state.projects.filter(p => p.category === cat.id).length;
+        const isAll = cat.id === 'all';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <input type="text" value="${cat.label}" onchange="updateCategoryLabel(${index}, this.value)" style="max-width:260px; font-weight:700;">
+          </td>
+          <td><code>${cat.id}</code></td>
+          <td><span class="badge-admin">${count} projet(s)</span></td>
+          <td>
+            ${isAll 
+              ? '<span style="color:#999; font-size:11px;">Obligatoire</span>' 
+              : `<button class="btn btn-outline btn-sm btn-red" onclick="deleteCategory(${index})">Supprimer</button>`
+            }
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function createCategory() {
+      const input = document.getElementById('new-cat-label');
+      const label = input.value.trim();
+      if (!label) return;
+
+      const id = label.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+      if (state.categories.some(c => c.id === id)) {
+        alert("Cette catégorie existe déjà !");
+        return;
+      }
+
+      state.categories.push({ id, label });
+      input.value = '';
+      markUnsaved();
+      renderAll();
+    }
+
+    function updateCategoryLabel(index, val) {
+      if (val.trim()) {
+        state.categories[index].label = val.trim();
+        markUnsaved();
+        populateFilterCategories();
+      }
+    }
+
+    function deleteCategory(index) {
+      const cat = state.categories[index];
+      if (confirm(`Supprimer la catégorie "${cat.label}" ? Ses projets seront assignés à "all".`)) {
+        state.projects.forEach(p => { if (p.category === cat.id) p.category = 'all'; });
+        state.categories.splice(index, 1);
+        markUnsaved();
+        renderAll();
+      }
+    }
+
+    // ==========================================
+    // RECHERCHE ET FILTRES D'ADMIN
+    // ==========================================
+    function applyFilters() {
+      const search = (document.getElementById('filter-search').value || '').toLowerCase();
+      const catFilter = document.getElementById('filter-category').value;
+      const typeFilter = document.getElementById('filter-type').value;
+
+      document.querySelectorAll('#projects-container .panel-card').forEach(card => {
+        const title = (card.getAttribute('data-title') || '').toLowerCase();
+        const cat = card.getAttribute('data-category');
+        const type = card.getAttribute('data-type');
+
+        const matchesSearch = title.includes(search);
+        const matchesCat = (catFilter === 'all' || cat === catFilter);
+        const matchesType = (typeFilter === 'all' || type === typeFilter);
+
+        card.style.display = (matchesSearch && matchesCat && matchesType) ? 'block' : 'none';
+      });
+    }
+
+    // ==========================================
+    // GESTION DES PROJETS & DRAG & DROP
+    // ==========================================
+    let draggedIndex = null;
+
+    function renderProjectsList() {
+      const container = document.getElementById('projects-container');
+      container.innerHTML = '';
+
+      state.projects.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'panel-card';
+        card.draggable = true;
+        card.setAttribute('data-index', index);
+        card.setAttribute('data-title', item.title || '');
+        card.setAttribute('data-category', item.category || 'all');
+        card.setAttribute('data-type', item.type || 'image');
+
+        const type = item.type || 'image';
+        const layout = item.layout || 'col-6';
+        const aspect = item.aspectRatio || 'aspect-auto';
+        const media = item.media || item.image || '';
+        const isText = type === 'text';
+        const defaultProjectUrl = `project-detail.html?id=${item.id}`;
+        const activeLink = item.link && item.link.trim() !== '' ? item.link.trim() : defaultProjectUrl;
+
+        // Drag & Drop des cartes avec support multi-navigateurs
+        card.addEventListener('dragstart', (e) => {
+          draggedIndex = index;
+          if (e.dataTransfer) {
+            e.dataTransfer.setData('text/plain', index);
+            e.dataTransfer.effectAllowed = 'move';
+          }
+          card.classList.add('is-dragging');
+        });
+        card.addEventListener('dragend', () => {
+          card.classList.remove('is-dragging');
+          document.querySelectorAll('.panel-card').forEach(c => c.classList.remove('drag-over'));
+        });
+        card.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+          card.classList.add('drag-over');
+        });
+        card.addEventListener('dragleave', () => {
+          card.classList.remove('drag-over');
+        });
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          card.classList.remove('drag-over');
+          if (draggedIndex !== null && draggedIndex !== index) {
+            const movedItem = state.projects.splice(draggedIndex, 1)[0];
+            state.projects.splice(index, 0, movedItem);
+            draggedIndex = null;
+            markUnsaved();
+            renderProjectsList();
+          }
+        });
+
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="drag-handle" title="Glisser pour réordonner">☰</span>
+              <span class="order-badge">#${index + 1}</span>
+              <span class="item-type-badge badge-${type}">${getTypeLabel(type)}</span>
+              <span style="font-size:12px; font-weight:700; color:#555;">${getLayoutLabel(layout)}</span>
+            </div>
+            
+            <div class="card-actions">
+              ${!isText ? `
+                <a href="${activeLink}" target="_blank" class="btn btn-outline btn-sm" title="Ouvrir la page de ce projet dans une nouvelle fenêtre">👁️ Ouvrir Page Projet</a>
+                <button class="btn btn-outline btn-sm" onclick="exportProjectHTML(${index})" title="Télécharger un fichier HTML autonome pour ce projet">📄 Exporter HTML</button>
+              ` : ''}
+              <button class="btn btn-outline btn-sm" onclick="duplicateItem(${index})" title="Dupliquer">📋 Copier</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
+              <button class="btn btn-outline btn-sm" onclick="moveItem(${index}, 1)" ${index === state.projects.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+              <button class="btn btn-outline btn-sm btn-red" onclick="deleteItem(${index})">🗑️</button>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            
+            <div class="form-group col-span-3">
+              <label>Type de contenu</label>
+              <select onchange="updateItem(${index}, 'type', this.value); renderProjectsList();">
+                <option value="image" ${type === 'image' ? 'selected' : ''}>📷 Image (Photo standard)</option>
+                <option value="video" ${type === 'video' ? 'selected' : ''}>🎬 Vidéo (MP4 / WebM)</option>
+                <option value="gif" ${type === 'gif' ? 'selected' : ''}>🎞️ GIF Animé</option>
+                <option value="text" ${type === 'text' ? 'selected' : ''}>✍️ Bloc de Texte</option>
+              </select>
+            </div>
+
+            <div class="form-group col-span-3">
+              <label>Largeur (Grille)</label>
+              <select onchange="updateItem(${index}, 'layout', this.value)">
+                <option value="col-6" ${layout === 'col-6' ? 'selected' : ''}>1/2 Largeur - 50% (Standard)</option>
+                <option value="col-12" ${layout === 'col-12' ? 'selected' : ''}>Pleine Largeur - 100% (Bannière)</option>
+                <option value="col-4" ${layout === 'col-4' ? 'selected' : ''}>1/3 Largeur - 33%</option>
+                <option value="col-8" ${layout === 'col-8' ? 'selected' : ''}>2/3 Largeur - 66%</option>
+                <option value="col-3" ${layout === 'col-3' ? 'selected' : ''}>1/4 Largeur - 25%</option>
+                <option value="col-7" ${layout === 'col-7' ? 'selected' : ''}>Asymétrique Large (58%)</option>
+                <option value="col-5" ${layout === 'col-5' ? 'selected' : ''}>Asymétrique Étroit (42%)</option>
+              </select>
+            </div>
+
+            ${!isText ? `
+              <div class="form-group col-span-3">
+                <label>Proportions (Ratio)</label>
+                <select onchange="updateItem(${index}, 'aspectRatio', this.value)">
+                  <option value="aspect-auto" ${aspect === 'aspect-auto' ? 'selected' : ''}>Libre / Auto</option>
+                  <option value="aspect-1-1" ${aspect === 'aspect-1-1' ? 'selected' : ''}>Carré (1:1)</option>
+                  <option value="aspect-16-9" ${aspect === 'aspect-16-9' ? 'selected' : ''}>Paysage (16:9)</option>
+                  <option value="aspect-4-5" ${aspect === 'aspect-4-5' ? 'selected' : ''}>Portrait (4:5)</option>
+                  <option value="aspect-3-4" ${aspect === 'aspect-3-4' ? 'selected' : ''}>Vertical (3:4)</option>
+                </select>
+              </div>
+            ` : `
+              <div class="form-group col-span-3">
+                <label>Style</label>
+                <div style="font-size:12px; color:#777; padding-top:0.6rem;">Texte brutaliste fluide</div>
+              </div>
+            `}
+
+            <div class="form-group col-span-3">
+              <label>Catégorie</label>
+              <select onchange="updateItem(${index}, 'category', this.value)">
+                ${state.categories.map(c => `
+                  <option value="${c.id}" ${c.id === item.category ? 'selected' : ''}>${c.label}</option>
+                `).join('')}
+              </select>
+            </div>
+
+            ${!isText ? `
+              <!-- Dropzone & Média -->
+              <div class="form-group col-span-6">
+                <label>Fichier Média (Nom du fichier ou Glisser-Déposer)</label>
+                <div class="media-dropzone" id="dropzone-${index}">
+                  <span style="font-size:12px; color:#555;">📁 Glissez votre fichier ici ou écrivez son nom ci-dessous</span>
+                  <input type="text" value="${media}" oninput="updateItem(${index}, 'media', this.value); updatePreview(${index}, this.value, '${type}')" placeholder="Ex: mon-projet.jpg, video.mp4, anim.gif">
+                </div>
+              </div>
+
+              <!-- Aperçu en temps réel -->
+              <div class="form-group col-span-6">
+                <label>Aperçu du média</label>
+                <div class="media-preview-container" id="preview-${index}">
+                  ${getPreviewHTML(media, type)}
+                </div>
+              </div>
+
+              <div class="form-group col-span-6">
+                <label>Lien de la page du projet (Automatique)</label>
+                <input type="text" value="${item.link || defaultProjectUrl}" onchange="updateItem(${index}, 'link', this.value)" placeholder="${defaultProjectUrl}">
+                <div style="font-size:11px; color:#777;">Laisse par défaut pour ouvrir sa page dédiée automatiquement.</div>
+              </div>
+
+              <div class="form-group col-span-6">
+                <label>Légende / Titre affiché</label>
+                <input type="text" value="${item.title || ''}" onchange="updateItem(${index}, 'title', this.value)" placeholder="Ex: 021    45 DEGRÉS, Direction Artistique & Typographie.">
+              </div>
+
+              <!-- Options avancées de la page de projet (Nouvelle Fenêtre) -->
+              <div class="col-span-12">
+                <details class="project-detail-accordion">
+                  <summary>⚙️ Personnaliser le contenu de la page dédiée de ce projet (Nouvelle Fenêtre)</summary>
+                  
+                  <div class="form-grid" style="margin-top:1rem;">
+                    <div class="form-group col-span-8">
+                      <label>Sous-titre / Accroche de la page</label>
+                      <input type="text" value="${item.subtitle || ''}" onchange="updateItem(${index}, 'subtitle', this.value)" placeholder="Ex: Exploration Visuelle & Recherche en Direction Artistique">
+                    </div>
+                    <div class="form-group col-span-2">
+                      <label>Année</label>
+                      <input type="text" value="${item.year || '2026'}" onchange="updateItem(${index}, 'year', this.value)" placeholder="2026">
+                    </div>
+                    <div class="form-group col-span-2">
+                      <label>Client / Contexte</label>
+                      <input type="text" value="${item.client || 'Marrakech — Studio'}" onchange="updateItem(${index}, 'client', this.value)" placeholder="Client / Studio">
+                    </div>
+                    <div class="form-group col-span-12">
+                      <label>Texte narratif / Explication complète du projet</label>
+                      <textarea onchange="updateItem(${index}, 'narrative', this.value)" placeholder="Racontez la démarche, le concept et les détails du projet...">${item.narrative || ''}</textarea>
+                    </div>
+                    <div class="form-group col-span-12">
+                      <label>
+                        <input type="checkbox" ${item.openInNewTab ? 'checked' : ''} onchange="updateItem(${index}, 'openInNewTab', this.checked)">
+                        Ouvrir le projet dans un nouvel onglet / nouvelle fenêtre au clic
+                      </label>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            ` : `
+              <div class="form-group col-span-12">
+                <label>Texte Brutaliste</label>
+                <textarea onchange="updateItem(${index}, 'textContent', this.value)" placeholder="Écrivez votre texte ici...">${item.textContent || item.title || ''}</textarea>
+              </div>
+            `}
+
+          </div>
+        `;
+
+        container.appendChild(card);
+
+        // Configuration du Glisser-Déposer de fichier direct sur la Dropzone
+        if (!isText) {
+          setupFileDropzone(index);
+        }
+      });
+
+      applyFilters();
+    }
+
+    function setupFileDropzone(index) {
+      const dz = document.getElementById(`dropzone-${index}`);
+      if (!dz) return;
+
+      dz.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dz.classList.add('dragover');
+      });
+      dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+      dz.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dz.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          const filename = file.name;
+
+          // Auto-détection du type
+          let newType = 'image';
+          if (filename.match(/\.(mp4|webm|mov)$/i)) newType = 'video';
+          else if (filename.match(/\.gif$/i)) newType = 'gif';
+
+          state.projects[index].type = newType;
+          state.projects[index].media = filename;
+          markUnsaved();
+          renderProjectsList();
+        }
+      });
+    }
+
+    function getPreviewHTML(media, type) {
+      if (!media) return '<span style="color:#777; font-size:12px;">Aucun média spécifié</span>';
+      if (type === 'video') {
+        return `<video src="${media}" autoplay muted loop playsinline></video>`;
+      }
+      return `<img src="${media}" onerror="this.src='favicon.png'; this.style.opacity=0.3;" alt="Aperçu">`;
+    }
+
+    function updatePreview(index, media, type) {
+      const container = document.getElementById(`preview-${index}`);
+      if (container) {
+        container.innerHTML = getPreviewHTML(media, type);
+      }
+    }
+
+    function getTypeLabel(type) {
+      switch(type) {
+        case 'video': return '🎬 Vidéo';
+        case 'gif': return '🎞️ GIF';
+        case 'text': return '✍️ Texte';
+        default: return '📷 Photo';
+      }
+    }
+
+    function getLayoutLabel(layout) {
+      switch(layout) {
+        case 'col-12': return '100% (Plein écran)';
+        case 'col-8': return '66% (Grand format)';
+        case 'col-4': return '33% (1/3)';
+        case 'col-3': return '25% (1/4)';
+        case 'col-7': return '58% (Asymétrique large)';
+        case 'col-5': return '42% (Asymétrique étroit)';
+        default: return '50% (Standard)';
+      }
+    }
+
+    function updateItem(index, key, val) {
+      state.projects[index][key] = val;
+      markUnsaved();
+    }
+
+    function moveItem(index, direction) {
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= state.projects.length) return;
+      const temp = state.projects[index];
+      state.projects[index] = state.projects[targetIndex];
+      state.projects[targetIndex] = temp;
+      markUnsaved();
+      renderProjectsList();
+    }
+
+    function duplicateItem(index) {
+      const clone = JSON.parse(JSON.stringify(state.projects[index]));
+      const newId = "proj_" + Date.now();
+      clone.id = newId;
+      clone.title = (clone.title || '') + " (Copie)";
+      clone.link = `project-detail.html?id=${newId}`;
+      state.projects.splice(index + 1, 0, clone);
+      markUnsaved();
+      renderProjectsList();
+    }
+
+    function deleteItem(index) {
+      if (confirm("Supprimer cet élément définitivement ?")) {
+        state.projects.splice(index, 1);
+        markUnsaved();
+        renderAll();
+      }
+    }
+
+    // AJOUT D'UN NOUVEAU PROJET : Toujours automatiquement lié à sa propre page !
+    function addNewItem() {
+      const newId = "proj_" + Date.now();
+      state.projects.unshift({
+        id: newId,
+        type: "image",
+        layout: "col-6",
+        aspectRatio: "aspect-auto",
+        media: "",
+        title: "NOUVEAU PROJET",
+        category: state.categories[1] ? state.categories[1].id : "all",
+        link: `project-detail.html?id=${newId}`, // Lien automatique vers sa propre page de projet !
+        subtitle: "Direction Artistique & Exploration Graphique",
+        year: "2026",
+        client: "Marrakech — Studio",
+        narrative: "",
+        openInNewTab: false
+      });
+      markUnsaved();
+      renderAll();
+      window.scrollTo({ top: 160, behavior: 'smooth' });
+    }
+
+    // EXPORTATION D'UN FICHIER HTML INDIVIDUEL AUTONOME
+    function exportProjectHTML(index) {
+      const p = state.projects[index];
+      const title = p.title ? p.title.replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim() : 'Projet';
+      const cleanSlug = p.id;
+      
+      const htmlContent = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title} — ZAKARIA BAIT</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link href="https://fonts.cdnfonts.com/css/monument-extended" rel="stylesheet">
+  <link rel="stylesheet" href="project-detail.html">
+  <script>
+    // Redirection propre vers le moteur de projet avec ID
+    window.location.replace("project-detail.html?id=${p.id}");
+  <\/script>
+</head>
+<body>
+  <p>Chargement du projet...</p>
+</body>
+</html>`;
+
+      const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${cleanSlug}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`📄 Fichier ${cleanSlug}.html exporté !`);
+    }
+
+    // ==========================================
+    // TEXTES DE LA PAGE INFO (FR / EN / AR)
+    // ==========================================
+    function populateInfoFields() {
+      if (!state.info) return;
+
+      // FR
+      if (state.info.fr) {
+        document.getElementById('info-fr-profil').value = state.info.fr.profil || '';
+        document.getElementById('info-fr-approche').value = state.info.fr.approche || '';
+        document.getElementById('info-fr-cvexp').value = state.info.fr.cvExp || '';
+        document.getElementById('info-fr-cvedu').value = state.info.fr.cvEdu || '';
+        document.getElementById('info-fr-contact').value = state.info.fr.contact || '';
+      }
+      // EN
+      if (state.info.en) {
+        document.getElementById('info-en-profil').value = state.info.en.profil || '';
+        document.getElementById('info-en-approche').value = state.info.en.approche || '';
+        document.getElementById('info-en-cvexp').value = state.info.en.cvExp || '';
+        document.getElementById('info-en-cvedu').value = state.info.en.cvEdu || '';
+        document.getElementById('info-en-contact').value = state.info.en.contact || '';
+      }
+      // AR
+      if (state.info.ar) {
+        document.getElementById('info-ar-profil').value = state.info.ar.profil || '';
+        document.getElementById('info-ar-approche').value = state.info.ar.approche || '';
+        document.getElementById('info-ar-cvexp').value = state.info.ar.cvExp || '';
+        document.getElementById('info-ar-cvedu').value = state.info.ar.cvEdu || '';
+        document.getElementById('info-ar-contact').value = state.info.ar.contact || '';
+      }
+    }
+
+    function syncInfoInputs() {
+      if (!state.info.fr) state.info.fr = {};
+      state.info.fr.profil = document.getElementById('info-fr-profil').value;
+      state.info.fr.approche = document.getElementById('info-fr-approche').value;
+      state.info.fr.cvExp = document.getElementById('info-fr-cvexp').value;
+      state.info.fr.cvEdu = document.getElementById('info-fr-cvedu').value;
+      state.info.fr.contact = document.getElementById('info-fr-contact').value;
+
+      if (!state.info.en) state.info.en = {};
+      state.info.en.profil = document.getElementById('info-en-profil').value;
+      state.info.en.approche = document.getElementById('info-en-approche').value;
+      state.info.en.cvExp = document.getElementById('info-en-cvexp').value;
+      state.info.en.cvEdu = document.getElementById('info-en-cvedu').value;
+      state.info.en.contact = document.getElementById('info-en-contact').value;
+
+      if (!state.info.ar) state.info.ar = {};
+      state.info.ar.profil = document.getElementById('info-ar-profil').value;
+      state.info.ar.approche = document.getElementById('info-ar-approche').value;
+      state.info.ar.cvExp = document.getElementById('info-ar-cvexp').value;
+      state.info.ar.cvEdu = document.getElementById('info-ar-cvedu').value;
+      state.info.ar.contact = document.getElementById('info-ar-contact').value;
+    }
+
+    // ==========================================
+    // SAUVEGARDE DIRECTE (GITHUB API / FILE SYSTEM / BLOB)
+    // ==========================================
+    async function savePortfolioData() {
+      syncInfoInputs();
+
+      const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
+      const ghToken = localStorage.getItem('portfolio_gh_token');
+
+      // 1. Priorité Cloud : Enregistrement direct sur GitHub si un token est configuré
+      if (ghToken) {
+        showToast("⏳ Envoi à GitHub en cours...");
+        try {
+          const success = await saveToGitHub(ghToken, jsCode);
+          if (success) {
+            markSaved();
+            showToast("🚀 Enregistré sur GitHub ! Vercel met à jour le site en direct.");
+            return;
+          }
+        } catch(e) {
+          console.warn("Échec GitHub API, bascule vers sauvegarde locale", e);
+        }
+      }
+
+      // 2. Sauvegarde directe locale via File System Access API
+      if ('showSaveFilePicker' in window && !fileHandle) {
+        try {
+          fileHandle = await window.showSaveFilePicker({
+            suggestedName: 'data.js',
+            types: [{ description: 'Fichier JavaScript', accept: { 'text/javascript': ['.js'] } }]
+          });
+        } catch(err) {}
+      }
+
+      if (fileHandle) {
+        try {
+          const writable = await fileHandle.createWritable();
+          await writable.write(jsCode);
+          await writable.close();
+          markSaved();
+          showToast("💾 Enregistré directement dans data.js !");
+          return;
+        } catch(e) {
+          fileHandle = null;
+        }
+      }
+
+      // 3. Repli standard : Téléchargement Blob propre
+      downloadBlob(jsCode, "data.js");
+      markSaved();
+      showToast("💾 data.js téléchargé ! Remplacez-le dans votre dossier.");
+    }
+
+    async function saveToGitHub(token, content) {
+      const owner = "zwakr";
+      const repo = "portfolio";
+      const path = "data.js";
+      
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!getRes.ok) throw new Error("Fichier introuvable sur GitHub");
+      const fileData = await getRes.json();
+      
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: "Mise à jour portfolio via CMS",
+          content: btoa(unescape(encodeURIComponent(content))),
+          sha: fileData.sha
+        })
+      });
+      return putRes.ok;
+    }
+
+    function configureGitHubToken() {
+      const current = localStorage.getItem('portfolio_gh_token') || '';
+      const token = prompt("Collez votre Token secret GitHub (ghp_...) pour sauvegarder en direct sur le cloud :", current);
+      if (token !== null) {
+        if (token.trim()) {
+          localStorage.setItem('portfolio_gh_token', token.trim());
+          alert("✅ Token GitHub enregistré ! Vos futures sauvegardes s'enverront directement sur GitHub.");
+        } else {
+          localStorage.removeItem('portfolio_gh_token');
+          alert("Token supprimé.");
+        }
+      }
+    }
+
+    function downloadBackup() {
+      syncInfoInputs();
+      const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
+      downloadBlob(jsCode, "data.js");
+      markSaved();
+      showToast("📥 data.js téléchargé !");
+    }
+
+    function downloadBlob(content, filename) {
+      const blob = new Blob([content], { type: "text/javascript;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('saveToast');
+      toast.textContent = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+  </script>
+</body>
+</html>
