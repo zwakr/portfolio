@@ -24,10 +24,10 @@ window.PORTFOLIO_DATA = {
   "projects": [
     {
       "id": "proj_021",
-      "type": "image",
+      "type": "gif",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "",
+      "media": "1-ezgif.com-video-to-gif-converter.gif",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
       "category": "direction",
       "link": "45-degres.html",
