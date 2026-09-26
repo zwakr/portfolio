@@ -35,7 +35,7 @@
       text-decoration: underline;
     }
 
-    /* Barre de navigation supérieure */
+    /* Barre de navigation supérieure - RETOUR AU DESIGN ORIGINAL PILL BUTTONS */
     .top-nav {
       font-family: 'Monument Extended', -apple-system, sans-serif;
       font-weight: 800;
@@ -52,18 +52,28 @@
     }
     .nav-links {
       display: flex;
-      gap: 2vw;
+      gap: 1.5vw;
     }
     .nav-btn {
-      color: #000;
-      opacity: 0.3;
-      transition: opacity 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.85rem;
+      border: 1.5px solid #000000;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      color: #000000;
     }
     .nav-btn:hover {
-      opacity: 0.7;
+      background: #000000;
+      color: #ffffff;
     }
     .nav-btn.active {
-      opacity: 1;
+      background: #000000;
+      color: #ffffff;
       pointer-events: none;
     }
 
@@ -115,11 +125,8 @@
     .column-set {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 0.5rem; /* gutter="0.5rem" */
+      gap: 0.5rem;
       width: 100%;
-    }
-    .column-unit {
-      /* Base styles */
     }
     .span-6 { grid-column: span 6; }
     .span-3 { grid-column: span 3; }
@@ -135,7 +142,7 @@
       margin-top: 2rem;
     }
     .media-item-container img {
-      max-width: 30%; /* scale="30" */
+      max-width: 30%;
       height: auto;
       margin-bottom: 0.5rem;
     }
@@ -149,11 +156,10 @@
         align-items: flex-start;
         gap: 1rem;
       }
-      /* mobile-stack="true" */
       .column-set {
         display: flex;
         flex-direction: column;
-        gap: 2rem; /* mobile-gutter="2rem" */
+        gap: 2rem;
       }
       .media-item-container img {
         max-width: 100%;
@@ -163,7 +169,7 @@
 </head>
 <body>
 
-  <!-- Navigation principale -->
+  <!-- Navigation principale avec le style original restauré ! -->
   <nav class="top-nav">
     <a href="index.html">ZAKARIA BAIT</a>
     <div class="nav-links">
@@ -184,6 +190,7 @@
   <div id="cargo-lang-wrapper">
     <br><br>
     
+    <!-- SECTION 1: CONTACT / PROFIL / APPROCHE -->
     <div class="column-set">
       <div class="column-unit span-6" id="txt-contact"></div>
       <div class="column-unit span-3" id="txt-profil"></div>
@@ -192,6 +199,16 @@
     
     <br><br><hr>
 
+    <!-- SECTION 1.5: PARCOURS (RESTORED) -->
+    <div class="column-set">
+      <div class="column-unit span-6" id="txt-cv-title"></div>
+      <div class="column-unit span-3" id="txt-cv-exp"></div>
+      <div class="column-unit span-3" id="txt-cv-edu"></div>
+    </div>
+
+    <br><br><hr>
+
+    <!-- SECTION 2: EXPERTISES -->
     <div class="column-set">
       <div class="column-unit span-6" id="txt-exp-title"></div>
       <div class="column-unit span-3" id="txt-exp-col1"></div>
@@ -200,6 +217,7 @@
     
     <br><br><br><hr>
 
+    <!-- SECTION 3: SELECTION & PROJETS -->
     <div class="column-set">
       <div class="column-unit span-6" id="txt-proj-title"></div>
       <div class="column-unit span-3" id="txt-proj-col1"></div>
@@ -207,7 +225,6 @@
     </div>
 
     <div class="media-item-container">
-      <!-- Remplacer le src par l'URL de votre image -->
       <img src="" alt="Zakaria Bait" onerror="this.style.display='none'">
       <figcaption class="caption" id="txt-caption"></figcaption>
     </div>
@@ -216,11 +233,15 @@
   <br><br><br><br><br><br><br><br><br><br><br><br>
 
   <script>
+  // On restaure les textes manquants de la section Parcours dans le dictionnaire
   const siteContent = {
     fr: {
       contact: `<hr>Contact<br><br>Marrakech<br>Maroc<br><br>zakaria-bait@outlook.com<br><a target="_blank" href="https://www.instagram.com/zakaria.bait/">@zeeekob</a><br>`,
       profil: `<hr>Profil<br><br>Zakaria Bait Graphiste Directeur Artistique indépendant basé à Marrakech, spécialisé dans la stratégie de marque (branding) et la création d'identités visuelles. Mon approche fusionne la réflexion stratégique avec une exécution visuelle précise, intégrant ponctuellement des éléments de conception 3D pour donner du volume et de la texture aux récits de marque.&nbsp;<br>J’utilise le volume, la typographie et l'image pour construire des univers cohérents et ancrés dans la réalité.<br><br>`,
       approche: `<hr>Approche<br><br>Je crois en un design intentionnel. Mon processus commence toujours par déconstruire le problème à partir de ses principes premiers avant de toucher au moindre outil graphique. Qu'il s'agisse du lancement d'une marque de vêtements ou de l'identité d'un projet, chaque décision typographique ou choix de direction artistique doit servir le positionnement stratégique. L'esthétique est pour moi la conséquence d'une bonne stratégie, jamais son point de départ.<br><br>`,
+      cvTitle: `&nbsp; &nbsp; &nbsp; Parcours<br><br><br>`,
+      cvExp: `&nbsp; &nbsp; &nbsp; Expériences<hr><b>Hivernage Collection</b><br>Graphiste — Direction visuelle 360° pour marques premium (print &amp; digital).<br>Depuis Oct. 2025<br><br><hr><b>Vinca Digital</b><br>Direction Artistique &amp; Event Branding — Identité sportive, signalétique grand format.<br>Juil. – Août 2025<br><br><hr><b>Brandoo Agency</b><br>Design Graphique — Création d'identités visuelles et campagnes à impact social.<br>Juin – Juil. 2024<br><br><br>`,
+      cvEdu: `&nbsp; &nbsp; &nbsp; Formation<hr><b>École Supérieure des Arts Visuels (ESAV)</b><br>Diplôme en Design Graphique Numérique.<br>Marrakech, 2023 - 2025<br><br><br>`,
       expTitle: `&nbsp; &nbsp; &nbsp; Expertises<br><br><br>`,
       expCol1: `&nbsp; &nbsp; &nbsp; Direction Artistique &amp; Branding<hr>Stratégie de Marque<br><hr>Identité Visuelle<hr>Design Typographique<hr>Direction de Création<br><hr>Design Éditorial<hr>Positionnement Stratégique<br><br><br>`,
       expCol2: `&nbsp; &nbsp; &nbsp; Exploration &amp; Volume<hr>Conception 3D (Concepts)<hr>Modélisation de Produits<br><hr>Recherche Visuelle<hr>Moodboarding&nbsp;<br><hr>Intégration Outils IA`,
@@ -233,6 +254,9 @@
       contact: `<hr>Contact<br><br>Marrakech<br>Morocco<br><br>zakaria-bait@outlook.com<br><a target="_blank" href="https://www.instagram.com/zakaria.bait/">@zeeekob</a><br>`,
       profil: `<hr>Profile<br><br>Zakaria Bait, freelance Graphic Designer & Art Director based in Marrakech, specializing in brand strategy and visual identity design. My approach merges strategic thinking with precise visual execution, occasionally integrating 3D design elements to bring volume and texture to brand narratives.&nbsp;<br>I use volume, typography, and imagery to craft coherent universes rooted in reality.<br><br>`,
       approche: `<hr>Approach<br><br>I believe in intentional design. My process always begins by deconstructing the problem down to its first principles before touching any graphic tool. Whether launching a clothing line or developing a project's identity, every typographic choice and art direction decision must serve the strategic positioning. For me, aesthetics are the outcome of a solid strategy, never its starting point.<br><br>`,
+      cvTitle: `&nbsp; &nbsp; &nbsp; Background<br><br><br>`,
+      cvExp: `&nbsp; &nbsp; &nbsp; Experience<hr><b>Hivernage Collection</b><br>Graphic Designer — 360° visual direction for premium brands.<br>Since Oct 2025<br><br><hr><b>Vinca Digital</b><br>Art Direction &amp; Event Branding — Sports identity and large-scale signage.<br>Jul – Aug 2025<br><br><hr><b>Brandoo Agency</b><br>Graphic Designer — Visual identities and high-impact social campaigns.<br>Jun – Jul 2024<br><br><br>`,
+      cvEdu: `&nbsp; &nbsp; &nbsp; Education<hr><b>École Supérieure des Arts Visuels (ESAV)</b><br>Digital Graphic Design Degree.<br>Marrakech, 2023 - 2025<br><br><br>`,
       expTitle: `&nbsp; &nbsp; &nbsp; Expertise<br><br><br>`,
       expCol1: `&nbsp; &nbsp; &nbsp; Art Direction &amp; Branding<hr>Brand Strategy<br><hr>Visual Identity<hr>Typography Design<hr>Creative Direction<br><hr>Editorial Design<hr>Strategic Positioning<br><br><br>`,
       expCol2: `&nbsp; &nbsp; &nbsp; Exploration &amp; Volume<hr>3D Design (Concepts)<hr>Product Modeling<br><hr>Visual Research<hr>Moodboarding&nbsp;<br><hr>AI Tools Integration`,
@@ -245,6 +269,9 @@
       contact: `<hr>اتصال<br><br>مراكش<br>المغرب<br><br>zakaria-bait@outlook.com<br><a target="_blank" href="https://www.instagram.com/zakaria.bait/">@zeeekob</a><br>`,
       profil: `<hr>نبذة<br><br>زكرياء بايت، مصمم جرافيك ومدير فني مستقل مقيم في مراكش، متخصّص في استراتيجية العلامات التجارية وتصميم الهويات البصرية. يجمع نهجي بين التفكير الاستراتيجي والتنفيذ البصري الدقيق، مع دمج عناصر ثلاثية الأبعاد لمنح سرديات العلامات التجارية بعداً وملمساً واقعياً.&nbsp;<br>أوظف الكتلة، التيبوغرافيا والصورة لبناء عوالم متماسكة ومتجذرة في الواقع.<br><br>`,
       approche: `<hr>الرؤية والمنهج<br><br>أؤمن بالتصميم الهادف. تبدأ منهجيتي دائماً بتفكيك المشكلة إلى مبادئها الأساسية قبل لمس أي أداة تصميم. وسواء كان العمل على إطلاق علامة ملابس أو تصميم هوية مشروع، فإن كل قرار تيبوغرافي واختيار فني يجب أن يخدم التموضع الاستراتيجي. الجماليات بالنسبة لي هي نتيجة حتمية لاستراتيجية ناجحة وليست نقطة انطلاقها أبداً.<br><br>`,
+      cvTitle: `&nbsp; &nbsp; &nbsp; المسار<br><br><br>`,
+      cvExp: `&nbsp; &nbsp; &nbsp; الخبرة المهنية<hr><b>Hivernage Collection</b><br>مصمم جرافيك — توجيه بصري شامل لعلامات تجارية فاخرة.<br>منذ أكتوبر 2025<br><br><hr><b>Vinca Digital</b><br>إدارة فنية وتصميم فعاليات — هوية رياضية ولافتات ضخمة.<br>يوليو – غشت 2025<br><br><hr><b>Brandoo Agency</b><br>مصمم جرافيك — هويات بصرية وحملات ذات تأثير اجتماعي.<br>يونيو – يوليو 2024<br><br><br>`,
+      cvEdu: `&nbsp; &nbsp; &nbsp; التعليم<hr><b>المدرسة العليا للفنون البصرية (ESAV)</b><br>دبلوم في التصميم الجرافيكي الرقمي.<br>مراكش، 2023 - 2025<br><br><br>`,
       expTitle: `&nbsp; &nbsp; &nbsp; مجالات الخبرة<br><br><br>`,
       expCol1: `&nbsp; &nbsp; &nbsp; الإدارة الفنية وبناء العلامات<hr>استراتيجية العلامة التجارية<br><hr>الهوية البصرية<hr>تصميم التيبوغرافيا والخط<hr>الإدارة الإبداعية<br><hr>التصميم التحريري<hr>التموضع الاستراتيجي<br><br><br>`,
       expCol2: `&nbsp; &nbsp; &nbsp; الاستكشاف والأبعاد<hr>تصميم ثلاثي الأبعاد (مفاهيم)<hr>نمذجة المنتجات<br><hr>البحث البصري<hr>لوحات الإلهام (Moodboarding)&nbsp;<br><hr>دمج أدوات الذكاء الاصطناعي`,
@@ -264,6 +291,12 @@
     document.getElementById('txt-contact').innerHTML = data.contact;
     document.getElementById('txt-profil').innerHTML = data.profil;
     document.getElementById('txt-approche').innerHTML = data.approche;
+    
+    // Ajout de la section parcours restaurée
+    document.getElementById('txt-cv-title').innerHTML = data.cvTitle;
+    document.getElementById('txt-cv-exp').innerHTML = data.cvExp;
+    document.getElementById('txt-cv-edu').innerHTML = data.cvEdu;
+
     document.getElementById('txt-exp-title').innerHTML = data.expTitle;
     document.getElementById('txt-exp-col1').innerHTML = data.expCol1;
     document.getElementById('txt-exp-col2').innerHTML = data.expCol2;
