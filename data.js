@@ -23,6 +23,38 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
+      "id": "proj_016",
+      "type": "image",
+      "layout": "col-6",
+      "aspectRatio": "aspect-auto",
+      "media": "gif lnfa motion design reveal.gif",
+      "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
+      "category": "direction",
+      "link": "project-detail.html?id=proj_016",
+      "textContent": "",
+      "detail": {
+        "title": "016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790418110107",
+            "type": "full-media",
+            "media": "gif lnfa motion design reveal.gif",
+            "mediaType": "image",
+            "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
+          },
+          {
+            "id": "blk_1790418110108",
+            "type": "narrative",
+            "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
+    },
+    {
       "id": "proj_1790374376519",
       "type": "image",
       "layout": "col-6",
@@ -76,13 +108,6 @@ window.PORTFOLIO_DATA = {
         "client": "Marrakech — Projet Studio",
         "blocks": [
           {
-            "id": "blk_1",
-            "type": "full-media",
-            "media": "poster_45_degres_01.svg",
-            "mediaType": "image",
-            "caption": "01 / 06 &nbsp; &nbsp;Identité &amp; composition spatiale à 45 degrés"
-          },
-          {
             "id": "blk_2",
             "type": "narrative",
             "text": "Le projet <b>45 Degrés</b> explore la tension entre structure rigide et rupture cinétique. En déconstruisant les règles de composition traditionnelles, chaque élément typographique et volumétrique est orienté pour créer un équilibre asymétrique immersif."
@@ -126,7 +151,28 @@ window.PORTFOLIO_DATA = {
       "title": "020 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
       "category": "branding",
       "link": "project-detail.html?id=proj_020",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790418110107",
+            "type": "full-media",
+            "media": "poster_45_degres_02.svg",
+            "mediaType": "image",
+            "caption": "01 / 01    020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis."
+          },
+          {
+            "id": "blk_1790418110108",
+            "type": "narrative",
+            "text": "Le projet <b>020 TEST CAPTION, Lorem ipsum dolar sit amet duis lacinia porttitor justo, ac interdum leo sollicitudin quis.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     },
     {
       "id": "proj_019",
@@ -148,7 +194,28 @@ window.PORTFOLIO_DATA = {
       "title": "017 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
       "category": "branding",
       "link": "project-detail.html?id=proj_017",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790418110107",
+            "type": "full-media",
+            "media": "poster_45_degres_03.svg",
+            "mediaType": "image",
+            "caption": "01 / 01    017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra."
+          },
+          {
+            "id": "blk_1790418110108",
+            "type": "narrative",
+            "text": "Le projet <b>017 TEST CAPTION, Lorem ipsum dolar sit amet, ut posuere interdum leo id pharetra.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     },
     {
       "id": "proj_018",
@@ -159,18 +226,28 @@ window.PORTFOLIO_DATA = {
       "title": "018 &nbsp; &nbsp;PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
       "category": "direction",
       "link": "project-detail.html?id=proj_018",
-      "textContent": ""
-    },
-    {
-      "id": "proj_016",
-      "type": "image",
-      "layout": "col-6",
-      "aspectRatio": "aspect-auto",
-      "media": "gif lnfa motion design reveal.gif",
-      "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
-      "category": "direction",
-      "link": "project-detail.html?id=proj_016",
-      "textContent": ""
+      "textContent": "",
+      "detail": {
+        "title": "018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790418110107",
+            "type": "full-media",
+            "media": "video_404.mp4",
+            "mediaType": "video",
+            "caption": "01 / 01    018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue."
+          },
+          {
+            "id": "blk_1790418110108",
+            "type": "narrative",
+            "text": "Le projet <b>018 PROJET VIDÉO / MOTION, Défilement dynamique et boucle continue.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
     }
   ],
   "info": {
