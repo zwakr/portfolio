@@ -50,6 +50,23 @@ window.PORTFOLIO_DATA = {
             "id": "blk_1790418110108",
             "type": "narrative",
             "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          },
+          {
+            "id": "blk_1790419014365",
+            "type": "grid-asym",
+            "media1": "",
+            "media1Type": "image",
+            "caption1": "",
+            "media2": "",
+            "media2Type": "image",
+            "caption2": ""
+          },
+          {
+            "id": "blk_1790419029927",
+            "type": "full-media",
+            "media": "",
+            "mediaType": "video",
+            "caption": ""
           }
         ]
       }
