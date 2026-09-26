@@ -23,6 +23,42 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
+      "id": "proj_1790374376519",
+      "type": "image",
+      "layout": "col-6",
+      "aspectRatio": "aspect-auto",
+      "media": "",
+      "title": "NOUVEAU PROJET",
+      "category": "branding",
+      "link": "project-detail.html?id=proj_1790374376519",
+      "subtitle": "Direction Artistique & Exploration Graphique",
+      "year": "2026",
+      "client": "Marrakech — Studio",
+      "narrative": "",
+      "openInNewTab": false,
+      "detail": {
+        "title": "NOUVEAU PROJET",
+        "subtitle": "Direction Artistique & Exploration Graphique",
+        "discipline": "Direction Artistique, Design",
+        "year": "2026",
+        "client": "Marrakech — Studio",
+        "blocks": [
+          {
+            "id": "blk_1790374376519",
+            "type": "full-media",
+            "media": "",
+            "mediaType": "image",
+            "caption": "01 / 01    NOUVEAU PROJET"
+          },
+          {
+            "id": "blk_1790374376520",
+            "type": "narrative",
+            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
+      }
+    },
+    {
       "id": "proj_021",
       "type": "image",
       "layout": "col-6",
