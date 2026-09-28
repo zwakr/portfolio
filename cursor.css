@@ -1,0 +1,106 @@
+/* ==========================================================================
+   GSAP CUSTOM CURSOR (Ultra-stable & Pure CSS Fallback)
+   ========================================================================== */
+
+@media (pointer: fine) {
+  body {
+    cursor: default;
+  }
+
+  /* Cache le curseur natif uniquement sur les éléments interactifs souhaités */
+  a, button, .nav-btn, .filter-btn, .cargo-lang-btn, .project-item, .project-item * {
+    cursor: none !important;
+  }
+
+  .custom-cursor-dot,
+  .custom-cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #000000;
+    transform: translate(-50%, -50%);
+  }
+
+  .custom-cursor-follower {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    background-color: transparent;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Satoshi', -apple-system, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: transparent;
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.25s ease,
+                border-color 0.25s ease,
+                color 0.2s ease;
+  }
+
+  /* État visible quand la souris bouge */
+  body.cursor-active .custom-cursor-dot,
+  body.cursor-active .custom-cursor-follower {
+    opacity: 1;
+  }
+
+  /* État : Survol d'un lien ou bouton (agrandissement subtil) */
+  .custom-cursor-follower.is-hover-link {
+    width: 52px;
+    height: 52px;
+    border-color: #000000;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  /* État : Survol d'un projet (Badge VIEW brutaliste) */
+  .custom-cursor-follower.is-hover-project {
+    width: 68px;
+    height: 68px;
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+  }
+
+  /* Thème inversé (si body.is-inverted) */
+  body.is-inverted .custom-cursor-dot {
+    background-color: #ef202b;
+  }
+  body.is-inverted .custom-cursor-follower {
+    border-color: rgba(239, 32, 43, 0.5);
+  }
+  body.is-inverted .custom-cursor-follower.is-hover-link {
+    border-color: #ef202b;
+    background-color: rgba(239, 32, 43, 0.08);
+  }
+  body.is-inverted .custom-cursor-follower.is-hover-project {
+    background-color: #ef202b;
+    border-color: #ef202b;
+    color: #000000;
+  }
+}
+
+/* Sur mobile/tablette : aucun curseur custom */
+@media (pointer: coarse), (max-width: 820px) {
+  .custom-cursor-dot,
+  .custom-cursor-follower {
+    display: none !important;
+  }
+  a, button, .nav-btn, .filter-btn, .cargo-lang-btn, .project-item {
+    cursor: auto !important;
+  }
+}
