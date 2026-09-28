@@ -3,12 +3,8 @@
    ========================================================================== */
 
 @media (pointer: fine) {
-  body {
-    cursor: default;
-  }
-
-  /* Cache le curseur natif uniquement sur les éléments interactifs souhaités */
-  a, button, .nav-btn, .filter-btn, .cargo-lang-btn, .project-item, .project-item * {
+  /* Masque complètement le curseur système natif partout sur ordinateur */
+  *, *::before, *::after, html, body, a, button {
     cursor: none !important;
   }
 
@@ -100,7 +96,7 @@
   .custom-cursor-follower {
     display: none !important;
   }
-  a, button, .nav-btn, .filter-btn, .cargo-lang-btn, .project-item {
+  *, *::before, *::after, html, body, a, button {
     cursor: auto !important;
   }
 }
