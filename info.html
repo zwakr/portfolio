@@ -318,6 +318,11 @@
     document.querySelectorAll('.cargo-lang-btn').forEach(btn => btn.classList.remove('active'));
     const activeBtn = document.getElementById('btn-' + lang);
     if (activeBtn) activeBtn.classList.add('active');
+
+    // Animation fluide GSAP lors du changement de langue
+    if (typeof onLanguageSwitched === 'function') {
+      onLanguageSwitched();
+    }
   }
 
   // Initialisation par défaut
@@ -326,8 +331,10 @@
   });
   </script>
 
-  <!-- GSAP & Clean Cursor -->
+  <!-- GSAP & Clean Cursor & Info Animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="cursor.js"></script>
+  <script src="info-animations.js"></script>
 </body>
 </html>
