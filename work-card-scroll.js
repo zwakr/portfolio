@@ -1,7 +1,7 @@
 /**
  * GSAP ScrollTrigger - Museum Gallery Card Stacking & Side Meta Reveal
- * Project starts full screen, then shrinks on scroll revealing wide whitespace
- * and side editorial text on both flanks (adapting to both landscape and vertical).
+ * Starts in pure FULL PAGE (fill edge-to-edge), then shrinks on scroll
+ * leaving massive whitespace (extra wide for vertical) with Satoshi Light side typography.
  */
 (function() {
   function getHeaderHeight() {
@@ -37,17 +37,25 @@
       const sideRight = wrapper.querySelector('.side-right');
       if (!card || !mediaFrame) return;
 
-      // Z-index progressif pour empiler les cartes proprement
+      // Z-index progressif
       card.style.zIndex = 10 + visibleIndex;
       visibleIndex++;
 
-      // 1. Rétrécissement de l'image (de plein écran vers le cadre musée au centre)
+      // Détecter si le projet est vertical ou horizontal
+      const isPortrait = wrapper.classList.contains('is-portrait');
+      
+      // Facteur d'agrandissement initial pour être véritablement en PLEIN ÉCRAN (fill edge-to-edge)
+      // Paysage : 1.82x pour déborder complètement sur tout l'écran
+      // Portrait : 1.45x pour couvrir toute la hauteur de l'écran
+      const startScale = isPortrait ? 1.45 : 1.85;
+
+      // 1. Rétrécissement du média (de Plein Écran à l'affiche musée centrée)
       gsap.fromTo(mediaFrame, 
         { 
-          scale: 1.28 // Pleine page au départ
+          scale: startScale
         }, 
         { 
-          scale: 0.92, // Rétrécit élégamment au centre
+          scale: 1.0, // Revient à sa taille musée au centre
           ease: "none",
           scrollTrigger: {
             trigger: wrapper,
@@ -59,12 +67,12 @@
         }
       );
 
-      // 2. Apparition des textes latéraux sur les côtés au fil du rétrécissement
+      // 2. Apparition douce des textes latéraux (Satoshi Light) sur les flancs
       if (sideLeft && sideRight) {
         gsap.fromTo([sideLeft, sideRight],
           {
             opacity: 0,
-            y: 20
+            y: 12
           },
           {
             opacity: 1,
@@ -73,7 +81,7 @@
             scrollTrigger: {
               trigger: wrapper,
               start: `top ${headerHeight}px`,
-              end: `center ${headerHeight}px`, // Les textes sont pleinement lisibles à mi-scroll
+              end: `center ${headerHeight}px`,
               scrub: 0.5,
               invalidateOnRefresh: true
             }

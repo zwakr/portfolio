@@ -72,8 +72,8 @@
       padding: 0.2rem 0.6rem;
       border: 1px solid #000000;
       border-radius: 0px;
-      font-family: 'Satoshi', sans-serif;
-      font-weight: 300;
+      font-family: 'Satoshi', sans-serif !important;
+      font-weight: 300 !important;
       font-size: 11px;
       letter-spacing: 0.05em;
       transition: all 0.2s ease;
@@ -116,7 +116,7 @@
     .project-card-wrapper {
       position: relative;
       width: 100%;
-      height: 145vh; /* Hauteur optimale pour un défilement doux */
+      height: 150vh; /* Hauteur optimale pour voir le plein écran puis le rétrécissement */
     }
 
     /* La carte reste collée sous le header */
@@ -124,23 +124,21 @@
       position: sticky;
       top: 80px;
       width: 100vw;
-      height: calc(100vh - 85px);
+      height: calc(100vh - 80px);
       display: flex;
       align-items: center;
       justify-content: center;
       background-color: #ffffff;
       overflow: hidden;
-      padding: 0 3vw;
+      padding: 0;
     }
 
-    /* Le cadre central de l'image (s'adapte au format paysage ET vertical) */
+    /* Cadre de l'image (Centré avec will-change) */
     .project-media-frame {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      max-width: 66vw;
-      max-height: 76vh;
       width: 100%;
       height: 100%;
       will-change: transform;
@@ -148,15 +146,33 @@
       text-decoration: none !important;
     }
 
+    /* RÈGLE CLÉ : Format Paysage (Rétrécit encore plus au centre pour laisser beaucoup de blanc) */
+    .project-card-wrapper.is-landscape .project-media-frame {
+      max-width: 52vw;
+      max-height: 60vh;
+    }
+
+    /* RÈGLE CLÉ : Format Portrait (Élancé en hauteur, très étroit en largeur pour un MAX de white space sur les côtés) */
+    .project-card-wrapper.is-portrait .project-media-frame {
+      max-height: 80vh;
+      max-width: 36vw;
+    }
+
+    /* Par défaut si non déterminé */
+    .project-media-frame {
+      max-width: 54vw;
+      max-height: 64vh;
+    }
+
     .project-media-frame img,
     .project-media-frame video {
       max-width: 100%;
-      max-height: 76vh;
+      max-height: 100%;
       width: auto;
       height: auto;
-      object-fit: contain; /* S'adapte au paysage et au portrait sans rogner */
+      object-fit: contain; /* Respecte fidèlement le ratio d'origine */
       display: block;
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.07);
       transition: transform 0.3s ease;
     }
 
@@ -166,64 +182,68 @@
     }
 
     .img-placeholder {
-      width: 48vw;
-      height: 60vh;
-      background-color: #f2f2f2;
-      border: 1px dashed #cccccc;
+      width: 42vw;
+      height: 55vh;
+      background-color: #f5f5f5;
+      border: 1px dashed #d0d0d0;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #888888;
-      font-family: 'Satoshi', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
+      font-family: 'Satoshi', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 12px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    /* Métadonnées sur les côtés (Flancs gauche et droite style musée) */
+    /* TYPOGRAPHIE SATOSHI LIGHT SUR LES CÔTÉS (Exactement comme dans la référence) */
     .project-side-meta {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-family: 'Satoshi', monospace, -apple-system, sans-serif;
-      font-size: 11.5px;
-      line-height: 1.45;
+      font-family: 'Satoshi', sans-serif !important;
+      font-weight: 300 !important; /* SATOSHI LIGHT PUR */
+      font-size: 11px;
+      line-height: 1.55;
       letter-spacing: 0.02em;
-      color: #111111;
+      color: #000000;
       z-index: 10;
       pointer-events: none;
-      max-width: 16vw;
+      max-width: 18vw;
       will-change: opacity, transform;
     }
 
     .side-left {
-      left: 3.5vw;
+      left: 5vw; /* Positionné bien à l'écart dans le white space */
       text-align: left;
     }
 
     .side-right {
-      right: 3.5vw;
+      right: 5vw; /* Positionné bien à l'écart dans le white space */
       text-align: right;
     }
 
     .meta-title {
-      font-weight: 700;
+      font-family: 'Satoshi', sans-serif !important;
+      font-weight: 300 !important; /* SATOSHI LIGHT */
       color: #000000;
-      font-size: 12px;
+      font-size: 11.5px;
       margin-bottom: 2px;
     }
 
     .meta-sub, .meta-client, .meta-cat, .meta-year, .meta-index {
-      color: #444444;
-      font-weight: 400;
+      font-family: 'Satoshi', sans-serif !important;
+      font-weight: 300 !important; /* SATOSHI LIGHT */
+      color: #222222;
     }
 
     .meta-divider {
-      color: #999999;
-      letter-spacing: 0.12em;
-      margin: 0.3rem 0;
-      font-family: monospace;
+      color: #666666;
+      letter-spacing: 0.15em;
+      margin: 0.35rem 0;
+      font-family: 'Satoshi', monospace, sans-serif !important;
+      font-weight: 300 !important;
       font-size: 10px;
     }
 
@@ -237,7 +257,8 @@
       justify-content: space-between;
       align-items: center;
       border-top: 1.5px solid #000000;
-      font-family: 'Satoshi', sans-serif;
+      font-family: 'Satoshi', sans-serif !important;
+      font-weight: 300 !important;
       font-size: 12px;
       letter-spacing: 0.05em;
     }
@@ -245,7 +266,7 @@
     .stacked-footer a {
       color: inherit;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 500;
     }
 
     /* Responsive Mobile */
@@ -255,12 +276,11 @@
         align-items: flex-start;
         gap: 0.8rem;
       }
-      .project-card {
-        padding: 0 1.5rem;
-      }
+      .project-card-wrapper.is-landscape .project-media-frame,
+      .project-card-wrapper.is-portrait .project-media-frame,
       .project-media-frame {
         max-width: 90vw;
-        max-height: 60vh;
+        max-height: 55vh;
       }
       .project-side-meta {
         position: static;
@@ -270,12 +290,13 @@
         margin-top: 1rem;
       }
       .side-right {
-        display: none; /* Sur mobile, on garde uniquement les infos principales à gauche */
+        display: none;
       }
       .project-card {
         flex-direction: column;
         height: auto;
         min-height: 90vh;
+        padding: 0 1.5rem;
       }
       .project-card-wrapper {
         height: 120vh;
@@ -379,9 +400,16 @@
         wrapper.className = 'project-card-wrapper';
         wrapper.setAttribute('data-category', category);
 
+        // Détection initiale du ratio
+        if (proj.aspectRatio === 'aspect-3-4' || proj.aspectRatio === 'aspect-4-5' || proj.aspectRatio === 'aspect-9-16') {
+          wrapper.classList.add('is-portrait');
+        } else {
+          wrapper.classList.add('is-landscape');
+        }
+
         wrapper.innerHTML = `
           <div class="project-card">
-            <!-- Métadonnées Flanc Gauche -->
+            <!-- Métadonnées Flanc Gauche (Satoshi Light) -->
             <div class="project-side-meta side-left">
               <div class="meta-title">${cleanTitle}</div>
               <div class="meta-sub">${discipline}</div>
@@ -389,12 +417,12 @@
               <div class="meta-year">${year}</div>
             </div>
 
-            <!-- Cadre Central de l'Image (Adaptatif Paysage & Vertical) -->
+            <!-- Cadre Central de l'Image -->
             <a href="${projectUrl}" class="project-media-frame project-item" ${targetAttr}>
               ${mediaHtml}
             </a>
 
-            <!-- Métadonnées Flanc Droit -->
+            <!-- Métadonnées Flanc Droit (Satoshi Light) -->
             <div class="project-side-meta side-right">
               <div class="meta-client">${client}</div>
               <div class="meta-cat">(${catLabel})</div>
@@ -405,6 +433,25 @@
         `;
 
         portfolioContainer.appendChild(wrapper);
+
+        // Détection dynamique dès que l'image est chargée pour affiner le ratio
+        const imgEl = wrapper.querySelector('img.media-element');
+        if (imgEl) {
+          const checkRatio = () => {
+            if (imgEl.naturalHeight > imgEl.naturalWidth) {
+              wrapper.classList.add('is-portrait');
+              wrapper.classList.remove('is-landscape');
+            } else {
+              wrapper.classList.add('is-landscape');
+              wrapper.classList.remove('is-portrait');
+            }
+          };
+          if (imgEl.complete && imgEl.naturalWidth > 0) {
+            checkRatio();
+          } else {
+            imgEl.addEventListener('load', checkRatio);
+          }
+        }
       });
 
       // 3. GESTION DU FILTRAGE
@@ -432,7 +479,6 @@
             }
           });
 
-          // Réinitialiser le scroll animation
           if (typeof initWorkCardScroll === 'function') {
             initWorkCardScroll();
           }
