@@ -1,12 +1,12 @@
 /**
- * GSAP ScrollTrigger - Full Page Card Stacking & Scale-Down
- * Each project card starts full page and smoothly shrinks on scroll,
- * revealing clean white margins around it before the next card stacks on top.
+ * GSAP ScrollTrigger - Museum Gallery Card Stacking & Side Meta Reveal
+ * Project starts full screen, then shrinks on scroll revealing wide whitespace
+ * and side editorial text on both flanks (adapting to both landscape and vertical).
  */
 (function() {
   function getHeaderHeight() {
     const header = document.querySelector('.sticky-header');
-    return header ? header.offsetHeight : 85;
+    return header ? header.offsetHeight : 80;
   }
 
   function initWorkCardScroll() {
@@ -32,37 +32,60 @@
       }
 
       const card = wrapper.querySelector('.project-card');
-      const inner = wrapper.querySelector('.project-card-inner');
-      if (!card || !inner) return;
+      const mediaFrame = wrapper.querySelector('.project-media-frame');
+      const sideLeft = wrapper.querySelector('.side-left');
+      const sideRight = wrapper.querySelector('.side-right');
+      if (!card || !mediaFrame) return;
 
-      // Z-index progressif pour empiler naturellement la carte suivante par-dessus la précédente
+      // Z-index progressif pour empiler les cartes proprement
       card.style.zIndex = 10 + visibleIndex;
       visibleIndex++;
 
-      // Animation liée au scroll (scrub: true)
-      gsap.fromTo(inner, 
+      // 1. Rétrécissement de l'image (de plein écran vers le cadre musée au centre)
+      gsap.fromTo(mediaFrame, 
         { 
-          scale: 1
+          scale: 1.28 // Pleine page au départ
         }, 
         { 
-          scale: 0.88, // Réduit à 88% pour dégager un cadre blanc régulier tout autour
+          scale: 0.92, // Rétrécit élégamment au centre
           ease: "none",
           scrollTrigger: {
             trigger: wrapper,
             start: `top ${headerHeight}px`,
             end: `bottom ${headerHeight}px`,
-            scrub: 0.5, // Amorti très doux pour un scroll soyeux
+            scrub: 0.5,
             invalidateOnRefresh: true
           }
         }
       );
+
+      // 2. Apparition des textes latéraux sur les côtés au fil du rétrécissement
+      if (sideLeft && sideRight) {
+        gsap.fromTo([sideLeft, sideRight],
+          {
+            opacity: 0,
+            y: 20
+          },
+          {
+            opacity: 1,
+            y: 0,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: wrapper,
+              start: `top ${headerHeight}px`,
+              end: `center ${headerHeight}px`, // Les textes sont pleinement lisibles à mi-scroll
+              scrub: 0.5,
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      }
     });
 
-    // Recalcule toutes les hauteurs et positions de scroll
     ScrollTrigger.refresh();
   }
 
-  // Initialisation automatique après chargement du DOM et des projets
+  // Initialisation automatique après chargement
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(initWorkCardScroll, 120);
@@ -71,10 +94,8 @@
     setTimeout(initWorkCardScroll, 120);
   }
 
-  // Rendre accessible globalement pour les filtres
   window.initWorkCardScroll = initWorkCardScroll;
 
-  // Rafraîchir lors du redimensionnement de la fenêtre
   window.addEventListener('resize', () => {
     ScrollTrigger.refresh();
   });

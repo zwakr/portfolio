@@ -24,7 +24,7 @@
       overflow-x: hidden;
     }
 
-    /* En-tête collant qui reste au-dessus sans masquer les cartes */
+    /* En-tête collant discret avec fond de verre */
     .sticky-header {
       position: sticky;
       top: 0;
@@ -107,138 +107,124 @@
       display: none;
     }
 
-    /* Espace sous le header */
-    .header-spacer {
-      height: 115px;
-    }
-
-    /* Conteneur des cartes empilées plein écran */
+    /* Conteneur des cartes empilées style galerie / musée */
     .portfolio-stacked-container {
       width: 100%;
       position: relative;
     }
 
-    /* Chaque projet dispose d'une hauteur de scroll pour rétrécir */
     .project-card-wrapper {
       position: relative;
       width: 100%;
-      height: 140vh; /* Permet un rétrécissement très progressif */
+      height: 145vh; /* Hauteur optimale pour un défilement doux */
     }
 
     /* La carte reste collée sous le header */
     .project-card {
       position: sticky;
-      top: 85px;
-      width: 100%;
-      height: calc(100vh - 90px);
+      top: 80px;
+      width: 100vw;
+      height: calc(100vh - 85px);
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #ffffff; /* Le blanc qui apparaît tout autour lors du scale */
+      background-color: #ffffff;
       overflow: hidden;
+      padding: 0 3vw;
     }
 
-    /* L'élément qui rétrécit au scroll (scale-down) */
-    .project-card-inner {
+    /* Le cadre central de l'image (s'adapte au format paysage ET vertical) */
+    .project-media-frame {
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 66vw;
+      max-height: 76vh;
       width: 100%;
       height: 100%;
       will-change: transform;
       transform-origin: center center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #0a0a0a;
       text-decoration: none !important;
-      overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
     }
 
-    .project-media-wrap {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-    }
-
-    .media-element {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .project-media-frame img,
+    .project-media-frame video {
+      max-width: 100%;
+      max-height: 76vh;
+      width: auto;
+      height: auto;
+      object-fit: contain; /* S'adapte au paysage et au portrait sans rogner */
       display: block;
-      transition: transform 0.4s ease;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
     }
 
-    .project-card-inner:hover .media-element {
-      transform: scale(1.02);
+    .project-media-frame:hover img,
+    .project-media-frame:hover video {
+      transform: scale(1.015);
     }
 
     .img-placeholder {
-      width: 100%;
-      height: 100%;
-      background-color: #141414;
+      width: 48vw;
+      height: 60vh;
+      background-color: #f2f2f2;
+      border: 1px dashed #cccccc;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #666666;
+      color: #888888;
+      font-family: 'Satoshi', sans-serif;
       font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    /* Légende éditoriale incrustée dans la carte */
-    .project-card-overlay {
+    /* Métadonnées sur les côtés (Flancs gauche et droite style musée) */
+    .project-side-meta {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 3rem 3.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Satoshi', monospace, -apple-system, sans-serif;
+      font-size: 11.5px;
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+      color: #111111;
       z-index: 10;
       pointer-events: none;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+      max-width: 16vw;
+      will-change: opacity, transform;
     }
 
-    .project-index {
-      font-family: 'Monument Extended', sans-serif;
-      font-size: clamp(1.6rem, 3.8vw, 3.5rem);
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1;
+    .side-left {
+      left: 3.5vw;
+      text-align: left;
     }
 
-    .project-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.5rem;
+    .side-right {
+      right: 3.5vw;
       text-align: right;
     }
 
-    .project-title {
-      font-family: 'Satoshi', -apple-system, sans-serif;
-      font-size: clamp(13px, 1.4vw, 19px);
-      font-weight: 500;
-      color: #ffffff;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      max-width: 60vw;
+    .meta-title {
+      font-weight: 700;
+      color: #000000;
+      font-size: 12px;
+      margin-bottom: 2px;
     }
 
-    .project-tag {
-      font-family: 'Satoshi', -apple-system, sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.75);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.4);
-      padding: 0.15rem 0.5rem;
+    .meta-sub, .meta-client, .meta-cat, .meta-year, .meta-index {
+      color: #444444;
+      font-weight: 400;
+    }
+
+    .meta-divider {
+      color: #999999;
+      letter-spacing: 0.12em;
+      margin: 0.3rem 0;
+      font-family: monospace;
+      font-size: 10px;
     }
 
     /* Pied de page en fin de liste */
@@ -264,19 +250,35 @@
 
     /* Responsive Mobile */
     @media (max-width: 820px) {
-      .header-spacer {
-        height: 145px;
-      }
       .top-nav {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.8rem;
       }
-      .project-card-overlay {
-        padding: 1.5rem;
+      .project-card {
+        padding: 0 1.5rem;
+      }
+      .project-media-frame {
+        max-width: 90vw;
+        max-height: 60vh;
+      }
+      .project-side-meta {
+        position: static;
+        transform: none;
+        max-width: 100%;
+        text-align: left !important;
+        margin-top: 1rem;
+      }
+      .side-right {
+        display: none; /* Sur mobile, on garde uniquement les infos principales à gauche */
+      }
+      .project-card {
+        flex-direction: column;
+        height: auto;
+        min-height: 90vh;
       }
       .project-card-wrapper {
-        height: 125vh;
+        height: 120vh;
       }
     }
   </style>
@@ -329,6 +331,8 @@
         return;
       }
 
+      const totalCount = data.projects.length;
+
       // 1. GÉNÉRATION DES FILTRES DE CATÉGORIES
       filtersContainer.innerHTML = '';
       (data.categories || []).forEach((cat, index) => {
@@ -339,7 +343,7 @@
         filtersContainer.appendChild(btn);
       });
 
-      // 2. GÉNÉRATION DES CARTES PLEIN ÉCRAN
+      // 2. GÉNÉRATION DES CARTES STYLE EXPOSITION MUSÉE
       portfolioContainer.innerHTML = '';
       (data.projects || []).forEach((proj, index) => {
         const mediaSrc = (proj.media || proj.image || '').trim();
@@ -353,14 +357,22 @@
         const catLabel = catObj ? catObj.label : category.toUpperCase();
 
         const numStr = String(index + 1).padStart(2, '0');
+        const totalStr = String(totalCount).padStart(2, '0');
+
+        // Métadonnées éditoriales
+        const detail = proj.detail || {};
+        const cleanTitle = (proj.title || 'PROJET').replace(/&nbsp;/g, ' ').trim();
+        const discipline = detail.discipline || detail.subtitle || 'Direction Artistique';
+        const year = detail.year || '2026';
+        const client = detail.client || 'Marrakech — Studio';
 
         let mediaHtml = '';
         if (proj.type === 'video' && mediaSrc) {
           mediaHtml = `<video src="${mediaSrc}" autoplay loop muted playsinline class="media-element"></video>`;
         } else if (mediaSrc) {
-          mediaHtml = `<img src="${mediaSrc}" class="media-element" alt="${proj.title || proj.id}">`;
+          mediaHtml = `<img src="${mediaSrc}" class="media-element" alt="${cleanTitle}">`;
         } else {
-          mediaHtml = `<div class="img-placeholder">${proj.title || 'VISUEL DU PROJET'}</div>`;
+          mediaHtml = `<div class="img-placeholder">${cleanTitle}</div>`;
         }
 
         const wrapper = document.createElement('div');
@@ -369,18 +381,26 @@
 
         wrapper.innerHTML = `
           <div class="project-card">
-            <a href="${projectUrl}" class="project-card-inner project-item" ${targetAttr}>
-              <div class="project-media-wrap">
-                ${mediaHtml}
-              </div>
-              <div class="project-card-overlay">
-                <div class="project-index">${numStr}</div>
-                <div class="project-meta">
-                  <div class="project-title">${proj.title || 'PROJET'}</div>
-                  <div class="project-tag">${catLabel}</div>
-                </div>
-              </div>
+            <!-- Métadonnées Flanc Gauche -->
+            <div class="project-side-meta side-left">
+              <div class="meta-title">${cleanTitle}</div>
+              <div class="meta-sub">${discipline}</div>
+              <div class="meta-divider">--------</div>
+              <div class="meta-year">${year}</div>
+            </div>
+
+            <!-- Cadre Central de l'Image (Adaptatif Paysage & Vertical) -->
+            <a href="${projectUrl}" class="project-media-frame project-item" ${targetAttr}>
+              ${mediaHtml}
             </a>
+
+            <!-- Métadonnées Flanc Droit -->
+            <div class="project-side-meta side-right">
+              <div class="meta-client">${client}</div>
+              <div class="meta-cat">(${catLabel})</div>
+              <div class="meta-divider">--------</div>
+              <div class="meta-index">${numStr} / ${totalStr}</div>
+            </div>
           </div>
         `;
 
