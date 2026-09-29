@@ -1,7 +1,8 @@
 /**
- * GSAP ScrollTrigger - Museum Gallery Card Stacking & Side Meta Reveal
- * Starts in pure FULL PAGE (fill edge-to-edge), then shrinks on scroll
- * leaving massive whitespace (extra wide for vertical) with Satoshi Light side typography.
+ * GSAP ScrollTrigger - Museum Gallery Card Stacking & Controlled Sequence
+ * 1. Shrinks from true full page to centered gallery size with side text.
+ * 2. STAYS AT REST (frozen in place) so the viewer can read and admire the project.
+ * 3. The next project ONLY arrives once this scroll is fully completed.
  */
 (function() {
   function getHeaderHeight() {
@@ -37,57 +38,44 @@
       const sideRight = wrapper.querySelector('.side-right');
       if (!card || !mediaFrame) return;
 
-      // Z-index progressif
+      // Z-index progressif pour empiler les cartes proprement
       card.style.zIndex = 10 + visibleIndex;
       visibleIndex++;
 
       // Détecter si le projet est vertical ou horizontal
       const isPortrait = wrapper.classList.contains('is-portrait');
-      
-      // Facteur d'agrandissement initial pour être véritablement en PLEIN ÉCRAN (fill edge-to-edge)
-      // Paysage : 1.82x pour déborder complètement sur tout l'écran
-      // Portrait : 1.45x pour couvrir toute la hauteur de l'écran
       const startScale = isPortrait ? 1.45 : 1.85;
 
-      // 1. Rétrécissement du média (de Plein Écran à l'affiche musée centrée)
-      gsap.fromTo(mediaFrame, 
-        { 
-          scale: startScale
-        }, 
-        { 
-          scale: 1.0, // Revient à sa taille musée au centre
-          ease: "none",
-          scrollTrigger: {
-            trigger: wrapper,
-            start: `top ${headerHeight}px`,
-            end: `bottom ${headerHeight}px`,
-            scrub: 0.5,
-            invalidateOnRefresh: true
-          }
+      // Création d'une timeline séquencée liée au scroll
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrapper,
+          start: `top ${headerHeight}px`,
+          end: `bottom ${headerHeight}px`,
+          scrub: 0.5,
+          invalidateOnRefresh: true
         }
+      });
+
+      // PHASE 1 (0% à 38% du scroll) : Rétrécissement vers le centre & apparition des textes
+      tl.fromTo(mediaFrame, 
+        { scale: startScale }, 
+        { scale: 1.0, ease: "power1.out", duration: 0.38 }, 
+        0
       );
 
-      // 2. Apparition douce des textes latéraux (Satoshi Light) sur les flancs
       if (sideLeft && sideRight) {
-        gsap.fromTo([sideLeft, sideRight],
-          {
-            opacity: 0,
-            y: 12
-          },
-          {
-            opacity: 1,
-            y: 0,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: wrapper,
-              start: `top ${headerHeight}px`,
-              end: `center ${headerHeight}px`,
-              scrub: 0.5,
-              invalidateOnRefresh: true
-            }
-          }
+        tl.fromTo([sideLeft, sideRight],
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, ease: "power1.out", duration: 0.32 },
+          0.06
         );
       }
+
+      // PHASE 2 (38% à 100% du scroll) : TEMPS DE CONTEMPLATION / REPOS TOTAL
+      // La carte reste parfaitement figée, l'internaute profite du projet et lit le texte.
+      // Le projet suivant n'arrive QUE lorsque l'internaute a fini de scroller cette section !
+      tl.to({}, { duration: 0.62 });
     });
 
     ScrollTrigger.refresh();
