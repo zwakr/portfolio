@@ -142,8 +142,8 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_4",
             "type": "grid-asym",
-            "media1": "video_404.mp4",
-            "media1Type": "video",
+            "media1": "video_404.gif",
+            "media1Type": "gif",
             "caption1": "04 / 06 &nbsp; &nbsp;Déploiement cinétique et mouvement vidéo",
             "media2": "poster_45_degres_03.svg",
             "media2Type": "image",
