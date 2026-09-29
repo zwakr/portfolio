@@ -62,6 +62,11 @@ window.PORTFOLIO_DATA = {
             "caption2": ""
           },
           {
+            "id": "blk_1790679090100",
+            "type": "narrative",
+            "text": "bjhbhjbjhbjhbjhbjhbjbjhb"
+          },
+          {
             "id": "blk_1790419029927",
             "type": "full-media",
             "media": "",
@@ -142,8 +147,8 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_4",
             "type": "grid-asym",
-            "media1": "video_404.gif",
-            "media1Type": "gif",
+            "media1": "video_404.mp4",
+            "media1Type": "video",
             "caption1": "04 / 06 &nbsp; &nbsp;Déploiement cinétique et mouvement vidéo",
             "media2": "poster_45_degres_03.svg",
             "media2Type": "image",
