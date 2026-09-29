@@ -434,25 +434,50 @@
 
         portfolioContainer.appendChild(wrapper);
 
-        // Détection dynamique dès que l'image est chargée pour affiner le ratio
+        // Détection dynamique automatique (Image ou Vidéo) pour les nouveaux projets
         const imgEl = wrapper.querySelector('img.media-element');
         if (imgEl) {
-          const checkRatio = () => {
-            if (imgEl.naturalHeight > imgEl.naturalWidth) {
-              wrapper.classList.add('is-portrait');
-              wrapper.classList.remove('is-landscape');
-            } else {
-              wrapper.classList.add('is-landscape');
-              wrapper.classList.remove('is-portrait');
+          const checkImg = () => {
+            if (imgEl.naturalHeight && imgEl.naturalWidth) {
+              if (imgEl.naturalHeight > imgEl.naturalWidth) {
+                wrapper.classList.add('is-portrait');
+                wrapper.classList.remove('is-landscape');
+              } else {
+                wrapper.classList.add('is-landscape');
+                wrapper.classList.remove('is-portrait');
+              }
             }
           };
           if (imgEl.complete && imgEl.naturalWidth > 0) {
-            checkRatio();
+            checkImg();
           } else {
-            imgEl.addEventListener('load', checkRatio);
+            imgEl.addEventListener('load', checkImg);
+          }
+        }
+
+        const videoEl = wrapper.querySelector('video.media-element');
+        if (videoEl) {
+          const checkVideo = () => {
+            if (videoEl.videoHeight && videoEl.videoWidth) {
+              if (videoEl.videoHeight > videoEl.videoWidth) {
+                wrapper.classList.add('is-portrait');
+                wrapper.classList.remove('is-landscape');
+              } else {
+                wrapper.classList.add('is-landscape');
+                wrapper.classList.remove('is-portrait');
+              }
+            }
+          };
+          if (videoEl.readyState >= 1) {
+            checkVideo();
+          } else {
+            videoEl.addEventListener('loadedmetadata', checkVideo);
           }
         }
       });
+
+      // Notifier le moteur de défilement que tous les projets sont prêts
+      window.dispatchEvent(new Event('portfolioRendered'));
 
       // 3. GESTION DU FILTRAGE
       const filterBtns = document.querySelectorAll('.filter-btn');
