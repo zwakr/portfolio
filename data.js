@@ -23,42 +23,6 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
-      "id": "proj_1790720857816",
-      "type": "image",
-      "layout": "col-6",
-      "aspectRatio": "aspect-auto",
-      "media": "",
-      "title": "Nejdkdjdie",
-      "category": "branding",
-      "link": "project-detail.html?id=proj_1790720857816",
-      "subtitle": "Direction Artistique & Exploration Graphique",
-      "year": "2026",
-      "client": "Marrakech — Studio",
-      "narrative": "",
-      "openInNewTab": false,
-      "detail": {
-        "title": "Nejdkdjdie",
-        "subtitle": "Direction Artistique & Exploration Graphique",
-        "discipline": "Direction Artistique, Design",
-        "year": "2026",
-        "client": "Marrakech — Studio",
-        "blocks": [
-          {
-            "id": "blk_1790720857817",
-            "type": "full-media",
-            "media": "",
-            "mediaType": "image",
-            "caption": "01 / 01    NOUVEAU PROJET"
-          },
-          {
-            "id": "blk_1790720857818",
-            "type": "narrative",
-            "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
-          }
-        ]
-      }
-    },
-    {
       "id": "proj_016",
       "type": "image",
       "layout": "col-6",
@@ -100,7 +64,7 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_1790679090100",
             "type": "narrative",
-            "text": "bjhbhjbjhbjhbjhbjhbjbjhb"
+            "text": ""
           },
           {
             "id": "blk_1790419029927",
@@ -159,7 +123,7 @@ window.PORTFOLIO_DATA = {
       "link": "project-detail.html?id=proj_021",
       "textContent": "",
       "detail": {
-        "title": "45 Degrés",
+        "title": "real madrid",
         "subtitle": "Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.",
         "discipline": "Direction Artistique, Exploration 3D, Typographie",
         "year": "2026",
