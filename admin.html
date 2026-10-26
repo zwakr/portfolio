@@ -1091,9 +1091,13 @@
             ${!isText ? `
               <!-- Dropzone & Média -->
               <div class="form-group col-span-6">
-                <label>Fichier Média (Nom du fichier ou Glisser-Déposer)</label>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                  <label style="margin-bottom:0;">Fichier Média (Photo / Vidéo)</label>
+                  <button type="button" class="btn btn-outline btn-xs" onclick="triggerCardFileInput(${index})">📁 Choisir un fichier...</button>
+                  <input type="file" id="card-file-input-${index}" onchange="handleCardFileInput(${index}, this)" accept="image/*,video/mp4,video/webm,.gif,.svg" style="display:none;">
+                </div>
                 <div class="media-dropzone" id="dropzone-${index}">
-                  <span style="font-size:12px; color:#555;">📁 Glissez votre fichier ici ou écrivez son nom ci-dessous</span>
+                  <span style="font-size:11.5px; color:#555;">Glissez votre fichier ici ou écrivez son nom ci-dessous :</span>
                   <input type="text" value="${media}" oninput="updateItem(${index}, 'media', this.value); updatePreview(${index}, this.value, '${type}')" placeholder="Ex: mon-projet.jpg, video.mp4, anim.gif">
                 </div>
               </div>
@@ -1169,6 +1173,50 @@
       applyFilters();
     }
 
+    function triggerCardFileInput(index) {
+      const input = document.getElementById(`card-file-input-${index}`);
+      if (input) input.click();
+    }
+
+    function handleCardFileInput(index, input) {
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      registerMediaFile(file, index);
+      input.value = '';
+    }
+
+    let uploadedMediaFiles = {}; // filename -> objectUrl/dataUrl
+    let pendingMediaUploads = new Map(); // filename -> File object (prêt pour upload GitHub)
+
+    function registerMediaFile(file, projectIndex = null) {
+      if (!file) return;
+      const filename = file.name;
+      pendingMediaUploads.set(filename, file);
+      const objectUrl = URL.createObjectURL(file);
+      uploadedMediaFiles[filename] = objectUrl;
+
+      let newType = 'image';
+      if (filename.match(/\.(mp4|webm|mov)$/i)) newType = 'video';
+      else if (filename.match(/\.gif$/i)) newType = 'gif';
+
+      if (projectIndex !== null && state.projects[projectIndex]) {
+        state.projects[projectIndex].type = newType;
+        state.projects[projectIndex].media = filename;
+        ensureProjectDetailStructure(state.projects[projectIndex]);
+        if (state.projects[projectIndex].detail.blocks && state.projects[projectIndex].detail.blocks.length > 0) {
+          if (state.projects[projectIndex].detail.blocks[0].type === 'full-media') {
+            state.projects[projectIndex].detail.blocks[0].media = filename;
+            state.projects[projectIndex].detail.blocks[0].mediaType = newType;
+          }
+        }
+        markUnsaved();
+        renderProjectsList();
+      }
+
+      renderDetailMediaGallery();
+      showToast(`✅ "${filename}" sélectionné ! N'oubliez pas de cliquer sur "💾 Enregistrer".`);
+    }
+
     function setupFileDropzone(index) {
       const dz = document.getElementById(`dropzone-${index}`);
       if (!dz) return;
@@ -1183,22 +1231,10 @@
         dz.classList.remove('dragover');
         if (e.dataTransfer.files.length > 0) {
           const file = e.dataTransfer.files[0];
-          const filename = file.name;
-
-          // Auto-détection du type
-          let newType = 'image';
-          if (filename.match(/\.(mp4|webm|mov)$/i)) newType = 'video';
-          else if (filename.match(/\.gif$/i)) newType = 'gif';
-
-          state.projects[index].type = newType;
-          state.projects[index].media = filename;
-          markUnsaved();
-          renderProjectsList();
+          registerMediaFile(file, index);
         }
       });
     }
-
-    let uploadedMediaFiles = {}; // filename -> objectUrl/dataUrl
 
     function getPreviewHTML(media, type) {
       if (!media) return '<span style="color:#777; font-size:12px;">Aucun média spécifié</span>';
@@ -1594,6 +1630,7 @@
       if (!input.files || input.files.length === 0) return;
       const file = input.files[0];
       const filename = file.name;
+      pendingMediaUploads.set(filename, file);
       const objectUrl = URL.createObjectURL(file);
       uploadedMediaFiles[filename] = objectUrl;
 
@@ -1603,6 +1640,11 @@
       const proj = getCurrentDetailProject();
       if (proj) {
         ensureProjectDetailStructure(proj);
+        // Si le média principal de couverture du projet est vide, on l'assigne automatiquement
+        if (!proj.media || proj.media.trim() === '') {
+          proj.media = filename;
+          proj.type = isVid ? 'video' : (filename.match(/\.gif$/i) ? 'gif' : 'image');
+        }
         proj.detail.blocks.push({
           id: "blk_" + Date.now(),
           type: "full-media",
@@ -1615,7 +1657,7 @@
       }
 
       renderDetailMediaGallery();
-      showToast(`✅ "${filename}" importé et ajouté au projet !`);
+      showToast(`✅ "${filename}" importé et prêt à être envoyé sur GitHub !`);
       input.value = '';
     }
 
@@ -1868,6 +1910,7 @@
       if (!fileInput.files || fileInput.files.length === 0) return;
       const file = fileInput.files[0];
       const filename = file.name;
+      pendingMediaUploads.set(filename, file);
       uploadedMediaFiles[filename] = URL.createObjectURL(file);
 
       const proj = getCurrentDetailProject();
@@ -1880,10 +1923,15 @@
         proj.detail.blocks[idx][typeField] = 'image';
       }
 
+      if (!proj.media || proj.media.trim() === '') {
+        proj.media = filename;
+        proj.type = proj.detail.blocks[idx][typeField];
+      }
+
       markUnsaved();
       renderDetailBlocksList(proj);
       renderDetailMediaGallery();
-      showToast(`Fichier "${filename}" sélectionné !`);
+      showToast(`✅ "${filename}" sélectionné et prêt pour l'envoi !`);
     }
 
     function setupDetailBlockDropzones(proj) {
@@ -1911,6 +1959,7 @@
         if (e.dataTransfer.files.length > 0) {
           const file = e.dataTransfer.files[0];
           const filename = file.name;
+          pendingMediaUploads.set(filename, file);
           uploadedMediaFiles[filename] = URL.createObjectURL(file);
 
           const proj = getCurrentDetailProject();
@@ -1923,10 +1972,15 @@
             proj.detail.blocks[idx][typeField] = 'image';
           }
 
+          if (!proj.media || proj.media.trim() === '') {
+            proj.media = filename;
+            proj.type = proj.detail.blocks[idx][typeField];
+          }
+
           markUnsaved();
           renderDetailBlocksList(proj);
           renderDetailMediaGallery();
-          showToast(`Fichier déposé : "${filename}"`);
+          showToast(`✅ Fichier déposé : "${filename}"`);
         }
       });
     }
@@ -2042,6 +2096,63 @@
       state.info.ar.contact = document.getElementById('info-ar-contact').value;
     }
 
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const res = reader.result;
+          const base64 = res.substring(res.indexOf(',') + 1);
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadMediaFileToGitHub(token, file) {
+      if (file.size > 25 * 1024 * 1024) {
+        throw new Error(`Le fichier "${file.name}" dépasse 25 Mo (${(file.size / (1024*1024)).toFixed(1)} Mo). Veuillez le compresser avant de l'ajouter.`);
+      }
+
+      const owner = "zwakr";
+      const repo = "portfolio";
+      const path = file.name;
+      
+      const base64Content = await fileToBase64(file);
+      
+      let sha;
+      try {
+        const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (getRes.ok) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+        }
+      } catch(e) {}
+
+      const bodyData = {
+        message: `Upload media: ${file.name} via CMS`,
+        content: base64Content
+      };
+      if (sha) bodyData.sha = sha;
+
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodyData)
+      });
+
+      if (!putRes.ok) {
+        const err = await putRes.json().catch(() => ({}));
+        throw new Error(err.message || `Échec upload GitHub (${putRes.status})`);
+      }
+      return true;
+    }
+
     // ==========================================
     // SAUVEGARDE DIRECTE (GITHUB API / FILE SYSTEM / BLOB)
     // ==========================================
@@ -2049,21 +2160,51 @@
       syncInfoInputs();
 
       const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
-      const ghToken = localStorage.getItem('portfolio_gh_token');
+      let ghToken = localStorage.getItem('portfolio_gh_token');
+
+      // Si des fichiers médias sont en attente mais aucun token n'est configuré, proposer de le saisir
+      if (!ghToken && pendingMediaUploads.size > 0) {
+        const wantToken = confirm(
+          "Vous avez ajouté de nouvelles photos/vidéos.\n\n" +
+          "Pour qu'elles soient envoyées sur GitHub et publiées directement sur Vercel, vous devez configurer votre Clé GitHub.\n\n" +
+          "Souhaitez-vous renseigner votre Clé GitHub maintenant ?"
+        );
+        if (wantToken) {
+          configureGitHubToken();
+          ghToken = localStorage.getItem('portfolio_gh_token');
+        }
+      }
 
       // 1. Priorité Cloud : Enregistrement direct sur GitHub si un token est configuré
       if (ghToken) {
-        showToast("⏳ Envoi à GitHub en cours...");
+        showToast("⏳ Connexion à GitHub...");
         try {
+          // A. Téléversement de tous les médias en attente
+          if (pendingMediaUploads.size > 0) {
+            let count = 0;
+            const total = pendingMediaUploads.size;
+            for (const [filename, file] of pendingMediaUploads.entries()) {
+              count++;
+              showToast(`⏳ Envoi de ${filename} (${count}/${total}) vers GitHub...`);
+              await uploadMediaFileToGitHub(ghToken, file);
+            }
+            pendingMediaUploads.clear();
+          }
+
+          // B. Envoi de data.js
+          showToast("⏳ Enregistrement de data.js sur GitHub...");
           const success = await saveToGitHub(ghToken, jsCode);
           if (success) {
             markSaved();
-            showToast("🚀 Enregistré sur GitHub ! Vercel met à jour le site en direct.");
+            showToast("🚀 Photos & data.js envoyés sur GitHub ! Vercel met à jour le site...");
             return;
           }
         } catch(e) {
           console.warn("Échec GitHub API, bascule vers sauvegarde locale", e);
+          alert("⚠️ Erreur lors de l'envoi sur GitHub :\n" + (e.message || e) + "\n\nVos modifications vont être sauvegardées localement.");
         }
+      } else if (pendingMediaUploads.size > 0) {
+        alert("⚠️ Note importante :\nVous n'avez pas configuré votre Clé GitHub. Vos fichiers images doivent être copiés manuellement dans le dossier de votre projet pour être visibles en ligne !");
       }
 
       // 2. Sauvegarde directe locale via File System Access API

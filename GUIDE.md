@@ -57,17 +57,17 @@ Ton portfolio est composé de 5 pages publiques et d'un panneau d'administration
 
 ## 📁 4. Comment ajouter des images, vidéos et GIFs
 
-### Méthode recommandée (Directement dans l'Admin) :
-* Partout où tu vois un champ média, tu peux soit :
-  1. Cliquer sur le bouton **`📁 Parcourir`** et choisir ton fichier dans ton Mac.
-  2. Glisser-déposer le fichier directement sur la zone en pointillés.
-  3. Sélectionner un fichier déjà présent via le menu déroulant.
-* Un aperçu s'affiche immédiatement en direct.
+### Méthode 100% Automatique (Directement dans l'Admin) :
+* Sur n'importe quelle carte de projet ou dans l'éditeur de page détaillée :
+  1. Clique sur le bouton **`📁 Choisir un fichier...`** (ou glisse-dépose ton image/vidéo).
+  2. L'aperçu s'affiche immédiatement.
+  3. Clique sur le gros bouton rouge **`💾 Enregistrer les Modifications`**.
+  4. **Le CMS envoie directement le fichier réel sur ton GitHub** puis enregistre `data.js`.
+  5. Vercel met à jour le site en ~30 secondes avec ta nouvelle photo en ligne !
 
-### Important pour la mise en ligne permanente :
-Pour que tes nouvelles images et vidéos soient visibles par tout le monde sur Internet :
-* Place tes fichiers images (`.jpg`, `.png`, `.svg`, `.gif`) et vidéos (`.mp4`) dans le dossier de ton portfolio.
-* Privilégie des noms simples sans accents ni espaces bizarres (ex: `projet_nike_01.jpg`, `motion_reveal.mp4`).
+### Recommandations :
+* Privilégie des noms de fichiers simples (ex: `projet_nike_01.jpg`, `poster_art.png`).
+* Fichiers acceptés : `.jpg`, `.png`, `.svg`, `.gif`, `.mp4` (recommandé < 15 Mo pour un chargement rapide).
 
 ---
 
