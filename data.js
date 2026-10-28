@@ -28,52 +28,39 @@ window.PORTFOLIO_DATA = {
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
       "media": "gif lnfa motion design reveal.gif",
-      "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
+      "title": "016 &nbsp; &nbsp;GLYPHS APP — Brand Identity & Strategy",
       "category": "direction",
       "link": "project-detail.html?id=proj_016",
       "textContent": "",
       "detail": {
-        "title": "016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
-        "subtitle": "Direction Artistique & Exploration Graphique",
-        "discipline": "Direction Artistique, Design",
-        "year": "2026",
-        "client": "Marrakech — Studio",
-        "blocks": [
-          {
-            "id": "blk_1790418110107",
-            "type": "full-media",
-            "media": "gif lnfa motion design reveal.gif",
-            "mediaType": "image",
-            "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
-          },
-          {
-            "id": "blk_1790418110108",
-            "type": "narrative",
-            "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
-          },
-          {
-            "id": "blk_1790419014365",
-            "type": "grid-asym",
-            "media1": "",
-            "media1Type": "image",
-            "caption1": "",
-            "media2": "",
-            "media2Type": "image",
-            "caption2": ""
-          },
-          {
-            "id": "blk_1790679090100",
-            "type": "narrative",
-            "text": ""
-          },
-          {
-            "id": "blk_1790419029927",
-            "type": "full-media",
-            "media": "",
-            "mediaType": "video",
-            "caption": ""
-          }
-        ]
+        "template": "glyphs-case-study",
+        "caseStudyNo": "Case Study No. 04",
+        "title": "projet 45 degre",
+        "subtitle": "Brand Identity & strategy",
+        "partner": "Designed in partnership with Matteo Bologna of Mucca",
+        "websiteUrl": "http://glyphsapp.com",
+        "websiteLabel": "Visit the Glyphs website here",
+        "brief": "Glyphs App is a Mac font editor and a project of type designers and software developers Georg Seifert and Rainer Erich Scheichelbauer. For the 2020 launch of their highly anticipated Glyphs 3, Georg & Rainer were looking to relaunch their website and brand identity in order to better communicate what Glyphs does and bring new energy to the release.",
+        "solution": "The new website centers itself in the community that surrounds Glyphs, simplifying the architecture for ease of navigation, enhancing access to Tutorials and resources and showcasing type designers’ projects in a dynamic way. The website uses a single Variable font by ABC Dinamo, drawn and developed entirely within Glyphs. The logo and identity simplify and reimagine the app, giving the entirety of the focus on the content itself: the typographic expression made possible with Glyphs.",
+        "role": "Design & creative direction",
+        "discipline": "Identity, Technology",
+        "client": "Glyphs App — Georg & Rainer",
+        "year": "November 2020",
+        "pressBadges": [
+          "Brand New",
+          "The Brand Identity",
+          "Mindsparkle",
+          "Httpster"
+        ],
+        "specs": [
+          { "label": "Role", "val": "Design & creative direction" },
+          { "label": "Field", "val": "Identity, Technology" },
+          { "label": "Typefaces", "val": "ABC Arizona VF by ABC Dinamo" },
+          { "label": "Development", "val": "Chris Corby" },
+          { "label": "Special Thanks", "val": "Georg & Rainer, Fabian & Johannes" },
+          { "label": "Published", "val": "November 2020" }
+        ],
+        "blocks": []
       }
     },
     {
@@ -123,43 +110,54 @@ window.PORTFOLIO_DATA = {
       "link": "project-detail.html?id=proj_021",
       "textContent": "",
       "detail": {
-        "title": "real madrid",
+        "title": "45 Degrés",
         "subtitle": "Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.",
         "discipline": "Direction Artistique, Exploration 3D, Typographie",
         "year": "2026",
         "client": "Marrakech — Projet Studio",
+        "role": "Direction Artistique &amp; Design",
+        "brief": "Comment réinventer la rigueur de la grille suisse traditionnelle en introduisant une rupture angulaire radicale ? L’objectif était d’expérimenter la géométrie oblique à 45° comme vecteur d’énergie et de tension spatiale à travers le design éditorial et le mouvement.",
+        "solution": "Un système graphique fondé sur un dialogue audacieux entre typographie monumentale, surfaces texturales brutes et cadrages asymétriques. Le langage modulaire se décline à la fois en affiches éditoriales grand format, en séquences motion design et en modélisations 3D sculpturales.",
         "blocks": [
           {
+            "id": "blk_1",
+            "type": "full-media",
+            "media": "poster_45_degres_01.svg",
+            "mediaType": "image",
+            "caption": "01 / 05 &nbsp; &nbsp;Affiche principale 45° : Déconstruction géométrique et grille oblique"
+          },
+          {
             "id": "blk_2",
-            "type": "narrative",
-            "text": "Le projet <b>45 Degrés</b> explore la tension entre structure rigide et rupture cinétique. En déconstruisant les règles de composition traditionnelles, chaque élément typographique et volumétrique est orienté pour créer un équilibre asymétrique immersif."
+            "type": "editorial-duo",
+            "media": "gif lnfa motion design reveal.gif",
+            "mediaType": "image",
+            "title": "Une tension spatiale en mouvement",
+            "text": "L'animation reveal explore le passage de la 2D vers la profondeur. En rompant la ligne d'horizon conventionnelle, chaque lettre et forme géométrique <b>génère une vibration optique immédiate</b>, captant le regard sans jamais surcharger la composition.",
+            "caption": "02 / 05 &nbsp; &nbsp;Motion reveal &amp; cinétique typographique",
+            "reverse": false
           },
           {
             "id": "blk_3",
             "type": "grid-2",
-            "media1": "gif lnfa motion design reveal.gif",
+            "media1": "poster_45_degres_02.svg",
             "media1Type": "image",
-            "caption1": "02 / 06 &nbsp; &nbsp;Motion design &amp; animation cinétique reveal",
-            "media2": "poster_45_degres_02.svg",
+            "caption1": "03 / 05 &nbsp; &nbsp;Cadrage matière &amp; grain textural",
+            "media2": "poster_45_degres_03.svg",
             "media2Type": "image",
-            "caption2": "03 / 06 &nbsp; &nbsp;Étude typographique et contraste de matière"
+            "caption2": "04 / 05 &nbsp; &nbsp;Volume 3D &amp; abstraction spatiale"
           },
           {
             "id": "blk_4",
-            "type": "grid-asym",
-            "media1": "video_404.mp4",
-            "media1Type": "video",
-            "caption1": "04 / 06 &nbsp; &nbsp;Déploiement cinétique et mouvement vidéo",
-            "media2": "poster_45_degres_03.svg",
-            "media2Type": "image",
-            "caption2": "05 / 06 &nbsp; &nbsp;Volume 3D &amp; Cadrage oblique"
+            "type": "offset-narrative",
+            "title": "Rigueur suisse & brutalité contemporaine",
+            "text": "Pensé comme une pièce de musée éditoriale, le projet fusionne la précision de la typographie moderniste avec l'énergie brute du design graphique contemporain. Chaque visuel est calibré au millimètre près pour vivre aussi bien en affiche print géante qu'en environnement digital réactif."
           },
           {
             "id": "blk_5",
             "type": "full-media",
-            "media": "gif lnfa motion design reveal.gif",
-            "mediaType": "image",
-            "caption": "06 / 06 &nbsp; &nbsp;Vue globale du système d'identité"
+            "media": "video_404.mp4",
+            "mediaType": "video",
+            "caption": "05 / 05 &nbsp; &nbsp;Déploiement vidéo en boucle continue"
           }
         ]
       }

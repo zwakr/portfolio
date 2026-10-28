@@ -703,11 +703,22 @@
           <textarea id="dp-subtitle" onchange="updateDetailHeader('subtitle', this.value)" style="min-height:70px;" placeholder="Ex: Exploration Visuelle &amp; Recherche en Direction Artistique..."></textarea>
         </div>
         <div class="form-group col-span-4">
-          <label>Discipline(s)</label>
+          <label>Role</label>
+          <input type="text" id="dp-role" onchange="updateDetailHeader('role', this.value)" placeholder="Ex: Direction Artistique &amp; Design">
+
+          <label style="margin-top:0.6rem;">Discipline(s)</label>
           <input type="text" id="dp-discipline" onchange="updateDetailHeader('discipline', this.value)" placeholder="Ex: Direction Artistique, Typographie, 3D">
           
           <label style="margin-top:0.6rem;">Client / Lieu</label>
           <input type="text" id="dp-client" onchange="updateDetailHeader('client', this.value)" placeholder="Ex: Marrakech — Studio">
+        </div>
+        <div class="form-group col-span-6">
+          <label>Brief éditorial (Style Trabuc.co)</label>
+          <textarea id="dp-brief" onchange="updateDetailHeader('brief', this.value)" style="min-height:80px;" placeholder="Énoncé du brief, problématique ou contexte du projet..."></textarea>
+        </div>
+        <div class="form-group col-span-6">
+          <label>Solution éditoriale (Style Trabuc.co)</label>
+          <textarea id="dp-solution" onchange="updateDetailHeader('solution', this.value)" style="min-height:80px;" placeholder="Démarche créative, solution typographique et direction artistique..."></textarea>
         </div>
       </div>
     </div>
@@ -750,6 +761,8 @@
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media', 'image')">🖼️ + Grande Image (100%)</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media', 'video')">🎬 + Grande Vidéo MP4 (100%)</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('editorial-duo')">📖 + Duo Éditorial Trabuc</button>
+          <button class="btn btn-sm btn-outline" onclick="addDetailBlock('offset-narrative')">💬 + Encart Typo Asymétrique</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-2')">👥 + Duo 2 Colonnes</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-asym')">📐 + Duo Asymétrique (1.4 : 1)</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('narrative')">✍️ + Paragraphe / Récit</button>
@@ -1475,6 +1488,9 @@
       if (!proj.detail.subtitle) proj.detail.subtitle = proj.subtitle || "Direction Artistique & Exploration Graphique";
       if (!proj.detail.year) proj.detail.year = proj.year || "2026";
       if (!proj.detail.client) proj.detail.client = proj.client || "Marrakech — Studio";
+      if (!proj.detail.role) proj.detail.role = proj.role || "Direction Artistique & Design";
+      if (!proj.detail.brief) proj.detail.brief = proj.brief || "";
+      if (!proj.detail.solution) proj.detail.solution = proj.solution || "";
 
       if (!Array.isArray(proj.detail.blocks)) {
         proj.detail.blocks = [];
@@ -1676,6 +1692,13 @@
       document.getElementById('dp-subtitle').value = proj.detail.subtitle || '';
       document.getElementById('dp-discipline').value = proj.detail.discipline || '';
       document.getElementById('dp-client').value = proj.detail.client || '';
+      
+      const roleEl = document.getElementById('dp-role');
+      if (roleEl) roleEl.value = proj.detail.role || '';
+      const briefEl = document.getElementById('dp-brief');
+      if (briefEl) briefEl.value = proj.detail.brief || '';
+      const solutionEl = document.getElementById('dp-solution');
+      if (solutionEl) solutionEl.value = proj.detail.solution || '';
 
       renderDetailMediaGallery();
       renderDetailBlocksList(proj);
@@ -1776,6 +1799,73 @@
             <div class="form-group">
               <label>Texte explicatif du projet (HTML autorisé : &lt;b&gt;, &lt;br&gt;)</label>
               <textarea onchange="updateBlock(${idx}, 'text', this.value)" style="min-height:95px;" placeholder="Écrivez le concept, la démarche et les détails du projet...">${block.text || ''}</textarea>
+            </div>
+          `;
+        } else if (block.type === 'editorial-duo') {
+          const isVid = block.mediaType === 'video' || (typeof block.media === 'string' && block.media.match(/\.(mp4|webm|mov)$/i));
+          blockTitle = '📖 Duo Éditorial Trabuc (Média 50% + Récit 50%)';
+          formContent = `
+            <div class="form-grid">
+              <div class="form-group col-span-6" style="background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:0.85rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                  <label style="font-weight:700;">Média (Image ou Vidéo)</label>
+                  <select onchange="updateBlock(${idx}, 'mediaType', this.value); renderDetailBlocksList(getCurrentDetailProject());" style="width:auto; font-size:11px;">
+                    <option value="image" ${!isVid ? 'selected' : ''}>📷 Image</option>
+                    <option value="video" ${isVid ? 'selected' : ''}>🎬 Vidéo</option>
+                  </select>
+                </div>
+                <div style="margin-bottom:0.5rem;">
+                  <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media', this.value, 'mediaType'); }" style="font-size:11px;">
+                    <option value="">-- Média disponible --</option>
+                    ${availableMedia.map(m => `
+                      <option value="${m.name}" ${m.name === block.media ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
+                    `).join('')}
+                  </select>
+                </div>
+                <div style="display:flex; gap:0.4rem; margin-bottom:0.5rem;">
+                  <input type="text" value="${block.media || ''}" oninput="updateBlockMedia(${idx}, 'media', this.value, 'mediaType')" placeholder="image.jpg ou video.mp4" style="flex:1;">
+                  <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
+                    📁 Parcourir
+                    <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media', 'mediaType', this)">
+                  </label>
+                </div>
+                <div class="media-dropzone" id="detail-dz-${idx}-media" style="min-height:60px; padding:0.4rem; margin-bottom:0.5rem;">
+                  <span style="font-size:11px; color:#666;">📁 Glissez le média ici</span>
+                </div>
+                <input type="text" value="${block.caption || ''}" onchange="updateBlock(${idx}, 'caption', this.value)" placeholder="Légende du média">
+                <div class="media-preview-container" id="detail-prev-${idx}-media" style="margin-top:0.5rem; max-height:140px;">
+                  ${getPreviewHTML(block.media, block.mediaType)}
+                </div>
+              </div>
+
+              <div class="form-group col-span-6" style="background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:0.85rem; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <label style="font-weight:700;">Titre H2 de la section</label>
+                  <input type="text" value="${block.title || ''}" onchange="updateBlock(${idx}, 'title', this.value)" placeholder="Ex: DIRECTION ARTISTIQUE & MOTION" style="margin-bottom:0.75rem;">
+                  <label style="font-weight:700;">Texte explicatif &amp; Récit (HTML autorisé : &lt;b&gt;, &lt;br&gt;)</label>
+                  <textarea onchange="updateBlock(${idx}, 'text', this.value)" style="min-height:120px;" placeholder="Écrivez le récit du projet, démarches, mots en <b>gras</b>...">${block.text || ''}</textarea>
+                </div>
+                <div style="margin-top:0.75rem; padding-top:0.5rem; border-top:1px solid #eee;">
+                  <label style="display:inline-flex; align-items:center; gap:0.5rem; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" ${block.reverse ? 'checked' : ''} onchange="updateBlock(${idx}, 'reverse', this.checked)">
+                    <span>Inverser l'ordre (Texte à gauche / Média à droite)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (block.type === 'offset-narrative') {
+          blockTitle = '💬 Encart Typo Asymétrique (Style Trabuc.co)';
+          formContent = `
+            <div class="form-grid">
+              <div class="form-group col-span-5">
+                <label>Titre H2</label>
+                <input type="text" value="${block.title || ''}" onchange="updateBlock(${idx}, 'title', this.value)" placeholder="Ex: CONCEPT & TYPOGRAPHIE">
+              </div>
+              <div class="form-group col-span-7">
+                <label>Texte narratif (HTML autorisé)</label>
+                <textarea onchange="updateBlock(${idx}, 'text', this.value)" style="min-height:95px;" placeholder="Explication détaillée du concept...">${block.text || ''}</textarea>
+              </div>
             </div>
           `;
         } else if (block.type === 'grid-2' || block.type === 'grid-asym') {
@@ -1936,7 +2026,7 @@
 
     function setupDetailBlockDropzones(proj) {
       proj.detail.blocks.forEach((block, idx) => {
-        if (block.type === 'full-media') {
+        if (block.type === 'full-media' || block.type === 'editorial-duo') {
           attachBlockDropzone(`detail-dz-${idx}-media`, idx, 'media', 'mediaType');
         } else if (block.type === 'grid-2' || block.type === 'grid-asym') {
           attachBlockDropzone(`detail-dz-${idx}-media1`, idx, 'media1', 'media1Type');
@@ -2026,6 +2116,16 @@
         newBlock.caption = "";
       } else if (type === 'narrative') {
         newBlock.text = "";
+      } else if (type === 'editorial-duo') {
+        newBlock.media = "";
+        newBlock.mediaType = mediaTypeHint || "image";
+        newBlock.title = "TITRE DU RÉCIT";
+        newBlock.text = "Explication du concept visuel et de la démarche créative avec des mots en <b>gras</b>...";
+        newBlock.caption = "";
+        newBlock.reverse = false;
+      } else if (type === 'offset-narrative') {
+        newBlock.title = "CONCEPT & TYPOGRAPHIE";
+        newBlock.text = "Démarche et exploration formelle du projet.";
       } else if (type === 'grid-2' || type === 'grid-asym') {
         newBlock.media1 = "";
         newBlock.media1Type = "image";

@@ -93,83 +93,158 @@
       pointer-events: none;
     }
 
-    /* En-tête éditorial du projet */
-    .project-header {
+    /* ========================================================
+       MISE EN PAGE ÉDITORIALE TRABUC.CO STYLE (CARGO / MUSEUM)
+       ======================================================== */
+
+    /* En-tête éditorial en 2 colonnes 50/50 */
+    .trabuc-header {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3.5rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid #000000;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5vw;
+      margin-bottom: 4rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1.5px solid #000000;
     }
 
-    .project-title {
-      font-family: 'Satoshi', -apple-system, sans-serif;
-      font-weight: 700;
-      font-size: clamp(2rem, 4.2vw, 4.2rem);
-      line-height: 1;
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.01em;
-    }
-
-    .project-subtitle {
-      font-family: 'Satoshi', sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 1.45;
-      max-width: 650px;
-      color: #111111;
-    }
-
-    .project-meta {
-      font-family: 'Satoshi', sans-serif;
-      font-size: 12.5px;
-      line-height: 1.6;
+    .trabuc-header-left {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
     }
 
-    .meta-group b {
-      font-family: 'Monument Extended', -apple-system, sans-serif;
-      font-weight: 800;
-      display: block;
+    .trabuc-title {
+      font-family: 'Satoshi', -apple-system, sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4.2vw, 4.2rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
       text-transform: uppercase;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.25rem;
+      margin-bottom: 1.2rem;
       color: #000000;
     }
 
-    .meta-group span {
+    .trabuc-tagline {
       font-family: 'Satoshi', sans-serif;
-      font-weight: 300;
+      font-size: clamp(14px, 1.2vw, 16px);
+      font-weight: 400;
+      line-height: 1.45;
+      color: #444444;
+      max-width: 92%;
+    }
+
+    .trabuc-header-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+      font-family: 'Satoshi', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.55;
       color: #222222;
     }
 
-    /* Flux de médias avec gouttières serrées Cargo brutalistes */
-    .project-media-flow {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
+    .trabuc-section-title {
+      display: block;
+      font-weight: 700;
+      color: #000000;
+      font-size: 13.5px;
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.02em;
     }
 
-    .media-full {
+    .trabuc-section-body {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #222222;
+    }
+
+    .trabuc-section-body b {
+      font-weight: 700;
+      color: #000000;
+    }
+
+    /* Table Métadonnées avec pointillés dynamiques (Style Trabuc Mono) */
+    .trabuc-meta-table {
+      margin-top: 0.8rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      font-family: 'Satoshi', monospace, sans-serif;
+      font-size: 12px;
+    }
+
+    .trabuc-meta-row {
+      display: flex;
+      align-items: baseline;
       width: 100%;
     }
 
-    .media-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
+    .trabuc-meta-label {
+      font-weight: 600;
+      color: #000000;
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.04em;
     }
 
-    .media-grid-asym {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 0.5rem;
+    .trabuc-meta-dots {
+      flex: 1;
+      margin: 0 0.5rem;
+      border-bottom: 1px dotted #888888;
+      position: relative;
+      top: -3px;
+    }
+
+    .trabuc-meta-val {
+      color: #333333;
+      white-space: nowrap;
+      font-weight: 400;
+      font-size: 12px;
+    }
+
+    .trabuc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.2rem;
+    }
+
+    .trabuc-link {
+      display: inline-flex;
       align-items: center;
+      gap: 0.25rem;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid #000000;
+      padding-bottom: 2px;
+      color: #000000;
+      transition: opacity 0.2s;
+    }
+
+    .trabuc-link:hover {
+      opacity: 0.6;
+    }
+
+    .trabuc-link::after {
+      content: '↗';
+      display: inline-block;
+      font-size: 11px;
+      transition: transform 0.2s ease;
+    }
+
+    .trabuc-link:hover::after {
+      transform: translate(2px, -2px);
+    }
+
+    /* Flux de médias modulaire Trabuc */
+    .project-media-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
     }
 
     figure {
@@ -183,22 +258,121 @@
       width: 100%;
       height: auto;
       background: #f7f7f7;
-      min-height: 380px;
+      min-height: 280px;
       object-fit: cover;
       display: block;
       border-radius: 0px;
     }
 
     figcaption {
-      margin-top: 0.45rem;
+      margin-top: 0.55rem;
       font-family: 'Satoshi', sans-serif;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 300;
       letter-spacing: 0.02em;
-      color: #111111;
-      opacity: 0.9;
+      color: #333333;
     }
 
+    /* 1. Grand média héro 100% */
+    .media-full {
+      width: 100%;
+    }
+
+    /* 2. Duo Éditorial Trabuc (Image + Texte H2 & Récit) */
+    .trabuc-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5vw;
+      align-items: center;
+      margin: 1.5rem 0;
+    }
+
+    .trabuc-duo.reversed {
+      direction: rtl;
+    }
+
+    .trabuc-duo.reversed > * {
+      direction: ltr;
+    }
+
+    .trabuc-duo-media {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .trabuc-duo-text h2 {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      margin-bottom: 1.1rem;
+      color: #000000;
+    }
+
+    .trabuc-duo-text p {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #222222;
+      margin-bottom: 1rem;
+    }
+
+    .trabuc-duo-text p b {
+      font-weight: 700;
+      color: #000000;
+    }
+
+    /* 3. Duo d'images 50/50 */
+    .media-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    /* 4. Duo asymétrique 1.4:1 */
+    .media-grid-asym {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    /* 5. Encart Typographique Asymétrique (Style Trabuc 5/7 cols) */
+    .trabuc-offset {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 3.5vw;
+      margin: 2rem 0;
+      padding: 2.5rem 0;
+      border-top: 1px solid #000000;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .trabuc-offset h2 {
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #000000;
+      margin-bottom: 0.8rem;
+    }
+
+    .trabuc-offset p {
+      font-family: 'Satoshi', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #222222;
+    }
+
+    .trabuc-offset p b {
+      font-weight: 700;
+      color: #000000;
+    }
+
+    /* Récit libre */
     .project-narrative {
       font-family: 'Satoshi', sans-serif;
       font-size: 14.5px;
@@ -207,6 +381,11 @@
       margin: 1.5rem 0;
       font-weight: 400;
       color: #111111;
+    }
+
+    .project-narrative b {
+      font-weight: 700;
+      color: #000000;
     }
 
     /* Navigation entre projets en bas de page */
@@ -224,20 +403,388 @@
       body {
         padding: 5vw 4vw;
       }
-      .top-nav {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      .project-header {
+      .trabuc-header {
         grid-template-columns: 1fr;
         gap: 2rem;
+      }
+      .trabuc-duo {
+        grid-template-columns: 1fr;
+        direction: ltr !important;
+        gap: 2rem;
+      }
+      .trabuc-offset {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
       }
       .media-grid-2, .media-grid-asym {
         grid-template-columns: 1fr;
       }
       .project-media {
         min-height: 240px;
+      }
+    /* ========================================================
+       CASE STUDY BESPOQUE : GLYPHS / TRABUC (POUR PROJ_016)
+       ======================================================== */
+    :root {
+      --cs-green: #22c55e;
+      --cs-green-subtle: rgba(34, 197, 94, 0.15);
+      --cs-dark: #09090b;
+      --cs-hairline: #e4e4e7;
+      --cs-hairline-dark: #27272a;
+      --cs-subtle: #f4f4f5;
+      --cs-text-muted: #71717a;
+    }
+
+    .glyphs-case-study {
+      width: 100%;
+      font-family: 'Satoshi', sans-serif;
+      color: #09090b;
+    }
+
+    .cs-section {
+      width: 100%;
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--cs-hairline);
+    }
+
+    .cs-section:first-child {
+      padding-top: 1rem;
+    }
+
+    .cs-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2rem;
+    }
+
+    .cs-tag {
+      font-family: 'Satoshi', monospace, sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cs-text-muted);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .cs-title-display {
+      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: #09090b;
+      margin-bottom: 0.4rem;
+    }
+
+    .cs-subtitle {
+      font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+      font-weight: 400;
+      color: var(--cs-text-muted);
+      line-height: 1.35;
+      margin-bottom: 1.5rem;
+    }
+
+    .cs-partner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--cs-hairline);
+      background: var(--cs-subtle);
+      padding: 0.45rem 0.85rem;
+      font-size: 12.5px;
+      color: #09090b;
+      margin-bottom: 1rem;
+    }
+
+    .cs-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cs-green);
+      animation: csPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes csPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .cs-ext-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 13.5px;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      color: #09090b;
+      transition: color 0.2s;
+    }
+
+    .cs-ext-link:hover {
+      color: var(--cs-green);
+    }
+
+    .cs-badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .cs-press-badge {
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--cs-hairline);
+      font-family: 'Satoshi', monospace, sans-serif;
+      font-size: 11.5px;
+      text-decoration: none;
+      color: #09090b;
+      background: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .cs-press-badge:hover {
+      border-color: var(--cs-green);
+      background: var(--cs-subtle);
+    }
+
+    .cs-spec-table {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--cs-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-family: 'Satoshi', monospace, sans-serif;
+      font-size: 12px;
+    }
+
+    .cs-spec-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .cs-spec-label {
+      color: var(--cs-text-muted);
+      white-space: nowrap;
+    }
+
+    .cs-spec-dots {
+      flex: 1;
+      margin: 0 0.5rem;
+      border-bottom: 1px dotted var(--cs-hairline);
+      position: relative;
+      top: -3px;
+    }
+
+    .cs-spec-val {
+      font-weight: 500;
+      color: #09090b;
+      text-align: right;
+    }
+
+    .cs-dock-wrapper {
+      width: 100%;
+      border: 1px solid var(--cs-hairline);
+      background: var(--cs-subtle);
+      padding: 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .cs-dock {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--cs-hairline);
+      padding: 0.6rem 1.1rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(8px);
+    }
+
+    .cs-dock-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--cs-hairline);
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .cs-dock-icon:hover {
+      transform: scale(1.12);
+    }
+
+    .cs-dock-focal {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: var(--cs-dark);
+      border: 2px solid var(--cs-green);
+      position: relative;
+    }
+
+    .cs-dock-tooltip {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--cs-dark);
+      color: #ffffff;
+      font-family: 'Satoshi', monospace, sans-serif;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .cs-dock-focal:hover .cs-dock-tooltip {
+      opacity: 1;
+    }
+
+    .cs-card-subtle {
+      border: 1px solid var(--cs-hairline);
+      background: var(--cs-subtle);
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cs-card-dark {
+      border: 1px solid var(--cs-hairline-dark);
+      background: var(--cs-dark);
+      color: #ffffff;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cs-h2 {
+      font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #09090b;
+    }
+
+    .cs-h3 {
+      font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+
+    .cs-highlight {
+      background: var(--cs-green-subtle);
+      font-weight: 600;
+      padding: 0 0.25rem;
+    }
+
+    /* Range slider variable */
+    .cs-slider-container {
+      margin-top: 1.5rem;
+      border: 1px solid var(--cs-hairline);
+      padding: 1.5rem;
+      background: var(--cs-subtle);
+    }
+
+    .cs-slider-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .cs-active-badge {
+      padding: 2px 8px;
+      background: var(--cs-green);
+      color: #09090b;
+      font-family: 'Satoshi', monospace, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .cs-range-slider {
+      -webkit-appearance: none;
+      width: 180px;
+      height: 4px;
+      background: #d4d4d8;
+      outline: none;
+      border-radius: 2px;
+    }
+
+    .cs-range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #09090b;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .cs-range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.3);
+      background: var(--cs-green);
+    }
+
+    .cs-specimen-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 1rem 0;
+      border-top: 1px solid var(--cs-hairline);
+    }
+
+    .cs-specimen-text {
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-family: 'Satoshi', sans-serif;
+      transition: font-weight 0.1s ease;
+    }
+
+    /* Stack de répétition typographique posters */
+    .cs-typo-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 1.5rem 0;
+      user-select: none;
+    }
+
+    .cs-typo-stack div {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    @media (max-width: 820px) {
+      .cs-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .cs-grid > [style*="grid-column"] {
+        grid-column: span 1 / span 1 !important;
+      }
+      .cs-dock {
+        transform: scale(0.85);
       }
     }
   </style>
@@ -254,27 +801,50 @@
     </div>
   </nav>
 
-  <!-- En-tête éditorial du projet -->
-  <header class="project-header">
-    <div>
-      <h1 class="project-title" id="proj-title">Projet</h1>
-      <p class="project-subtitle" id="proj-subtitle">
-        Direction Artistique &amp; Exploration Graphique
-      </p>
+  <!-- En-tête éditorial Trabuc.co Style -->
+  <header class="trabuc-header" id="trabuc-standard-header">
+    <!-- Colonne Gauche : Titre imposant et sous-titre -->
+    <div class="trabuc-header-left">
+      <h1 class="trabuc-title" id="proj-title">Projet</h1>
+      <div class="trabuc-tagline" id="proj-subtitle">Direction Artistique &amp; Typographie</div>
     </div>
     
-    <div class="project-meta">
-      <div class="meta-group">
-        <b>Discipline</b>
-        <span id="proj-discipline">Direction Artistique, Design</span>
+    <!-- Colonne Droite : Récit (Brief, Solution) + Table métadonnées en pointillés + Liens -->
+    <div class="trabuc-header-right">
+      <div class="trabuc-section" id="sec-brief">
+        <span class="trabuc-section-title">Brief</span>
+        <div class="trabuc-section-body" id="proj-brief"></div>
       </div>
-      <div class="meta-group">
-        <b>Année</b>
-        <span id="proj-year">2026</span>
+
+      <div class="trabuc-section" id="sec-solution">
+        <span class="trabuc-section-title">Solution</span>
+        <div class="trabuc-section-body" id="proj-solution"></div>
       </div>
-      <div class="meta-group">
-        <b>Client / Contexte</b>
-        <span id="proj-client">Marrakech — Studio</span>
+
+      <div class="trabuc-links" id="proj-links"></div>
+
+      <!-- Table Métadonnées avec pointillés dynamiques -->
+      <div class="trabuc-meta-table">
+        <div class="trabuc-meta-row" id="row-role">
+          <span class="trabuc-meta-label">Role</span>
+          <span class="trabuc-meta-dots"></span>
+          <span class="trabuc-meta-val" id="proj-role">Direction Artistique &amp; Design</span>
+        </div>
+        <div class="trabuc-meta-row" id="row-field">
+          <span class="trabuc-meta-label">Field</span>
+          <span class="trabuc-meta-dots"></span>
+          <span class="trabuc-meta-val" id="proj-discipline">Branding, 3D, Typographie</span>
+        </div>
+        <div class="trabuc-meta-row" id="row-client">
+          <span class="trabuc-meta-label">Client</span>
+          <span class="trabuc-meta-dots"></span>
+          <span class="trabuc-meta-val" id="proj-client">Marrakech — Studio</span>
+        </div>
+        <div class="trabuc-meta-row" id="row-year">
+          <span class="trabuc-meta-label">Year</span>
+          <span class="trabuc-meta-dots"></span>
+          <span class="trabuc-meta-val" id="proj-year">2026</span>
+        </div>
       </div>
     </div>
   </header>
@@ -344,19 +914,73 @@
 
       const detail = project.detail || {};
 
+      // SI C'EST LE PROJET 016 (OU TEMPLATE GLYPHS CASE STUDY)
+      if (project.id === 'proj_016' || detail.template === 'glyphs-case-study') {
+        const stdHeader = document.getElementById('trabuc-standard-header');
+        if (stdHeader) stdHeader.style.display = 'none';
+
+        const rawTitle = (detail.title || project.title || 'Glyphs App').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        document.getElementById('page-title').textContent = `${rawTitle} — ZAKARIA BAIT`;
+
+        const flow = document.getElementById('proj-flow');
+        flow.innerHTML = '';
+        renderGlyphsCaseStudy(project, flow);
+
+        // Lien Projet Suivant
+        const nextIndex = (currentIndex + 1) % projects.length;
+        const nextProj = projects[nextIndex];
+        const nextBtn = document.getElementById('next-proj-link');
+        if (nextProj) {
+          nextBtn.href = `project-detail.html?id=${nextProj.id}`;
+          nextBtn.textContent = `PROJET SUIVANT →`;
+        }
+        return;
+      }
+
       // Catégorie lisible
       const catObj = (data.categories || []).find(c => c.id === project.category);
       const catLabel = catObj ? catObj.label : (project.category || 'Direction Artistique');
 
-      // Titres & Métadonnées
+      // Titres & Métadonnées Trabuc Style
       const rawTitle = (detail.title || project.title || 'PROJET').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
       document.getElementById('page-title').textContent = `${rawTitle} — ZAKARIA BAIT`;
       document.getElementById('proj-title').innerHTML = detail.title || project.title || 'Projet';
       
-      document.getElementById('proj-subtitle').innerHTML = detail.subtitle || project.subtitle || rawTitle;
+      document.getElementById('proj-subtitle').innerHTML = detail.subtitle || project.subtitle || "Direction Artistique &amp; Exploration Graphique";
+      document.getElementById('proj-role').textContent = detail.role || "Direction Artistique & Design";
       document.getElementById('proj-discipline').textContent = detail.discipline || catLabel;
       document.getElementById('proj-year').textContent = detail.year || project.year || '2026';
       document.getElementById('proj-client').textContent = detail.client || project.client || 'Marrakech — Studio';
+
+      // Brief & Solution
+      const briefEl = document.getElementById('proj-brief');
+      const solutionEl = document.getElementById('proj-solution');
+
+      if (detail.brief && detail.brief.trim()) {
+        briefEl.innerHTML = detail.brief;
+      } else if (project.narrative && project.narrative.trim()) {
+        briefEl.innerHTML = project.narrative;
+      } else {
+        briefEl.innerHTML = `Le projet <b>${rawTitle}</b> explore la stratégie de marque et la direction artistique à travers un langage visuel exigeant et singulier, articulé autour du contraste spatial et de la composition typographique.`;
+      }
+
+      if (detail.solution && detail.solution.trim()) {
+        solutionEl.innerHTML = detail.solution;
+      } else if (detail.narrative && detail.narrative.trim()) {
+        solutionEl.innerHTML = detail.narrative;
+      } else {
+        solutionEl.innerHTML = `Conception d’un écosystème modulaire combinant géométrie oblique, hiérarchie typographique forte et contrastes volumétriques pour un impact visuel maximal.`;
+      }
+
+      // Liens externes (si configurés)
+      const linksContainer = document.getElementById('proj-links');
+      if (Array.isArray(detail.links) && detail.links.length > 0) {
+        linksContainer.innerHTML = detail.links.map(l => `
+          <a href="${l.url}" target="_blank" class="trabuc-link">${l.label || 'Voir le projet'}</a>
+        `).join('');
+      } else {
+        linksContainer.style.display = 'none';
+      }
 
       // Rendu du flux modulaire (Media Flow)
       const flow = document.getElementById('proj-flow');
@@ -367,11 +991,17 @@
         detail.blocks.forEach((block, idx) => {
           if (block.type === 'full-media') {
             flow.appendChild(createFullMediaElement(block, idx));
+          } else if (block.type === 'editorial-duo') {
+            flow.appendChild(createEditorialDuoElement(block));
+          } else if (block.type === 'offset-narrative') {
+            flow.appendChild(createOffsetNarrativeElement(block));
           } else if (block.type === 'narrative') {
-            const div = document.createElement('div');
-            div.className = 'project-narrative';
-            div.innerHTML = block.text || '';
-            flow.appendChild(div);
+            if (block.text && block.text.trim()) {
+              const div = document.createElement('div');
+              div.className = 'project-narrative';
+              div.innerHTML = block.text;
+              flow.appendChild(div);
+            }
           } else if (block.type === 'grid-2') {
             flow.appendChild(createGridElement(block, 'media-grid-2'));
           } else if (block.type === 'grid-asym') {
@@ -379,13 +1009,13 @@
           }
         });
       } else {
-        // MODE PAR DÉFAUT (Si le projet n'a pas encore de blocs personnalisés)
+        // MODE PAR DÉFAUT TRABUC (Si le projet n'a pas encore de blocs personnalisés)
         const mainMedia = project.media || project.image || '';
         const isVideo = project.type === 'video';
 
         const heroFig = document.createElement('figure');
         heroFig.className = 'media-full';
-        heroFig.innerHTML = renderMediaHtml(mainMedia, isVideo, rawTitle, '01 &nbsp; &nbsp; ' + rawTitle);
+        heroFig.innerHTML = renderMediaHtml(mainMedia, isVideo, rawTitle, '01 / 01 &nbsp; &nbsp; ' + rawTitle);
         flow.appendChild(heroFig);
 
         const narrativeText = project.narrative || project.textContent || `Le projet <b>${rawTitle}</b> explore la stratégie visuelle et l'identité de marque à travers un langage graphique singulier et précis, articulé autour de la composition et du contraste typographique.`;
@@ -415,23 +1045,22 @@
       const nextBtn = document.getElementById('next-proj-link');
       if (nextProj) {
         nextBtn.href = `project-detail.html?id=${nextProj.id}`;
-        const nextTitleClean = (nextProj.title || nextProj.id).replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
         nextBtn.textContent = `PROJET SUIVANT →`;
       }
     });
 
-    // Fonctions d'aide pour générer les blocs HTML
+    // Fonctions d'aide pour générer les blocs HTML Trabuc Style
     function renderMediaHtml(src, isVideo, alt, caption) {
       const isVid = isVideo || (typeof src === 'string' && src.match(/\.(mp4|webm|mov)$/i));
       let mediaTag = '';
       if (isVid) {
         mediaTag = src 
           ? `<video src="${src}" autoplay loop muted playsinline class="project-media"></video>`
-          : `<div class="project-media" style="min-height:450px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">VIDÉO PRINCIPALE</div>`;
+          : `<div class="project-media" style="min-height:380px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">VIDÉO PRINCIPALE</div>`;
       } else {
         mediaTag = src 
           ? `<img src="${src}" class="project-media" alt="${alt || ''}">`
-          : `<div class="project-media" style="min-height:450px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">IMAGE / VISUEL</div>`;
+          : `<div class="project-media" style="min-height:380px; display:flex; align-items:center; justify-content:center; color:#888; font-weight:700;">IMAGE / VISUEL</div>`;
       }
       return `${mediaTag}${caption ? `<figcaption>${caption}</figcaption>` : ''}`;
     }
@@ -441,6 +1070,37 @@
       fig.className = 'media-full';
       fig.innerHTML = renderMediaHtml(block.media, block.mediaType === 'video', 'Visuel', block.caption);
       return fig;
+    }
+
+    function createEditorialDuoElement(block) {
+      const div = document.createElement('div');
+      div.className = `trabuc-duo ${block.reverse ? 'reversed' : ''}`;
+      div.innerHTML = `
+        <div class="trabuc-duo-media">
+          <figure>
+            ${renderMediaHtml(block.media, block.mediaType === 'video', block.title, block.caption)}
+          </figure>
+        </div>
+        <div class="trabuc-duo-text">
+          ${block.title ? `<h2>${block.title}</h2>` : ''}
+          <p>${block.text || ''}</p>
+        </div>
+      `;
+      return div;
+    }
+
+    function createOffsetNarrativeElement(block) {
+      const div = document.createElement('div');
+      div.className = 'trabuc-offset';
+      div.innerHTML = `
+        <div>
+          <h2>${block.title || ''}</h2>
+        </div>
+        <div>
+          <p>${block.text || ''}</p>
+        </div>
+      `;
+      return div;
     }
 
     function createGridElement(block, gridClass) {
@@ -455,6 +1115,580 @@
         </figure>
       `;
       return div;
+    }
+
+    // ========================================================
+    // RENDU DU CASE STUDY BESPOQUE : GLYPHS APP (PROJ_016)
+    // ========================================================
+    function renderGlyphsCaseStudy(project, container) {
+      const detail = project.detail || {};
+      const caseStudyNo = detail.caseStudyNo || "Case Study No. 04";
+      const title = detail.title || project.title || "projet 45 degre";
+      const subtitle = detail.subtitle || project.subtitle || "Brand Identity & strategy";
+      const partnerText = detail.partner || 'Designed in partnership with <strong style="font-weight:600;">Matteo Bologna</strong> of <a href="#" style="text-decoration:underline;">Mucca</a>';
+      const websiteUrl = detail.websiteUrl || "http://glyphsapp.com";
+      const websiteLabel = detail.websiteLabel || "Visit the Glyphs website here";
+
+      const brief = detail.brief || `<a href="#" style="font-weight:600; text-decoration:underline; color:#09090b;">Glyphs App</a> is a Mac font editor and a project of type designers and software developers Georg Seifert and Rainer Erich Scheichelbauer. For the 2020 launch of their highly anticipated Glyphs 3, Georg &amp; Rainer were looking to relaunch their website and brand identity in order to better communicate what Glyphs does and bring new energy to the release.`;
+
+      const solution = detail.solution || `The new website centers itself in the community that surrounds Glyphs, simplifying the architecture for ease of navigation, enhancing access to Tutorials and resources and showcasing type designers’ projects in a dynamic way. The website uses a single Variable font by ABC Dinamo, drawn and developed entirely within Glyphs. The logo and identity simplify and reimagine the app, giving the entirety of the focus on the content itself: the typographic expression made possible with Glyphs.`;
+
+      const pressBadges = Array.isArray(detail.pressBadges) && detail.pressBadges.length > 0 
+        ? detail.pressBadges 
+        : ["Brand New", "The Brand Identity", "Mindsparkle", "Httpster"];
+
+      const specs = Array.isArray(detail.specs) && detail.specs.length > 0
+        ? detail.specs
+        : [
+            { label: "Role", val: detail.role || "Design & creative direction" },
+            { label: "Field", val: detail.discipline || "Identity, Technology" },
+            { label: "Typefaces", val: "ABC Arizona VF by ABC Dinamo" },
+            { label: "Development", val: "Chris Corby" },
+            { label: "Special Thanks", val: "Georg & Rainer, Fabian & Johannes" },
+            { label: "Published", val: detail.year || "November 2020" }
+          ];
+
+      const arrowSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; transition:transform 0.2s;"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>`;
+
+      container.innerHTML = `
+        <div class="glyphs-case-study">
+          <!-- Section 1: Hero & Project Metadata -->
+          <section class="cs-section">
+            <div class="cs-grid">
+              <!-- Colonne Gauche (5 cols) -->
+              <div style="grid-column: span 5 / span 5; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <span class="cs-tag">${caseStudyNo}</span>
+                  <h1 class="cs-title-display">${title}</h1>
+                  <p class="cs-subtitle">${subtitle}</p>
+                </div>
+                <div>
+                  <div class="cs-partner-badge">
+                    <span class="cs-pulse-dot"></span>
+                    <span>${partnerText}</span>
+                  </div>
+                  <div>
+                    <a href="${websiteUrl}" target="_blank" rel="noopener noreferrer" class="cs-ext-link">
+                      <span>${websiteLabel}</span>
+                      ${arrowSvg}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Colonne Droite (7 cols) -->
+              <div style="grid-column: span 7 / span 7; display:flex; flex-direction:column; justify-content:space-between; gap:2.5rem;">
+                <div style="display:flex; flex-direction:column; gap:1.75rem;">
+                  <div>
+                    <span class="cs-tag">Brief</span>
+                    <p style="font-size:16px; line-height:1.6; color:#09090b;">${brief}</p>
+                  </div>
+                  <div>
+                    <span class="cs-tag">Solution</span>
+                    <p style="font-size:14px; line-height:1.6; color:#09090b;">${solution}</p>
+                  </div>
+                </div>
+
+                <!-- Press Badges -->
+                <div style="padding-top:1.25rem; border-top:1px solid var(--cs-hairline);">
+                  <span class="cs-tag">Featured in</span>
+                  <div class="cs-badge-group">
+                    ${pressBadges.map(b => `<a href="#" class="cs-press-badge">${b}</a>`).join('')}
+                  </div>
+                </div>
+
+                <!-- Spec Table with Dot Leaders -->
+                <div class="cs-spec-table">
+                  ${specs.map(s => `
+                    <div class="cs-spec-row">
+                      <span class="cs-spec-label">${s.label}</span>
+                      <span class="cs-spec-dots"></span>
+                      <span class="cs-spec-val">${s.val}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 2: Visual Artifact Bento & Dock Feature -->
+          <section class="cs-section">
+            <!-- macOS Dock Preview Panel -->
+            <div class="cs-dock-wrapper">
+              <span class="cs-tag" style="margin-bottom:1.5rem;">macOS System Integration / App Icon</span>
+              <div class="cs-dock">
+                <!-- Folder Icon -->
+                <div class="cs-dock-icon" style="background:var(--cs-subtle);">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <!-- Blue Nav Icon -->
+                <div class="cs-dock-icon" style="background:#2997FF;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                </div>
+                <!-- Glyphs 3 Focal Icon -->
+                <div class="cs-dock-icon cs-dock-focal">
+                  <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+                    <path d="M8 8H32V16H18V24H32V32H8V8Z" fill="#22C55E"/>
+                    <circle cx="28" cy="12" fill="#09090B" r="3"/>
+                  </svg>
+                  <span class="cs-dock-tooltip">Glyphs 3</span>
+                </div>
+                <!-- Spotify Green Icon -->
+                <div class="cs-dock-icon" style="background:#1DB954;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <!-- Terminal Dark Icon -->
+                <div class="cs-dock-icon" style="background:var(--cs-dark);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                </div>
+              </div>
+              <span style="font-size:11.5px; color:var(--cs-text-muted); margin-top:1.25rem;">Re-engineered app dock presence and modular bezier silhouette</span>
+            </div>
+
+            <!-- Asymmetrical 2-Column Mockups -->
+            <div class="cs-grid">
+              <!-- Left: Phone Device Perspective -->
+              <div class="cs-card-subtle" style="grid-column: span 6 / span 6;">
+                <div>
+                  <span class="cs-tag">Editorial Feed Mockup</span>
+                  <h3 class="cs-h3" style="margin-top:0.25rem;">Mobile Newsletter &amp; Changelog</h3>
+                </div>
+                
+                <!-- Smartphone Inset -->
+                <div style="background:var(--cs-dark); padding:1rem; border-radius:2rem; border:1px solid var(--cs-hairline); box-shadow:0 10px 25px rgba(0,0,0,0.1); max-width:320px; width:100%; margin:2rem auto;">
+                  <div style="background:#ffffff; border-radius:1.5rem; padding:1.2rem; overflow:hidden; border:1px solid var(--cs-hairline);">
+                    <div style="border-bottom:1px solid var(--cs-hairline); padding-bottom:0.5rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+                      <span style="font-weight:700; font-size:16px;">News</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:var(--cs-text-muted);">Issue 48</span>
+                    </div>
+                    <p style="font-family:'Satoshi',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.05em; color:var(--cs-text-muted); margin-bottom:0.25rem;">Make Things You Love</p>
+                    <h4 style="font-size:18px; font-weight:700; line-height:1.2; margin-bottom:0.5rem;">Say hello to Glyphs 3</h4>
+                    <p style="font-size:11px; line-height:1.5; color:#555; margin-bottom:0.85rem;">In its third major iteration, Glyphs has become more reliable, more user-friendly, and even more efficient. After three years of intensive development, version 3 is available today.</p>
+                    <div style="background:var(--cs-green-subtle); border:1px solid rgba(34,197,94,0.4); padding:0.5rem; font-family:'Satoshi',monospace; font-size:10px; display:flex; justify-content:space-between; align-items:center;">
+                      <span>EVENTS / WORKSHOPS</span>
+                      <span style="font-weight:700;">2021 →</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="padding-top:1rem; border-top:1px solid var(--cs-hairline);">
+                  <p style="font-size:11.5px; color:var(--cs-text-muted); margin:0;">Mobile view framing editorial announcements typeset with adaptive optical sizes.</p>
+                </div>
+              </div>
+
+              <!-- Right: Tutorial & Learning UI View -->
+              <div class="cs-card-subtle" style="grid-column: span 6 / span 6;">
+                <div>
+                  <span class="cs-tag">Interactive Platform</span>
+                  <h3 class="cs-h3" style="margin-top:0.25rem;">Tutorials &amp; Resource Hub</h3>
+                </div>
+
+                <!-- UI Mockup Window -->
+                <div style="background:#ffffff; border:1px solid var(--cs-hairline); border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.05); max-width:380px; width:100%; margin:1.5rem auto;">
+                  <!-- Header Bar -->
+                  <div style="background:var(--cs-dark); color:#ffffff; padding:0.6rem 0.85rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--cs-hairline-dark);">
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
+                      <div style="width:16px; height:16px; border-radius:3px; background:var(--cs-green); display:flex; align-items:center; justify-content:center; color:var(--cs-dark); font-weight:800; font-size:9px;">G</div>
+                      <span style="font-size:12px; font-weight:600;">Glyphs</span>
+                    </div>
+                    <div style="background:var(--cs-green); color:var(--cs-dark); font-family:'Satoshi',monospace; font-size:10px; padding:2px 8px; font-weight:700; border-radius:2px;">Get Glyphs</div>
+                  </div>
+
+                  <!-- Filter Tabs -->
+                  <div style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--cs-hairline); display:flex; gap:0.85rem; font-family:'Satoshi',monospace; font-size:10px; color:var(--cs-text-muted);">
+                    <span style="color:#09090b; font-weight:700; border-bottom:2px solid #09090b; padding-bottom:2px;">Recent</span>
+                    <span>Essentials</span>
+                    <span>Basic</span>
+                    <span style="margin-left:auto;">🔍</span>
+                  </div>
+
+                  <!-- List entries -->
+                  <div style="display:flex; flex-direction:column;">
+                    <div style="padding:0.75rem 0.85rem; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--cs-hairline);">
+                      <div>
+                        <span style="font-family:'Satoshi',monospace; font-size:9px; text-transform:uppercase; color:var(--cs-text-muted);">Tutorial</span>
+                        <h5 style="font-size:13px; font-weight:700; margin:0.15rem 0;">Mark Attachment</h5>
+                        <span style="display:inline-block; border:1px solid var(--cs-hairline); padding:1px 5px; font-family:'Satoshi',monospace; font-size:9px;">Diacritics</span>
+                      </div>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <div style="padding:0.75rem 0.85rem; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--cs-hairline);">
+                      <div>
+                        <span style="font-family:'Satoshi',monospace; font-size:9px; text-transform:uppercase; color:var(--cs-text-muted);">Tutorial</span>
+                        <h5 style="font-size:13px; font-weight:700; margin:0.15rem 0;">Working with UFO</h5>
+                        <span style="display:inline-block; border:1px solid var(--cs-hairline); padding:1px 5px; font-family:'Satoshi',monospace; font-size:9px;">Importing</span>
+                      </div>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#71717A" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <div style="padding:0.75rem 0.85rem; background:var(--cs-subtle); display:flex; justify-content:space-between; align-items:center;">
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; font-weight:700; color:#09090b;">Essentials for Getting Started</span>
+                      <span style="font-size:12px;">→</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="padding-top:1rem; border-top:1px solid var(--cs-hairline);">
+                  <p style="font-size:11.5px; color:var(--cs-text-muted); margin:0;">Card interface structure highlighting quick bookmarks and modular tag filters.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 3: Community & Ecosystem -->
+          <section class="cs-section">
+            <div class="cs-grid">
+              <div style="grid-column: span 4 / span 4;">
+                <span class="cs-tag">01 / Ecosystem</span>
+                <h2 class="cs-h2">A tool for the community</h2>
+              </div>
+              <div style="grid-column: span 8 / span 8; display:flex; flex-direction:column; gap:1.5rem;">
+                <p style="font-size:16px; line-height:1.6; color:#09090b;">
+                  Glyphs is one of the go-to tools for type design. This is largely because it’s built for everyone: easy to use for Novices and Professional type designers alike. <strong class="cs-highlight">The website is re-imagined as a tool for the community, to give a window to the community’s work,</strong> not as just a showcase of an app.
+                </p>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.75rem; padding-top:1rem;">
+                  <div style="border-left:2px solid #09090b; padding-left:1.1rem;">
+                    <h3 class="cs-h3" style="margin-bottom:0.5rem;">Tutorials &amp; Forum</h3>
+                    <p style="font-size:13.5px; line-height:1.55; color:#555;">
+                      The community superpowers Glyphs by constantly engaging with Tutorials as a resource for learning, the Forum as a form of exchange with the makers of the app and other members. Some of the world’s most renowned foundries use it, and emerging talent is engaging with it on a weekly basis.
+                    </p>
+                  </div>
+                  <div style="border-left:2px solid var(--cs-green); padding-left:1.1rem;">
+                    <h3 class="cs-h3" style="margin-bottom:0.5rem;">Personalized Lists</h3>
+                    <p style="font-size:13.5px; line-height:1.55; color:#555;">
+                      Finding and discovering new tutorials quickly is at the core of the new experience. The Learn section deploys Bookmarks for creating personal lists and recommendations from top talent in the field on topics ranging from essentials to coding of typefaces.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 4: Variable Typography Showcase -->
+          <section class="cs-section">
+            <div class="cs-grid" style="margin-bottom:2rem;">
+              <div style="grid-column: span 4 / span 4;">
+                <span class="cs-tag">02 / Typography</span>
+                <h2 class="cs-h2">One font can do it all</h2>
+              </div>
+              <div style="grid-column: span 8 / span 8; display:flex; flex-direction:column; gap:1rem;">
+                <p style="font-size:16px; line-height:1.6; color:#09090b;">
+                  The website is typeset using <strong style="font-weight:700;">ABC Arizona</strong>, an unreleased Variable font drawn by <a href="#" style="text-decoration:underline;">Elias Hanzer</a> for <a href="#" style="text-decoration:underline;">ABC Dinamo</a> made entirely within Glyphs. The typeface covers a wide typographic range that spans from Sans to Serif, making versatile for any context.
+                </p>
+                <p style="font-size:13.5px; line-height:1.55; color:#555;">
+                  The range is useful for drawing a reader’s attention through weight shifts, creating hierarchy across content blocks, typesetting long articles for optimal readability and creating visually impactful typographic moments.
+                </p>
+              </div>
+            </div>
+
+            <!-- Variable Specimen Poster Grid -->
+            <div class="cs-grid">
+              <!-- Left: Poster "From idea to release" -->
+              <div class="cs-card-subtle" style="grid-column: span 6 / span 6; background:#ffffff;">
+                <div style="border-bottom:1px solid var(--cs-hairline); padding-bottom:0.85rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="cs-tag" style="margin:0;">SPECIMEN NO. 01 — ARIZONA SANS &amp; SERIF</span>
+                  <span style="padding:2px 7px; border:1px solid var(--cs-hairline); font-family:'Satoshi',monospace; font-size:10px;">WEIGHT AXIS 100–900</span>
+                </div>
+                
+                <div style="margin:1.5rem 0;">
+                  <h3 style="font-size:clamp(2rem, 3.5vw, 3rem); font-weight:700; line-height:1; margin-bottom:1.25rem;">Features</h3>
+                  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div style="background:var(--cs-dark); color:#ffffff; padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; min-height:170px;">
+                      <span style="font-size:16px; font-weight:600; color:var(--cs-green);">From idea to release</span>
+                      <p style="font-size:11.5px; color:#aaa; margin:0;">With Glyphs, you can perfect vector font assets and launch any OpenType font family.</p>
+                    </div>
+                    <div style="border:1px solid var(--cs-hairline); padding:1.25rem; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:170px;">
+                      <span style="font-size:2.8rem; font-weight:700;">A→Z</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted); margin-top:0.4rem;">Continuous Variable Interpolation</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="padding-top:1rem; border-top:1px solid var(--cs-hairline); display:flex; justify-content:space-between; align-items:center; font-family:'Satoshi',monospace; font-size:11px;">
+                  <span style="color:var(--cs-text-muted);">Typeface: ABC Arizona Variable</span>
+                  <span style="color:var(--cs-green); font-weight:700;">● VARIABLE GLYPH</span>
+                </div>
+              </div>
+
+              <!-- Right: Poster "Vibrant community of makers" -->
+              <div class="cs-card-dark" style="grid-column: span 6 / span 6;">
+                <div style="border-bottom:1px solid var(--cs-hairline-dark); padding-bottom:0.85rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="cs-tag" style="margin:0; color:#aaa;">SPECIMEN NO. 02 — COMMUNITY AXIS</span>
+                  <span style="padding:2px 7px; border:1px solid var(--cs-hairline-dark); color:var(--cs-green); font-family:'Satoshi',monospace; font-size:10px;">EDITORIAL LAYOUT</span>
+                </div>
+
+                <div style="margin:1.5rem 0;">
+                  <h3 style="font-size:clamp(2rem, 3.5vw, 3rem); font-weight:700; font-style:italic; line-height:1; margin-bottom:1.25rem;">Resources</h3>
+                  <div style="border:1px solid var(--cs-hairline-dark); padding:1.25rem; background:#111114;">
+                    <h4 style="font-size:clamp(1.2rem, 2vw, 1.8rem); font-weight:700; color:var(--cs-green); line-height:1.2; margin-bottom:0.75rem;">Vibrant community of makers</h4>
+                    <p style="font-size:13px; line-height:1.55; color:#ccc; margin-bottom:1rem;">Plugins &amp; scripts to supercharge your workflow, contributed directly by developers and type founders worldwide.</p>
+                    <div style="display:flex; align-items:center; gap:0.6rem; border-top:1px solid var(--cs-hairline-dark); padding-top:0.75rem;">
+                      <span style="padding:2px 7px; background:#ffffff; color:#09090b; font-family:'Satoshi',monospace; font-size:10px; font-weight:700;">MEKKABLUE SCRIPTS</span>
+                      <span style="padding:2px 7px; border:1px solid var(--cs-hairline-dark); color:#ffffff; font-family:'Satoshi',monospace; font-size:10px;">ROTATION GUIDE</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="padding-top:1rem; border-top:1px solid var(--cs-hairline-dark); display:flex; justify-content:space-between; align-items:center; font-family:'Satoshi',monospace; font-size:11px;">
+                  <span style="color:#aaa;">Designed completely within Glyphs</span>
+                  <span style="color:var(--cs-green); font-weight:700;">abc-dinamo.com</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Variable Font Interactive Range Explorer Slider Graphic -->
+            <div class="cs-slider-container">
+              <div class="cs-slider-header">
+                <div style="display:flex; align-items:center; gap:0.75rem;">
+                  <span class="cs-tag" style="margin:0;">Variable Axis Control</span>
+                  <span class="cs-active-badge">Active Specimen</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.75rem; font-family:'Satoshi',monospace; font-size:11.5px;">
+                  <span>Sans (100)</span>
+                  <input type="range" id="var-slider" min="100" max="900" step="10" value="400" class="cs-range-slider">
+                  <span>Serif (900) &nbsp; [ Weight: <b id="var-val-label" style="color:var(--cs-green);">400</b> ]</span>
+                </div>
+              </div>
+              <div class="cs-specimen-scroll">
+                <span id="var-specimen" class="cs-specimen-text" style="font-weight:400;">
+                  Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz 0123456789 &amp; @ § ¶
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 6: Identity System & Modular Iconography -->
+          <section class="cs-section">
+            <div class="cs-grid" style="margin-bottom:2rem;">
+              <div style="grid-column: span 4 / span 4;">
+                <span class="cs-tag">04 / Identity</span>
+                <h2 class="cs-h2">A new chapter</h2>
+              </div>
+              <div style="grid-column: span 8 / span 8; display:flex; flex-direction:column; gap:1rem;">
+                <p style="font-size:16px; line-height:1.6; color:#09090b;">
+                  The new logo and design system signal a new chapter for Glyphs. The iconic, simplified symbol connects with the modular language at play in the rest of the identity.
+                </p>
+                <p style="font-size:13.5px; line-height:1.55; color:#555;">
+                  The modular language of Glyphs 3 symbol is extended to make the rest of the app suite cohesive: <strong style="color:#09090b; font-weight:700;">Glyphs 3 Mini</strong> and all of the <strong style="color:#09090b; font-weight:700;">Pro font tools</strong> use the same building blocks as the main logo, and will be gradually released in 2021.
+                </p>
+                <p style="font-size:13.5px; line-height:1.55; color:#555;">
+                  The color palette builds on the heritage green that distinguished Glyphs from its competitors, evolving it to a more vibrant, dynamic and ownable green. The extended palette uses a combination of brights and darks that bestow flexibility within the site and social.
+                </p>
+              </div>
+            </div>
+
+            <div class="cs-grid">
+              <!-- Big Brand Mark Block (Left) -->
+              <div class="cs-card-dark" style="grid-column: span 6 / span 6; align-items:center; text-align:center; min-height:420px; padding:2.5rem 1.5rem;">
+                <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="cs-tag" style="margin:0; color:#aaa;">GLYPHS 3 HERO SYMBOL</span>
+                  <span style="padding:2px 7px; background:var(--cs-green); color:var(--cs-dark); font-family:'Satoshi',monospace; font-size:10px; font-weight:700;">#22C55E</span>
+                </div>
+
+                <!-- Iconic Modular G Logo SVG -->
+                <div style="margin:2.5rem 0;">
+                  <svg width="180" height="180" viewBox="0 0 200 200" fill="none">
+                    <path d="M40 40H160C160 40 160 100 100 100H40V40Z" fill="#22C55E"/>
+                    <path d="M40 100H100V160H40V100Z" fill="#22C55E"/>
+                    <path d="M100 100H160V160C160 160 160 160 100 160V100Z" fill="#22C55E"/>
+                    <rect x="70" y="70" width="30" height="30" fill="#09090B"/>
+                  </svg>
+                </div>
+
+                <div style="width:100%; border-top:1px solid var(--cs-hairline-dark); padding-top:1rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:11px; color:#aaa;">
+                  <span>Geometric Modular Construction</span>
+                  <span>Grid: 4x4 Proportional Ratio</span>
+                </div>
+              </div>
+
+              <!-- Suite Family Icons & Specimen Cards (Right) -->
+              <div style="grid-column: span 6 / span 6; display:flex; flex-direction:column; gap:1.5rem;">
+                <!-- App Suite Icon Family -->
+                <div class="cs-card-dark" style="padding:1.5rem;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--cs-hairline-dark); padding-bottom:0.75rem; margin-bottom:1.25rem;">
+                    <span class="cs-tag" style="margin:0; color:#aaa;">APP ECOSYSTEM FAMILY</span>
+                    <span style="color:var(--cs-green); font-family:'Satoshi',monospace; font-size:10px; font-weight:700;">SUITE 2021</span>
+                  </div>
+                  <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:0.5rem; text-align:center;">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div style="width:44px; height:44px; border-radius:8px; background:var(--cs-dark); border:2px solid var(--cs-green); display:flex; align-items:center; justify-content:center; padding:5px; margin-bottom:0.4rem;">
+                        <div style="width:100%; height:100%; background:var(--cs-green);"></div>
+                      </div>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:#fff;">Glyphs 3</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div style="width:44px; height:44px; border-radius:8px; background:var(--cs-dark); border:1px solid var(--cs-hairline-dark); display:flex; align-items:center; justify-content:center; padding:5px; margin-bottom:0.4rem;">
+                        <div style="width:100%; height:50%; background:#fff;"></div>
+                      </div>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:#aaa;">Mini</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div style="width:44px; height:44px; border-radius:8px; background:var(--cs-dark); border:1px solid var(--cs-hairline-dark); display:flex; align-items:center; justify-content:center; padding:5px; margin-bottom:0.4rem;">
+                        <div style="width:65%; height:100%; border:2px solid #fff;"></div>
+                      </div>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:#aaa;">Outline</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div style="width:44px; height:44px; border-radius:8px; background:var(--cs-dark); border:1px solid var(--cs-hairline-dark); display:flex; align-items:center; justify-content:center; padding:5px; margin-bottom:0.4rem;">
+                        <div style="width:100%; height:100%; border-radius:50%; border:2px solid #fff;"></div>
+                      </div>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:#aaa;">Nodes</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div style="width:44px; height:44px; border-radius:8px; background:var(--cs-dark); border:1px solid var(--cs-hairline-dark); display:flex; align-items:center; justify-content:center; padding:5px; margin-bottom:0.4rem;">
+                        <div style="width:100%; height:100%; background:var(--cs-green-subtle); border:1px solid var(--cs-green);"></div>
+                      </div>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:#aaa;">Cloud</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div style="width:44px; height:44px; border-radius:8px; background:var(--cs-dark); border:1px solid var(--cs-hairline-dark); display:flex; align-items:center; justify-content:center; padding:5px; margin-bottom:0.4rem;">
+                        <div style="width:100%; height:7px; background:var(--cs-green);"></div>
+                      </div>
+                      <span style="font-family:'Satoshi',monospace; font-size:10px; color:#aaa;">Scripts</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ag Weights Matrix Specimen -->
+                <div class="cs-card-subtle" style="padding:1.5rem; flex-grow:1;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--cs-hairline); padding-bottom:0.6rem; margin-bottom:1rem;">
+                    <span class="cs-tag" style="margin:0;">Weight Progression Specimen</span>
+                    <span style="font-family:'Satoshi',monospace; font-size:11px; font-weight:700;">Arizona VF</span>
+                  </div>
+                  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.75rem;">
+                    <div style="border:1px solid var(--cs-hairline); background:#fff; padding:0.6rem; text-align:center;">
+                      <span style="font-size:24px; font-weight:300; display:block;">Ag</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:9.5px; color:var(--cs-text-muted);">Thin 100</span>
+                    </div>
+                    <div style="border:1px solid var(--cs-hairline); background:#fff; padding:0.6rem; text-align:center;">
+                      <span style="font-size:24px; font-weight:400; display:block;">Ag</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:9.5px; color:var(--cs-text-muted);">Regular 400</span>
+                    </div>
+                    <div style="border:1px solid var(--cs-hairline); background:#fff; padding:0.6rem; text-align:center;">
+                      <span style="font-size:24px; font-weight:700; display:block;">Ag</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:9.5px; color:var(--cs-text-muted);">Bold 700</span>
+                    </div>
+                    <div style="border:1px solid var(--cs-hairline); background:#fff; padding:0.6rem; text-align:center;">
+                      <span style="font-size:24px; font-weight:300; font-style:italic; display:block;">Ag</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:9.5px; color:var(--cs-text-muted);">Serif Thin</span>
+                    </div>
+                    <div style="border:1px solid var(--cs-hairline); background:#fff; padding:0.6rem; text-align:center;">
+                      <span style="font-size:24px; font-weight:400; font-style:italic; display:block;">Ag</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:9.5px; color:var(--cs-text-muted);">Serif Reg</span>
+                    </div>
+                    <div style="border:1.5px solid var(--cs-green); background:var(--cs-green-subtle); padding:0.6rem; text-align:center;">
+                      <span style="font-size:24px; font-weight:900; font-style:italic; display:block;">Ag</span>
+                      <span style="font-family:'Satoshi',monospace; font-size:9.5px; font-weight:700; color:#09090b;">Serif Black</span>
+                    </div>
+                  </div>
+                  <div style="border-top:1px solid var(--cs-hairline); padding-top:0.75rem; margin-top:1rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                    <span>Full Unicode Range</span>
+                    <span>OpenType Features Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 7: Merch & Physical Print Artifacts -->
+          <section class="cs-section" style="border-bottom:none;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:2rem;">
+              <div>
+                <span class="cs-tag">05 / Physical Collateral</span>
+                <h2 class="cs-h2">Printed matter &amp; merchandise</h2>
+              </div>
+              <span style="font-family:'Satoshi',monospace; font-size:11.5px; color:var(--cs-text-muted);">2020–2021 Releases</span>
+            </div>
+
+            <div class="cs-grid">
+              <!-- Handbook 2021 Cover (5 cols) -->
+              <div class="cs-card-subtle" style="grid-column: span 5 / span 5;">
+                <div style="aspect-ratio:3/4; background:#ffffff; border:1px solid var(--cs-hairline); padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="font-family:'Satoshi',monospace; font-size:11px; font-weight:700; text-transform:uppercase;">Handbook 2021</span>
+                    <span style="font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">Rev 3.0</span>
+                  </div>
+
+                  <!-- Emboss Graphic -->
+                  <div style="margin:auto; display:flex; align-items:center; justify-content:center;">
+                    <div style="width:130px; height:130px; border:3px solid var(--cs-hairline); border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                      <div style="width:70px; height:70px; background:var(--cs-subtle); border:1px solid var(--cs-hairline); border-bottom-left-radius:100%;"></div>
+                    </div>
+                  </div>
+
+                  <div style="border-top:1px solid var(--cs-hairline); padding-top:0.85rem; display:flex; justify-content:space-between; align-items:flex-end;">
+                    <div>
+                      <h4 style="font-size:14.5px; font-weight:700; line-height:1.2;">Glyphs 3 Handbook</h4>
+                      <p style="font-size:11px; color:var(--cs-text-muted); margin:0;">Official user guide &amp; scripting manual</p>
+                    </div>
+                    <span style="font-family:'Satoshi',monospace; font-size:11px; font-weight:700;">540pp</span>
+                  </div>
+                </div>
+                <p style="font-size:11.5px; color:var(--cs-text-muted); margin-top:1rem; margin-bottom:0;">Screen-printed debossed volume on heavy matte stock.</p>
+              </div>
+
+              <!-- Canvas Tote Merch (3 cols) -->
+              <div class="cs-card-subtle" style="grid-column: span 3 / span 3;">
+                <div style="aspect-ratio:3/4; background:var(--cs-dark); color:#ffffff; padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; border:1px solid var(--cs-hairline-dark);">
+                  <span class="cs-tag" style="margin:0; color:#aaa;">COMMUNITY MERCH</span>
+                  <div style="margin:auto; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <div style="width:90px; height:110px; border:1px solid var(--cs-hairline-dark); background:#111114; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0.6rem;">
+                      <svg width="46" height="46" viewBox="0 0 40 40" fill="none">
+                        <path d="M8 8H32V16H18V24H32V32H8V8Z" fill="#22C55E"/>
+                      </svg>
+                      <span style="font-family:'Satoshi',monospace; font-size:8px; color:var(--cs-green); margin-top:0.3rem;">GLYPHS</span>
+                    </div>
+                  </div>
+                  <div style="border-top:1px solid var(--cs-hairline-dark); padding-top:0.6rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:11px; color:#aaa;">
+                    <span>Canvas Tote</span>
+                    <span style="color:var(--cs-green);">Heavy Twill</span>
+                  </div>
+                </div>
+                <p style="font-size:11.5px; color:var(--cs-text-muted); margin-top:1rem; margin-bottom:0;">Heavyweight organic cotton tote bags distributed at ATypI &amp; TypoLabs.</p>
+              </div>
+
+              <!-- Typographic Repetition Poster (4 cols) -->
+              <div class="cs-card-subtle" style="grid-column: span 4 / span 4;">
+                <div style="aspect-ratio:3/4; background:var(--cs-dark); padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; border:1px solid var(--cs-hairline-dark); text-align:center;">
+                  <div style="display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:10px; color:#aaa; border-bottom:1px solid var(--cs-hairline-dark); padding-bottom:0.6rem;">
+                    <span>SILKSCREEN POSTER</span>
+                    <span style="color:var(--cs-green);">70 × 100 CM</span>
+                  </div>
+
+                  <!-- Repetition Typographic Stack -->
+                  <div class="cs-typo-stack">
+                    <div style="font-weight:300; color:rgba(255,255,255,0.3);">Glyphs</div>
+                    <div style="font-weight:400; color:#ffffff;">Glyphs</div>
+                    <div style="font-weight:600; color:var(--cs-green);">Glyphs</div>
+                    <div style="font-weight:700; color:var(--cs-green);">Glyphs</div>
+                    <div style="font-weight:900; color:#ffffff;">Glyphs</div>
+                    <div style="font-weight:300; color:rgba(255,255,255,0.3);">Glyphs</div>
+                  </div>
+
+                  <div style="border-top:1px solid var(--cs-hairline-dark); padding-top:0.6rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:10px; color:#aaa;">
+                    <span>2-Color Offset</span>
+                    <span style="color:var(--cs-green);">Fluorescent Ink</span>
+                  </div>
+                </div>
+                <p style="font-size:11.5px; color:var(--cs-text-muted); margin-top:1rem; margin-bottom:0;">High-impact fluorescent acid-green silkscreen promotional poster series.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+
+      // Slider variable font interactif
+      setTimeout(() => {
+        const slider = document.getElementById('var-slider');
+        const specimen = document.getElementById('var-specimen');
+        const label = document.getElementById('var-val-label');
+        if (slider && specimen) {
+          slider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            specimen.style.fontWeight = val;
+            if (label) label.textContent = val;
+          });
+        }
+      }, 50);
     }
   </script>
   <!-- GSAP & Clean Cursor -->
