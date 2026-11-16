@@ -2407,7 +2407,7 @@
       return btoa(binary);
     }
 
-    async function uploadMediaFileToGitHub(token, file) {
+    async function uploadMediaFileToGitHub(token, file, maxRetries = 2) {
       if (file.size > 25 * 1024 * 1024) {
         throw new Error(`Le fichier "${file.name}" dépasse 25 Mo (${(file.size / (1024*1024)).toFixed(1)} Mo). Veuillez le compresser avant de l'ajouter.`);
       }
@@ -2419,39 +2419,62 @@
       
       const base64Content = await fileToBase64(file);
       
-      let sha;
-      try {
-        const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?t=${Date.now()}`, {
-          headers: { 
-            'Authorization': `Bearer ${cleanToken}`,
-            'Accept': 'application/vnd.github.v3+json'
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        let sha;
+        try {
+          const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?t=${Date.now()}_${attempt}`, {
+            headers: { 
+              'Authorization': `Bearer ${cleanToken}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+          if (getRes.ok) {
+            const fileData = await getRes.json();
+            sha = fileData.sha;
           }
+        } catch(e) {}
+
+        const bodyData = {
+          message: `Upload media: ${file.name} via CMS`,
+          content: base64Content
+        };
+        if (sha) bodyData.sha = sha;
+
+        const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${cleanToken}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify(bodyData)
         });
-        if (getRes.ok) {
-          const fileData = await getRes.json();
-          sha = fileData.sha;
-        }
-      } catch(e) {}
 
-      const bodyData = {
-        message: `Upload media: ${file.name} via CMS`,
-        content: base64Content
-      };
-      if (sha) bodyData.sha = sha;
+        if (putRes.ok) return true;
 
-      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${cleanToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify(bodyData)
-      });
-
-      if (!putRes.ok) {
         const err = await putRes.json().catch(() => ({}));
-        throw new Error(err.message || `Échec upload GitHub (${putRes.status})`);
+        const errMsg = err.message || `Échec upload GitHub (${putRes.status})`;
+
+        if (putRes.status === 409 || errMsg.includes('is at') || errMsg.includes('does not match')) {
+          const shaMatch = errMsg.match(/is at ([a-f0-9]{40})/);
+          if (shaMatch && shaMatch[1]) {
+            bodyData.sha = shaMatch[1];
+            const retryPut = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${cleanToken}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.github.v3+json'
+              },
+              body: JSON.stringify(bodyData)
+            });
+            if (retryPut.ok) return true;
+          }
+          await new Promise(r => setTimeout(r, 450));
+          continue;
+        }
+
+        throw new Error(errMsg);
       }
       return true;
     }
@@ -2609,7 +2632,28 @@
       openTokenModal();
     }
 
+    let isSavingActive = false;
+    let hasQueuedSave = false;
+    let queuedIsAuto = true;
+
     async function savePortfolioData(isAuto = false) {
+      if (isSavingActive) {
+        hasQueuedSave = true;
+        if (!isAuto) queuedIsAuto = false;
+        return;
+      }
+      isSavingActive = true;
+      if (autoSaveTimer) {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = null;
+      }
+
+      const saveBtn = document.getElementById('saveBtn');
+      if (saveBtn && !isAuto) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = '⏳ Publication...';
+      }
+
       syncInfoInputs();
 
       const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
@@ -2617,6 +2661,11 @@
 
       // Si pas de token et clic manuel, ouvrir immédiatement la fenêtre de connexion
       if (!ghToken) {
+        isSavingActive = false;
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = '🚀 ENREGISTRER & METTRE EN LIGNE';
+        }
         if (!isAuto) {
           openTokenModal();
           showToast("⚠️ Connectez votre clé GitHub pour publier sur Vercel !");
@@ -2644,12 +2693,11 @@
           pendingMediaUploads.clear();
         }
 
-        // B. Envoi de data.js
+        // B. Envoi de data.js avec auto-résolution des conflits 409
         const success = await saveToGitHub(ghToken, jsCode);
         if (success) {
           markSaved();
           showToast("🚀 Publié sur GitHub ! Vercel met à jour votre site dans ~30 secondes.");
-          return;
         }
       } catch(e) {
         console.error("Échec GitHub API :", e);
@@ -2678,52 +2726,103 @@
             alert("⚠️ Erreur lors de l'envoi sur GitHub :\n" + errMsg);
           }
         }
+      } finally {
+        isSavingActive = false;
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = '🚀 ENREGISTRER & METTRE EN LIGNE';
+        }
+        if (hasQueuedSave) {
+          hasQueuedSave = false;
+          const nextIsAuto = queuedIsAuto;
+          queuedIsAuto = true;
+          setTimeout(() => savePortfolioData(nextIsAuto), 350);
+        }
       }
     }
 
-    async function saveToGitHub(token, content) {
+    async function saveToGitHub(token, content, maxRetries = 3) {
       const owner = "zwakr";
       const repo = "portfolio";
       const path = "data.js";
       const cleanToken = (token || '').trim();
       
-      // 1. Récupération du SHA frais (timestamp query param anti-cache)
-      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
-        headers: {
-          'Authorization': `Bearer ${cleanToken}`,
-          'Accept': 'application/vnd.github.v3+json'
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          // 1. Récupération du SHA frais (timestamp query param anti-cache)
+          const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}_${attempt}`, {
+            headers: {
+              'Authorization': `Bearer ${cleanToken}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+
+          if (getRes.status === 401 || getRes.status === 403) {
+            throw new Error('TOKEN_EXPIRED');
+          }
+          if (!getRes.ok) throw new Error("Fichier data.js introuvable sur GitHub (HTTP " + getRes.status + ")");
+          const fileData = await getRes.json();
+          let currentSha = fileData.sha;
+
+          // 2. Mise à jour de data.js
+          const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${cleanToken}`,
+              'Content-Type': 'application/json',
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify({
+              message: "Mise à jour portfolio via CMS [publication directe]",
+              content: utf8ToBase64(content),
+              sha: currentSha
+            })
+          });
+
+          if (putRes.status === 401 || putRes.status === 403) {
+            throw new Error('TOKEN_EXPIRED');
+          }
+
+          if (putRes.ok) {
+            return true;
+          }
+
+          const errJson = await putRes.json().catch(() => ({}));
+          const errMsg = errJson.message || ("Erreur GitHub HTTP " + putRes.status);
+
+          // Résolution automatique et transparente des conflits 409
+          if (putRes.status === 409 || errMsg.includes('is at') || errMsg.includes('does not match')) {
+            console.warn(`[CMS] Conflit de version SHA détecté (tentative ${attempt}/${maxRetries}), résolution automatique...`);
+            const shaMatch = errMsg.match(/is at ([a-f0-9]{40})/);
+            if (shaMatch && shaMatch[1]) {
+              const retryPut = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': `Bearer ${cleanToken}`,
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                  message: "Mise à jour portfolio via CMS [publication directe - auto-retry]",
+                  content: utf8ToBase64(content),
+                  sha: shaMatch[1]
+                })
+              });
+              if (retryPut.ok) return true;
+            }
+            await new Promise(r => setTimeout(r, 450 * attempt));
+            continue;
+          }
+
+          throw new Error(errMsg);
+        } catch(err) {
+          if (err.message === 'TOKEN_EXPIRED' || attempt === maxRetries) {
+            throw err;
+          }
+          await new Promise(r => setTimeout(r, 450 * attempt));
         }
-      });
-
-      if (getRes.status === 401 || getRes.status === 403) {
-        throw new Error('TOKEN_EXPIRED');
       }
-      if (!getRes.ok) throw new Error("Fichier data.js introuvable sur GitHub (HTTP " + getRes.status + ")");
-      const fileData = await getRes.json();
-      
-      // 2. Mise à jour de data.js
-      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${cleanToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-          message: "Mise à jour portfolio via CMS [publication directe]",
-          content: utf8ToBase64(content),
-          sha: fileData.sha
-        })
-      });
-
-      if (putRes.status === 401 || putRes.status === 403) {
-        throw new Error('TOKEN_EXPIRED');
-      }
-      if (!putRes.ok) {
-        const errJson = await putRes.json().catch(() => ({}));
-        throw new Error(errJson.message || ("Erreur GitHub HTTP " + putRes.status));
-      }
-      return true;
+      return false;
     }
 
     function downloadBackup() {
