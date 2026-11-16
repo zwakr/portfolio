@@ -27,7 +27,7 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-1-1",
-      "media": "",
+      "media": "Artboard 1@2x.png",
       "title": "NOUVEAU PROJET",
       "category": "branding",
       "link": "project-detail.html?id=proj_1790374376519",
@@ -46,7 +46,7 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_1790374376519",
             "type": "full-media",
-            "media": "",
+            "media": "Artboard 1@2x.png",
             "mediaType": "image",
             "caption": "01 / 01    NOUVEAU PROJET"
           },
