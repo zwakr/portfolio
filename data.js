@@ -28,7 +28,7 @@ window.PORTFOLIO_DATA = {
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
       "media": "gif lnfa motion design reveal.gif",
-      "title": "016 &nbsp; &nbsp;TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
+      "title": "45 Degrés",
       "category": "direction",
       "link": "project-detail.html?id=proj_016",
       "textContent": "",
