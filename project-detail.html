@@ -914,6 +914,33 @@
 
       const detail = project.detail || {};
 
+      // SI C'EST LE PROJET 45 DEGRÉS (PROJ_021 OU TEMPLATE CASE STUDY 45 DEGRES)
+      const is45Degres = project.id === 'proj_021' || 
+                         detail.template === 'case-study-45degres' || 
+                         (project.title && (project.title.includes('45 DEGRÉS') || project.title.includes('45 Degrés')) && project.id !== 'proj_016');
+
+      if (is45Degres) {
+        const stdHeader = document.getElementById('trabuc-standard-header');
+        if (stdHeader) stdHeader.style.display = 'none';
+
+        const rawTitle = (detail.title || project.title || '45 DEGRÉS').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+        document.getElementById('page-title').textContent = `${rawTitle} — ZAKARIA BAIT`;
+
+        const flow = document.getElementById('proj-flow');
+        flow.innerHTML = '';
+        render45DegresCaseStudy(project, flow);
+
+        // Lien Projet Suivant
+        const nextIndex = (currentIndex + 1) % projects.length;
+        const nextProj = projects[nextIndex];
+        const nextBtn = document.getElementById('next-proj-link');
+        if (nextProj) {
+          nextBtn.href = `project-detail.html?id=${nextProj.id}`;
+          nextBtn.textContent = `PROJET SUIVANT →`;
+        }
+        return;
+      }
+
       // SI C'EST LE PROJET 016 (OU TEMPLATE GLYPHS CASE STUDY)
       if (project.id === 'proj_016' || detail.template === 'glyphs-case-study') {
         const stdHeader = document.getElementById('trabuc-standard-header');
@@ -1115,6 +1142,382 @@
         </figure>
       `;
       return div;
+    }
+
+    // ========================================================
+    // RENDU DU CASE STUDY BESPOQUE : 45 DEGRÉS (PROJ_021)
+    // ========================================================
+    function render45DegresCaseStudy(project, container) {
+      const detail = project.detail || {};
+      const caseStudyNo = detail.caseStudyNo || "Case Study No. 02";
+      const title = detail.title || "45 DEGRÉS";
+      const subtitle = detail.subtitle || "Exploration Visuelle &amp; Recherche Typographique";
+      const partnerText = detail.partner || 'Direction Artistique &amp; Typographie — Studio <strong style="font-weight:600;">Zakaria Bait</strong>';
+      const websiteUrl = detail.websiteUrl || "45-degres.html";
+      const websiteLabel = detail.websiteLabel || "Voir l'étude &amp; les déclinaisons";
+
+      const brief = detail.brief || `Comment réinventer la rigueur de la grille suisse traditionnelle en introduisant une rupture angulaire radicale ? L’objectif était d’expérimenter la géométrie oblique à 45° comme vecteur d’énergie et de tension spatiale à travers le design éditorial et le mouvement.`;
+
+      const solution = detail.solution || `Un système graphique fondé sur un dialogue audacieux entre typographie monumentale, surfaces texturales brutes et cadrages asymétriques. Le langage modulaire se décline à la fois en affiches éditoriales grand format, en séquences motion design et en modélisations 3D sculpturales.`;
+
+      const pressBadges = Array.isArray(detail.pressBadges) && detail.pressBadges.length > 0 
+        ? detail.pressBadges 
+        : ["Swiss Graphic Awards", "Type Directors Club", "It's Nice That", "Brand New", "Étapes: Magazine"];
+
+      const specs = Array.isArray(detail.specs) && detail.specs.length > 0
+        ? detail.specs
+        : [
+            { label: "Role", val: detail.role || "Direction Artistique & Typographie" },
+            { label: "Field", val: detail.discipline || "Identité Visuelle, Typographie, Affiche" },
+            { label: "Geometry", val: "45.00° Oblique Grid System" },
+            { label: "Typefaces", val: "Monument Extended & Satoshi" },
+            { label: "Format", val: "B1 Poster (700 × 1000 mm) & 4K Digital" },
+            { label: "Client", val: detail.client || "Marrakech — Projet Studio" },
+            { label: "Published", val: detail.year || "2026" }
+          ];
+
+      const arrowSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; transition:transform 0.2s;"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>`;
+
+      container.innerHTML = `
+        <div class="glyphs-case-study">
+          <!-- Section 1: Hero & Project Metadata -->
+          <section class="cs-section">
+            <div class="cs-grid">
+              <!-- Colonne Gauche (5 cols) -->
+              <div style="grid-column: span 5 / span 5; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <span class="cs-tag">${caseStudyNo}</span>
+                  <h1 class="cs-title-display">${title}</h1>
+                  <p class="cs-subtitle">${subtitle}</p>
+                </div>
+                <div>
+                  <div class="cs-partner-badge">
+                    <span class="cs-pulse-dot"></span>
+                    <span>${partnerText}</span>
+                  </div>
+                  <div>
+                    <a href="${websiteUrl}" class="cs-ext-link">
+                      <span>${websiteLabel}</span>
+                      ${arrowSvg}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Colonne Droite (7 cols) -->
+              <div style="grid-column: span 7 / span 7; display:flex; flex-direction:column; justify-content:space-between; gap:2.5rem;">
+                <div style="display:flex; flex-direction:column; gap:1.75rem;">
+                  <div>
+                    <span class="cs-tag">Brief</span>
+                    <p style="font-size:16px; line-height:1.6; color:#09090b;">${brief}</p>
+                  </div>
+                  <div>
+                    <span class="cs-tag">Solution</span>
+                    <p style="font-size:14px; line-height:1.6; color:#09090b;">${solution}</p>
+                  </div>
+                </div>
+
+                <!-- Press Badges -->
+                <div style="padding-top:1.25rem; border-top:1px solid var(--cs-hairline);">
+                  <span class="cs-tag">Featured in</span>
+                  <div class="cs-badge-group">
+                    ${pressBadges.map(b => `<a href="#" class="cs-press-badge">${b}</a>`).join('')}
+                  </div>
+                </div>
+
+                <!-- Spec Table with Dot Leaders -->
+                <div class="cs-spec-table">
+                  ${specs.map(s => `
+                    <div class="cs-spec-row">
+                      <span class="cs-spec-label">${s.label}</span>
+                      <span class="cs-spec-dots"></span>
+                      <span class="cs-spec-val">${s.val}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 2: Hero Visual (Full-Bleed Media) -->
+          <section class="cs-section">
+            <figure style="margin:0; width:100%;">
+              <img src="poster_45_degres_01.svg" alt="Affiche principale 45°" style="width:100%; height:auto; display:block; border:1px solid var(--cs-hairline); background:#f4f4f5;">
+              <figcaption style="margin-top:0.85rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                01 / 05 &nbsp; &nbsp; Affiche principale 45° : Déconstruction géométrique et grille oblique
+              </figcaption>
+            </figure>
+          </section>
+
+          <!-- Section 3: Interactive Bento Matrix & Angle Specimen -->
+          <section class="cs-section">
+            <div class="cs-grid" style="margin-bottom:2rem;">
+              <div style="grid-column: span 4 / span 4;">
+                <span class="cs-tag">01 / Système Géométrique</span>
+                <h2 class="cs-h2">L'angle comme manifeste</h2>
+              </div>
+              <div style="grid-column: span 8 / span 8; display:flex; flex-direction:column; gap:1rem;">
+                <p style="font-size:16px; line-height:1.6; color:#09090b;">
+                  En brisant l'orthogonalité rigide à 90°, l'inclinaison à <strong style="font-weight:700;">45 degrés</strong> libère une dynamique spatiale puissante. Le système crée une cadence cinétique tout en conservant une discipline mathématique absolue inspirée des pionniers du style suisse international.
+                </p>
+                <p style="font-size:13.5px; line-height:1.55; color:#555;">
+                  Chaque bloc de contenu, titre et repère visuel répond à une grille diagonale unifiée : les intersections génèrent des points d'ancrage nets, transformant la surface de composition en un champ de forces actives.
+                </p>
+              </div>
+            </div>
+
+            <!-- Bento Asymmetrical Cards -->
+            <div class="cs-grid">
+              <!-- Left: 45° Vector Matrix Compass Graphic (Dark) -->
+              <div class="cs-card-dark" style="grid-column: span 6 / span 6; min-height:420px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--cs-hairline-dark); padding-bottom:0.75rem; margin-bottom:1.5rem;">
+                  <span class="cs-tag" style="margin:0; color:#aaa;">CALIBRATION VECTORIELLE</span>
+                  <span style="padding:2px 7px; background:var(--cs-green); color:var(--cs-dark); font-family:'Satoshi',monospace; font-size:10px; font-weight:700;">AXE 45.00°</span>
+                </div>
+
+                <!-- Compass & Matrix SVG Diagram -->
+                <div style="margin:auto; padding:1.5rem 0; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%;">
+                  <svg width="220" height="220" viewBox="0 0 240 240" fill="none" style="max-width:100%;">
+                    <!-- Outer Circles -->
+                    <circle cx="120" cy="120" r="100" stroke="#27272A" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    <circle cx="120" cy="120" r="70" stroke="#27272A" stroke-width="1"/>
+                    <circle cx="120" cy="120" r="3" fill="#ffffff"/>
+                    
+                    <!-- Axes Orthogonaux (90° / 0°) -->
+                    <line x1="120" y1="10" x2="120" y2="230" stroke="#3F3F46" stroke-width="1"/>
+                    <line x1="10" y1="120" x2="230" y2="120" stroke="#3F3F46" stroke-width="1"/>
+                    
+                    <!-- Axe 45° Principal (Acid Green) -->
+                    <g id="matrix-axis-group" style="transform-origin: 120px 120px; transition: transform 0.2s ease-out;">
+                      <line id="matrix-axis-line" x1="20" y1="220" x2="220" y2="20" stroke="#22C55E" stroke-width="2.5"/>
+                      <circle cx="190.7" cy="49.3" r="5" fill="#22C55E"/>
+                      <circle cx="49.3" cy="190.7" r="4" fill="#22C55E"/>
+                    </g>
+                    
+                    <!-- Repères d'angles -->
+                    <text x="125" y="24" fill="#71717A" font-size="10" font-family="'Satoshi', monospace">90°</text>
+                    <text x="215" y="115" fill="#71717A" font-size="10" font-family="'Satoshi', monospace">0°</text>
+                    <text x="200" y="42" fill="#22C55E" font-size="12" font-weight="700" font-family="'Satoshi', monospace">45°</text>
+                    <text x="35" y="205" fill="#71717A" font-size="10" font-family="'Satoshi', monospace">225°</text>
+                  </svg>
+                  
+                  <div style="display:flex; gap:1.5rem; margin-top:1.25rem; font-family:'Satoshi',monospace; font-size:11px; color:#aaa;">
+                    <span>COS(45°): <b style="color:#ffffff;">0.7071</b></span>
+                    <span>SIN(45°): <b style="color:#ffffff;">0.7071</b></span>
+                    <span>TANGENTE: <b style="color:var(--cs-green);">1.0000</b></span>
+                  </div>
+                </div>
+
+                <div style="border-top:1px solid var(--cs-hairline-dark); padding-top:0.85rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:11px; color:#aaa;">
+                  <span>Trigonométrie vectorielle oblique</span>
+                  <span>Précision d'ancrage : 100% vector</span>
+                </div>
+              </div>
+
+              <!-- Right: Interactive Angle Specimen Slider (Subtle Card) -->
+              <div class="cs-card-subtle" style="grid-column: span 6 / span 6; min-height:420px; background:#ffffff;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--cs-hairline); padding-bottom:0.75rem; margin-bottom:1.5rem;">
+                  <span class="cs-tag" style="margin:0;">INTERPOLATION TYPOGRAPHIQUE</span>
+                  <span style="font-family:'Satoshi',monospace; font-size:11px; font-weight:700; color:var(--cs-green); background:var(--cs-green-subtle); padding:2px 8px; border:1px solid rgba(34,197,94,0.3);">
+                    Angle actif: <span id="angle-val-label">45°</span>
+                  </span>
+                </div>
+
+                <!-- Dynamic Tilting Specimen Preview -->
+                <div style="margin:auto 0; padding:2rem 1rem; overflow:hidden; background:var(--cs-subtle); border:1px solid var(--cs-hairline); text-align:center;">
+                  <div id="angle-specimen" style="transform: skewX(-22.5deg) rotate(-7.5deg); transition: transform 0.15s ease-out; transform-origin: center;">
+                    <div style="font-family:'Monument Extended', 'Satoshi', sans-serif; font-size:clamp(1.8rem, 3.2vw, 2.8rem); font-weight:800; line-height:1; letter-spacing:-0.03em; text-transform:uppercase; color:#09090b;">
+                      45° OBLIQUE
+                    </div>
+                    <div style="font-family:'Satoshi', sans-serif; font-size:13px; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:var(--cs-green); margin-top:0.5rem;">
+                      MONUMENT EXTENDED &bull; STUDIO BAIT
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slider Control -->
+                <div style="margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--cs-hairline);">
+                  <div style="display:flex; justify-content:space-between; align-items:center; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted); margin-bottom:0.5rem;">
+                    <span>0° (Orthogonal)</span>
+                    <span style="font-weight:700; color:#09090b;">Ajuster l'inclinaison cinétique</span>
+                    <span>90° (Vertical)</span>
+                  </div>
+                  <input type="range" id="angle-slider" min="0" max="90" step="1" value="45" class="cs-range-slider" style="width:100%;">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 4: Kinetic Motion Reveal & Editorial Duo -->
+          <section class="cs-section">
+            <div class="cs-grid" style="align-items:stretch;">
+              <!-- Left: Kinetic GIF Reveal -->
+              <div style="grid-column: span 7 / span 7;">
+                <figure style="margin:0;">
+                  <img src="gif lnfa motion design reveal.gif" alt="Motion design reveal 45°" style="width:100%; height:auto; display:block; border:1px solid var(--cs-hairline);">
+                  <figcaption style="margin-top:0.75rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                    02 / 05 &nbsp; &nbsp; Motion reveal &amp; cinétique typographique — Rendu 60 FPS ProRes
+                  </figcaption>
+                </figure>
+              </div>
+
+              <!-- Right: Narrative Context -->
+              <div class="cs-card-subtle" style="grid-column: span 5 / span 5; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <span class="cs-tag">02 / Cinétique Spatiale</span>
+                  <h3 class="cs-h3" style="margin-top:0.25rem;">Une tension spatiale en mouvement</h3>
+                  <p style="font-size:14px; line-height:1.6; color:#444; margin-top:1.2rem;">
+                    L'animation reveal explore le passage de la surface bidimensionnelle vers la profondeur optique. En rompant la ligne d'horizon conventionnelle, chaque lettre et forme géométrique <b>génère une vibration optique immédiate</b>, captant le regard sans jamais surcharger la composition.
+                  </p>
+                  <p style="font-size:13px; line-height:1.55; color:#666; margin-top:0.85rem;">
+                    La typographie Monument Extended subit une accélération non-linéaire, matérialisant la puissance d'impact avant de se stabiliser sur l'axe oblique parfait.
+                  </p>
+                </div>
+
+                <div style="border-top:1px solid var(--cs-hairline); padding-top:1rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                  <span>Interpolation Bezier</span>
+                  <span style="color:var(--cs-green); font-weight:700;">● RENDER DIRECT 60FPS</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 5: Two-Column Poster Gallery (50/50 Duo) -->
+          <section class="cs-section">
+            <div class="cs-grid">
+              <div style="grid-column: span 6 / span 6;">
+                <figure style="margin:0;">
+                  <img src="poster_45_degres_02.svg" alt="Affiche 45 Degrés 02" style="width:100%; height:auto; display:block; border:1px solid var(--cs-hairline); background:#f4f4f5;">
+                  <figcaption style="margin-top:0.75rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                    03 / 05 &nbsp; &nbsp; Cadrage matière &amp; grain textural — Déclinaison tramée
+                  </figcaption>
+                </figure>
+              </div>
+              <div style="grid-column: span 6 / span 6;">
+                <figure style="margin:0;">
+                  <img src="poster_45_degres_03.svg" alt="Affiche 45 Degrés 03" style="width:100%; height:auto; display:block; border:1px solid var(--cs-hairline); background:#f4f4f5;">
+                  <figcaption style="margin-top:0.75rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                    04 / 05 &nbsp; &nbsp; Volume 3D &amp; abstraction spatiale — Série monochrome
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 6: Offset Narrative (Swiss Style & Brutalism) -->
+          <section class="cs-section">
+            <div class="cs-grid">
+              <div style="grid-column: span 4 / span 4;">
+                <span class="cs-tag">03 / Manifeste Éditorial</span>
+                <h2 class="cs-h2">Rigueur suisse &amp; brutalité contemporaine</h2>
+              </div>
+              <div style="grid-column: span 8 / span 8; display:flex; flex-direction:column; gap:1.25rem;">
+                <p style="font-size:16.5px; line-height:1.65; color:#09090b; font-weight:500;">
+                  Pensé comme une pièce de musée éditoriale, le projet fusionne la précision millimétrée du style typographique international avec l'énergie brute du graphisme d'avant-garde.
+                </p>
+                <p style="font-size:14px; line-height:1.6; color:#555;">
+                  Chaque visuel est calibré au millimètre près pour vivre aussi bien en affiche print B1 sérigraphiée qu'en environnement digital réactif. L'harmonie générale repose sur la confrontation directe entre espaces de respiration généreux et masses noires denses, magnifiées par l'accent vert acide signature.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 7: Full Video Loop Showcase -->
+          <section class="cs-section">
+            <figure style="margin:0; width:100%;">
+              <div style="position:relative; background:#000000; border:1px solid var(--cs-hairline-dark); overflow:hidden;">
+                <video src="video_404.mp4" autoplay loop muted playsinline style="width:100%; height:auto; display:block; max-height:85vh; object-fit:contain; margin:auto;"></video>
+                <div style="position:absolute; top:1rem; right:1rem; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15); padding:0.35rem 0.85rem; font-family:'Satoshi',monospace; font-size:10.5px; color:var(--cs-green); display:flex; align-items:center; gap:0.5rem;">
+                  <span class="cs-pulse-dot" style="width:6px; height:6px;"></span>
+                  <span>4K CINEMATIC LOOP</span>
+                </div>
+              </div>
+              <figcaption style="margin-top:0.85rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                05 / 05 &nbsp; &nbsp; Déploiement vidéo cinématique en boucle continue — Déclinaison grand format
+              </figcaption>
+            </figure>
+          </section>
+
+          <!-- Section 8: Physical Collateral & Exhibition Editions -->
+          <section class="cs-section" style="border-bottom:none;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:2rem;">
+              <div>
+                <span class="cs-tag">04 / Déclinaisons Physiques &amp; Édition</span>
+                <h2 class="cs-h2">Matière imprimée &amp; scénographie</h2>
+              </div>
+              <span style="font-family:'Satoshi',monospace; font-size:11.5px; color:var(--cs-text-muted);">Édition Studio 2026</span>
+            </div>
+
+            <div class="cs-grid">
+              <!-- Card 1: Poster B1 -->
+              <div class="cs-card-subtle" style="grid-column: span 4 / span 4;">
+                <div style="border-bottom:1px solid var(--cs-hairline); padding-bottom:0.75rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="cs-tag" style="margin:0;">SÉRIGRAPHIE B1</span>
+                  <span style="font-family:'Satoshi',monospace; font-size:10px; color:var(--cs-green); font-weight:700;">70 × 100 CM</span>
+                </div>
+                <h4 style="font-size:15px; font-weight:700; margin-bottom:0.5rem;">Tirage d'art numéroté</h4>
+                <p style="font-size:12px; line-height:1.55; color:#555; margin-bottom:1.5rem;">
+                  Impression artisanale en 2 passages couleur (Noir profond & Vert fluo Pantone 802C) avec marquage à chaud argent sur papier Fedrigoni Sirio Black 350g/m². Édition limitée à 50 exemplaires numérotés et signés.
+                </p>
+                <div style="border-top:1px solid var(--cs-hairline); padding-top:0.75rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:10.5px; color:var(--cs-text-muted);">
+                  <span>Sirio Black 350g</span>
+                  <span>Tirage 1/50</span>
+                </div>
+              </div>
+
+              <!-- Card 2: Monograph Book -->
+              <div class="cs-card-subtle" style="grid-column: span 4 / span 4;">
+                <div style="border-bottom:1px solid var(--cs-hairline); padding-bottom:0.75rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="cs-tag" style="margin:0;">ÉDITION MONOGRAPHIQUE</span>
+                  <span style="font-family:'Satoshi',monospace; font-size:10px; color:var(--cs-green); font-weight:700;">128 PAGES</span>
+                </div>
+                <h4 style="font-size:15px; font-weight:700; margin-bottom:0.5rem;">Livre d'Art &amp; Grille 45°</h4>
+                <p style="font-size:12px; line-height:1.55; color:#555; margin-bottom:1.5rem;">
+                  Recueil documentant la genèse mathématique et les itérations graphiques. Reliure suisse apparente cousue au fil vert fluo, couverture rigide débossée et découpe d'onglet biseautée à 45 degrés.
+                </p>
+                <div style="border-top:1px solid var(--cs-hairline); padding-top:0.75rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:10.5px; color:var(--cs-text-muted);">
+                  <span>Reliure suisse</span>
+                  <span>Munken Lynx 150g</span>
+                </div>
+              </div>
+
+              <!-- Card 3: Immersive Scenography -->
+              <div class="cs-card-dark" style="grid-column: span 4 / span 4;">
+                <div style="border-bottom:1px solid var(--cs-hairline-dark); padding-bottom:0.75rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="cs-tag" style="margin:0; color:#aaa;">SCÉNOGRAPHIE</span>
+                  <span style="font-family:'Satoshi',monospace; font-size:10px; color:var(--cs-green); font-weight:700;">INSTALLATION</span>
+                </div>
+                <h4 style="font-size:15px; font-weight:700; color:#ffffff; margin-bottom:0.5rem;">Dispositif Immersif</h4>
+                <p style="font-size:12px; line-height:1.55; color:#ccc; margin-bottom:1.5rem;">
+                  Projection monumentale 4K et panneaux métalliques brossés suspendus à 45° dans l'espace d'exposition. Dialogue entre lumière rasante, matière brute et rythmes typographiques en suspension.
+                </p>
+                <div style="border-top:1px solid var(--cs-hairline-dark); padding-top:0.75rem; display:flex; justify-content:space-between; font-family:'Satoshi',monospace; font-size:10.5px; color:#aaa;">
+                  <span>Acier brossé &amp; LED</span>
+                  <span style="color:var(--cs-green);">Exposition 2026</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+
+      // Slider interactif d'angle 45°
+      setTimeout(() => {
+        const slider = document.getElementById('angle-slider');
+        const specimen = document.getElementById('angle-specimen');
+        const valLabel = document.getElementById('angle-val-label');
+        const axisGroup = document.getElementById('matrix-axis-group');
+        if (slider && specimen && valLabel) {
+          slider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            valLabel.textContent = `${val}°`;
+            specimen.style.transform = `skewX(-${(val * 0.5).toFixed(1)}deg) rotate(-${(val * 0.16).toFixed(1)}deg)`;
+            if (axisGroup) {
+              axisGroup.style.transform = `rotate(${val - 45}deg)`;
+            }
+          });
+        }
+      }, 50);
     }
 
     // ========================================================

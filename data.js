@@ -144,12 +144,54 @@ window.PORTFOLIO_DATA = {
       "link": "project-detail.html?id=proj_021",
       "textContent": "",
       "detail": {
-        "title": "45 Degrés",
+        "template": "case-study-45degres",
+        "caseStudyNo": "Case Study No. 02",
+        "title": "45 DEGRÉS",
         "subtitle": "Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.",
+        "partner": "Direction Artistique &amp; Typographie — Studio <strong style=\"font-weight:600;\">Zakaria Bait</strong>",
+        "websiteUrl": "#",
+        "websiteLabel": "Voir l'étude &amp; les déclinaisons",
         "discipline": "Direction Artistique, Exploration 3D, Typographie",
         "year": "2026",
         "client": "Marrakech — Projet Studio",
-        "role": "Direction Artistique &amp; Design",
+        "role": "Direction Artistique &amp; Typographie",
+        "pressBadges": [
+          "Swiss Graphic Awards",
+          "Type Directors Club",
+          "It's Nice That",
+          "Brand New",
+          "Étapes: Magazine"
+        ],
+        "specs": [
+          {
+            "label": "Role",
+            "val": "Direction Artistique & Typographie"
+          },
+          {
+            "label": "Field",
+            "val": "Identité Visuelle, Typographie, Affiche"
+          },
+          {
+            "label": "Geometry",
+            "val": "45.00° Oblique Grid System"
+          },
+          {
+            "label": "Typefaces",
+            "val": "Monument Extended & Satoshi"
+          },
+          {
+            "label": "Format",
+            "val": "B1 Poster (700 × 1000 mm) & 4K Digital"
+          },
+          {
+            "label": "Client",
+            "val": "Marrakech — Projet Studio"
+          },
+          {
+            "label": "Published",
+            "val": "2026"
+          }
+        ],
         "brief": "Comment réinventer la rigueur de la grille suisse traditionnelle en introduisant une rupture angulaire radicale ? L’objectif était d’expérimenter la géométrie oblique à 45° comme vecteur d’énergie et de tension spatiale à travers le design éditorial et le mouvement.",
         "solution": "Un système graphique fondé sur un dialogue audacieux entre typographie monumentale, surfaces texturales brutes et cadrages asymétriques. Le langage modulaire se décline à la fois en affiches éditoriales grand format, en séquences motion design et en modélisations 3D sculpturales.",
         "blocks": [
