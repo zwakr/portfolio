@@ -29,7 +29,7 @@ window.PORTFOLIO_DATA = {
       "aspectRatio": "aspect-1-1",
       "media": "Artboard 1@2x.png",
       "title": "NOUVEAU PROJET",
-      "category": "branding",
+      "category": "direction",
       "link": "project-detail.html?id=proj_1790374376519",
       "subtitle": "Direction Artistique & Exploration Graphique",
       "year": "2026",
