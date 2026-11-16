@@ -53,14 +53,45 @@ window.PORTFOLIO_DATA = {
           "Httpster"
         ],
         "specs": [
-          { "label": "Role", "val": "Design & creative direction" },
-          { "label": "Field", "val": "Identity, Technology" },
-          { "label": "Typefaces", "val": "ABC Arizona VF by ABC Dinamo" },
-          { "label": "Development", "val": "Chris Corby" },
-          { "label": "Special Thanks", "val": "Georg & Rainer, Fabian & Johannes" },
-          { "label": "Published", "val": "November 2020" }
+          {
+            "label": "Role",
+            "val": "Design & creative direction"
+          },
+          {
+            "label": "Field",
+            "val": "Identity, Technology"
+          },
+          {
+            "label": "Typefaces",
+            "val": "ABC Arizona VF by ABC Dinamo"
+          },
+          {
+            "label": "Development",
+            "val": "Chris Corby"
+          },
+          {
+            "label": "Special Thanks",
+            "val": "Georg & Rainer, Fabian & Johannes"
+          },
+          {
+            "label": "Published",
+            "val": "November 2020"
+          }
         ],
-        "blocks": []
+        "blocks": [
+          {
+            "id": "blk_1794850803850",
+            "type": "full-media",
+            "media": "gif lnfa motion design reveal.gif",
+            "mediaType": "image",
+            "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
+          },
+          {
+            "id": "blk_1794850803851",
+            "type": "narrative",
+            "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
       }
     },
     {
@@ -96,7 +127,10 @@ window.PORTFOLIO_DATA = {
             "type": "narrative",
             "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
-        ]
+        ],
+        "role": "Direction Artistique & Design",
+        "brief": "",
+        "solution": ""
       }
     },
     {
