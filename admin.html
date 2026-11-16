@@ -474,6 +474,63 @@
       from { transform: translateY(20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
+
+    /* Bannière de statut GitHub / Vercel */
+    .github-status-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1.75rem;
+      font-size: 13px;
+      font-weight: 600;
+      border-bottom: 1.5px solid transparent;
+      transition: all 0.25s ease;
+      flex-wrap: wrap;
+    }
+    .github-status-banner.banner-success {
+      background: #e8f5e9;
+      color: #1b5e20;
+      border-color: #a5d6a7;
+    }
+    .github-status-banner.banner-warning {
+      background: #fff8e1;
+      color: #b78103;
+      border-color: #ffe082;
+    }
+    .github-status-banner.banner-error {
+      background: #ffebee;
+      color: #c62828;
+      border-color: #ef9a9a;
+    }
+
+    /* Modal de connexion GitHub */
+    .token-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease;
+    }
+    .token-modal-card {
+      background: #ffffff;
+      border: 2px solid #000000;
+      border-radius: 0px;
+      max-width: 580px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.2);
+      font-family: 'Satoshi', sans-serif;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -486,12 +543,23 @@
     
     <div class="header-actions">
       <div id="saveStatus" class="save-indicator">✓ À jour</div>
-      <button class="btn btn-outline btn-sm" onclick="configureGitHubToken()" title="Configurer la synchronisation directe vers GitHub">☁️ Clé GitHub</button>
+      <button class="btn btn-outline btn-sm" onclick="openTokenModal()" id="btn-cloud-token" title="Gérer la connexion cloud vers GitHub & Vercel">☁️ Clé GitHub</button>
       <a href="work.html" target="_blank" class="btn btn-outline btn-sm">👁️ Voir Galerie</a>
-      <button class="btn btn-outline btn-sm" onclick="downloadBackup()">📥 Télécharger data.js</button>
-      <button class="btn btn-red" id="saveBtn" onclick="savePortfolioData()">💾 Enregistrer les Modifications</button>
+      <a href="https://vercel.com/zwakr/portfolio" target="_blank" class="btn btn-outline btn-sm" title="Vérifier l'état de déploiement en direct sur Vercel">🚀 Vercel Live</a>
+      <button class="btn btn-red" id="saveBtn" onclick="savePortfolioData(false)" style="font-weight:800; letter-spacing:0.02em;">🚀 ENREGISTRER &amp; METTRE EN LIGNE</button>
     </div>
   </header>
+
+  <!-- BANNIÈRE DE CONNEXION GITHUB / VERCEL DYNAMIQUE -->
+  <div id="githubConnectionBanner" class="github-status-banner banner-warning">
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+      <span id="banner-icon">⚠️</span>
+      <span id="banner-message">Vérification de la connexion à GitHub et Vercel...</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:0.5rem;">
+      <button class="btn btn-sm btn-outline" id="banner-btn" onclick="openTokenModal()" style="font-weight:700; background:#fff;">🔑 Configurer ma Clé GitHub</button>
+    </div>
+  </div>
 
   <!-- ONGLETS -->
   <div class="nav-tabs">
@@ -584,24 +652,24 @@
       <div class="form-grid">
         <div class="form-group col-span-12">
           <label>Profil / Bio</label>
-          <textarea id="info-fr-profil" onchange="markUnsaved()"></textarea>
+          <textarea id="info-fr-profil" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-12">
           <label>Approche</label>
-          <textarea id="info-fr-approche" onchange="markUnsaved()"></textarea>
+          <textarea id="info-fr-approche" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-6">
           <label>Expériences (CV)</label>
-          <textarea id="info-fr-cvexp" style="min-height:140px;" onchange="markUnsaved()"></textarea>
+          <textarea id="info-fr-cvexp" style="min-height:140px;" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
           <div style="font-size:11px; color:#777;">Format HTML autorisé (&lt;b&gt;titre&lt;/b&gt;, &lt;br&gt;)</div>
         </div>
         <div class="form-group col-span-6">
           <label>Formation &amp; Éducation (CV)</label>
-          <textarea id="info-fr-cvedu" style="min-height:140px;" onchange="markUnsaved()"></textarea>
+          <textarea id="info-fr-cvedu" style="min-height:140px;" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-12">
           <label>Contact &amp; Réseaux</label>
-          <textarea id="info-fr-contact" onchange="markUnsaved()"></textarea>
+          <textarea id="info-fr-contact" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
       </div>
     </div>
@@ -614,23 +682,23 @@
       <div class="form-grid">
         <div class="form-group col-span-12">
           <label>Profile (English)</label>
-          <textarea id="info-en-profil" onchange="markUnsaved()"></textarea>
+          <textarea id="info-en-profil" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-12">
           <label>Approach (English)</label>
-          <textarea id="info-en-approche" onchange="markUnsaved()"></textarea>
+          <textarea id="info-en-approche" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-6">
           <label>Experience (English)</label>
-          <textarea id="info-en-cvexp" onchange="markUnsaved()"></textarea>
+          <textarea id="info-en-cvexp" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-6">
           <label>Education (English)</label>
-          <textarea id="info-en-cvedu" onchange="markUnsaved()"></textarea>
+          <textarea id="info-en-cvedu" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-12">
           <label>Contact (English)</label>
-          <textarea id="info-en-contact" onchange="markUnsaved()"></textarea>
+          <textarea id="info-en-contact" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
       </div>
     </div>
@@ -643,23 +711,23 @@
       <div class="form-grid">
         <div class="form-group col-span-12">
           <label>نبذة (Profil Arabe)</label>
-          <textarea id="info-ar-profil" dir="rtl" onchange="markUnsaved()"></textarea>
+          <textarea id="info-ar-profil" dir="rtl" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-12">
           <label>الرؤية والمنهج (Approche Arabe)</label>
-          <textarea id="info-ar-approche" dir="rtl" onchange="markUnsaved()"></textarea>
+          <textarea id="info-ar-approche" dir="rtl" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-6">
           <label>الخبرة المهنية (Expérience Arabe)</label>
-          <textarea id="info-ar-cvexp" dir="rtl" onchange="markUnsaved()"></textarea>
+          <textarea id="info-ar-cvexp" dir="rtl" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-6">
           <label>التعليم (Éducation Arabe)</label>
-          <textarea id="info-ar-cvedu" dir="rtl" onchange="markUnsaved()"></textarea>
+          <textarea id="info-ar-cvedu" dir="rtl" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
         <div class="form-group col-span-12">
           <label>اتصال (Contact Arabe)</label>
-          <textarea id="info-ar-contact" dir="rtl" onchange="markUnsaved()"></textarea>
+          <textarea id="info-ar-contact" dir="rtl" oninput="syncInfoInputs(); markUnsaved();" onchange="syncInfoInputs(); markUnsaved();"></textarea>
         </div>
       </div>
     </div>
@@ -692,33 +760,33 @@
       <div class="form-grid">
         <div class="form-group col-span-8">
           <label>Titre principal sur la page</label>
-          <input type="text" id="dp-title" onchange="updateDetailHeader('title', this.value)" placeholder="Ex: 45 Degrés">
+          <input type="text" id="dp-title" oninput="updateDetailHeader('title', this.value)" onchange="updateDetailHeader('title', this.value)" placeholder="Ex: 45 Degrés">
         </div>
         <div class="form-group col-span-4">
           <label>Année</label>
-          <input type="text" id="dp-year" onchange="updateDetailHeader('year', this.value)" placeholder="2026">
+          <input type="text" id="dp-year" oninput="updateDetailHeader('year', this.value)" onchange="updateDetailHeader('year', this.value)" placeholder="2026">
         </div>
         <div class="form-group col-span-8">
           <label>Sous-titre / Accroche éditoriale</label>
-          <textarea id="dp-subtitle" onchange="updateDetailHeader('subtitle', this.value)" style="min-height:70px;" placeholder="Ex: Exploration Visuelle &amp; Recherche en Direction Artistique..."></textarea>
+          <textarea id="dp-subtitle" oninput="updateDetailHeader('subtitle', this.value)" onchange="updateDetailHeader('subtitle', this.value)" style="min-height:70px;" placeholder="Ex: Exploration Visuelle &amp; Recherche en Direction Artistique..."></textarea>
         </div>
         <div class="form-group col-span-4">
           <label>Role</label>
-          <input type="text" id="dp-role" onchange="updateDetailHeader('role', this.value)" placeholder="Ex: Direction Artistique &amp; Design">
+          <input type="text" id="dp-role" oninput="updateDetailHeader('role', this.value)" onchange="updateDetailHeader('role', this.value)" placeholder="Ex: Direction Artistique &amp; Design">
 
           <label style="margin-top:0.6rem;">Discipline(s)</label>
-          <input type="text" id="dp-discipline" onchange="updateDetailHeader('discipline', this.value)" placeholder="Ex: Direction Artistique, Typographie, 3D">
+          <input type="text" id="dp-discipline" oninput="updateDetailHeader('discipline', this.value)" onchange="updateDetailHeader('discipline', this.value)" placeholder="Ex: Direction Artistique, Typographie, 3D">
           
           <label style="margin-top:0.6rem;">Client / Lieu</label>
-          <input type="text" id="dp-client" onchange="updateDetailHeader('client', this.value)" placeholder="Ex: Marrakech — Studio">
+          <input type="text" id="dp-client" oninput="updateDetailHeader('client', this.value)" onchange="updateDetailHeader('client', this.value)" placeholder="Ex: Marrakech — Studio">
         </div>
         <div class="form-group col-span-6">
           <label>Brief éditorial (Style Trabuc.co)</label>
-          <textarea id="dp-brief" onchange="updateDetailHeader('brief', this.value)" style="min-height:80px;" placeholder="Énoncé du brief, problématique ou contexte du projet..."></textarea>
+          <textarea id="dp-brief" oninput="updateDetailHeader('brief', this.value)" onchange="updateDetailHeader('brief', this.value)" style="min-height:80px;" placeholder="Énoncé du brief, problématique ou contexte du projet..."></textarea>
         </div>
         <div class="form-group col-span-6">
           <label>Solution éditoriale (Style Trabuc.co)</label>
-          <textarea id="dp-solution" onchange="updateDetailHeader('solution', this.value)" style="min-height:80px;" placeholder="Démarche créative, solution typographique et direction artistique..."></textarea>
+          <textarea id="dp-solution" oninput="updateDetailHeader('solution', this.value)" onchange="updateDetailHeader('solution', this.value)" style="min-height:80px;" placeholder="Démarche créative, solution typographique et direction artistique..."></textarea>
         </div>
       </div>
     </div>
@@ -778,6 +846,51 @@
   <!-- TOAST NOTIFICATION -->
   <div id="saveToast">✅ Modifs enregistrées !</div>
 
+  <!-- MODAL DE CONNEXION GITHUB / VERCEL -->
+  <div id="tokenModal" class="token-modal-overlay" style="display:none;" onclick="if(event.target === this) closeTokenModal()">
+    <div class="token-modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; border-bottom:1.5px solid #000; padding-bottom:0.75rem;">
+        <h3 style="font-family:'Monument Extended',sans-serif; font-size:13px; text-transform:uppercase; margin:0;">
+          🔑 Connexion GitHub &amp; Publication Vercel
+        </h3>
+        <button onclick="closeTokenModal()" style="background:none; border:none; font-size:20px; cursor:pointer; font-weight:700;">✕</button>
+      </div>
+
+      <p style="font-size:13px; line-height:1.5; color:#333; margin-bottom:1.2rem;">
+        Pour que chaque modification effectuée dans ce CMS se publie <b>immédiatement sur votre site en ligne Vercel</b>, votre navigateur a besoin d'une clé d'accès GitHub (Token).
+      </p>
+
+      <div style="background:#f4f4f6; border-left:3px solid #000; padding:1rem; margin-bottom:1.25rem; font-size:12.5px; line-height:1.5;">
+        <b>Étape 1 :</b> Cliquez sur le bouton ci-dessous pour ouvrir la page GitHub officielle (les autorisations nécessaires sont déjà pré-cochées) :
+        <div style="margin-top:0.75rem;">
+          <a href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio%20CMS" target="_blank" class="btn btn-sm btn-red" style="display:inline-flex; align-items:center; gap:0.4rem; text-decoration:none;">
+            👉 Ouvrir GitHub pour générer ma clé (1 clic) ↗
+          </a>
+        </div>
+        <div style="margin-top:0.6rem; color:#555; font-size:12px;">
+          💡 <i>Astuce : À la ligne <b>Expiration</b>, choisissez <b>"No expiration"</b> (Aucune expiration) pour que votre site ne soit plus jamais bloqué ! Descendez en bas et cliquez sur le bouton vert <b>Generate token</b>.</i>
+        </div>
+      </div>
+
+      <div style="margin-bottom:1.25rem;">
+        <label style="font-weight:700; font-size:12px; display:block; margin-bottom:0.35rem;">
+          <b>Étape 2 :</b> Collez votre clé ici (commence par <code>ghp_...</code>) :
+        </label>
+        <input type="password" id="modal-gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%; padding:0.65rem 0.85rem; font-family:monospace; font-size:13px; border:1.5px solid #000; border-radius:0px;">
+      </div>
+
+      <div id="modal-token-feedback" style="display:none; padding:0.6rem 0.85rem; font-size:12px; margin-bottom:1rem; border-radius:0px;"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="disconnectToken()" style="color:#d32f2f; border-color:#d32f2f;">Déconnecter / Supprimer</button>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn btn-outline btn-sm" onclick="closeTokenModal()">Annuler</button>
+          <button class="btn btn-red btn-sm" id="btn-verify-save-token" onclick="verifyAndSaveToken()" style="font-weight:700;">✅ Vérifier &amp; Connecter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- CHARGEMENT DU FICHIER DE DONNÉES -->
   <script src="data.js"></script>
 
@@ -794,18 +907,27 @@
 
     let isModified = false;
     let fileHandle = null; // Pour l'enregistrement direct File System API
+    let isGitHubTokenValid = false;
+    let autoSaveTimer = null;
 
     // Initialisation
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Vérification si un brouillon auto-save existe en localStorage
+      // 1. Vérification de la santé du Token GitHub en direct
+      checkGitHubTokenHealth();
+
+      // 2. Vérification si un brouillon auto-save existe en localStorage
       const draft = localStorage.getItem('portfolio_cms_draft');
       
       if (window.PORTFOLIO_DATA) {
         state = JSON.parse(JSON.stringify(window.PORTFOLIO_DATA));
-        if (draft && confirm("Un brouillon non enregistré a été détecté. Voulez-vous le restaurer ?")) {
+        if (draft) {
           try {
-            state = JSON.parse(draft);
-            markUnsaved();
+            const parsedDraft = JSON.parse(draft);
+            // Si le brouillon contient des données valides, on le restaure immédiatement
+            if (parsedDraft && parsedDraft.projects && parsedDraft.projects.length > 0) {
+              state = parsedDraft;
+              markUnsaved(true); // true = pas de déclenchement d'auto-save immédiat
+            }
           } catch(e) {}
         }
       } else if (draft) {
@@ -817,19 +939,42 @@
       renderAll();
     });
 
-    function markUnsaved() {
+    function markUnsaved(silent = false) {
       isModified = true;
+      // Synchroniser immédiatement les textes de la section Info
+      if (typeof syncInfoInputs === 'function') {
+        syncInfoInputs();
+      }
+
       const status = document.getElementById('saveStatus');
-      status.textContent = "● Modifié (non enregistré)";
-      status.className = "save-indicator unsaved";
+      if (status) {
+        status.textContent = "● Modifié (sauvegardé en local)";
+        status.className = "save-indicator unsaved";
+      }
+
+      // Sauvegarde immédiate dans localStorage (brouillon live)
       localStorage.setItem('portfolio_cms_draft', JSON.stringify(state));
+
+      // Déclenchement automatique de la synchronisation vers GitHub / Vercel (Debounce 2.5s)
+      if (!silent) {
+        if (autoSaveTimer) clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+          if (isGitHubTokenValid) {
+            savePortfolioData(true); // true = mode automatique silencieux
+          }
+        }, 2500);
+      }
     }
 
     function markSaved() {
       isModified = false;
       const status = document.getElementById('saveStatus');
-      status.textContent = "✓ À jour";
-      status.className = "save-indicator";
+      if (status) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        status.textContent = `✓ En ligne (${timeStr})`;
+        status.className = "save-indicator";
+      }
       localStorage.removeItem('portfolio_cms_draft');
     }
 
@@ -2262,78 +2407,220 @@
       const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
       let ghToken = localStorage.getItem('portfolio_gh_token');
 
-      // Si des fichiers médias sont en attente mais aucun token n'est configuré, proposer de le saisir
-      if (!ghToken && pendingMediaUploads.size > 0) {
-        const wantToken = confirm(
-          "Vous avez ajouté de nouvelles photos/vidéos.\n\n" +
-          "Pour qu'elles soient envoyées sur GitHub et publiées directement sur Vercel, vous devez configurer votre Clé GitHub.\n\n" +
-          "Souhaitez-vous renseigner votre Clé GitHub maintenant ?"
-        );
-        if (wantToken) {
-          configureGitHubToken();
-          ghToken = localStorage.getItem('portfolio_gh_token');
-        }
+    // ==========================================
+    // SAUVEGARDE DIRECTE & SYNCHRONISATION GITHUB / VERCEL
+    // ==========================================
+
+    async function checkGitHubTokenHealth() {
+      const banner = document.getElementById('githubConnectionBanner');
+      const icon = document.getElementById('banner-icon');
+      const msg = document.getElementById('banner-message');
+      const btn = document.getElementById('banner-btn');
+      if (!banner) return;
+
+      const token = (localStorage.getItem('portfolio_gh_token') || '').trim();
+
+      if (!token) {
+        isGitHubTokenValid = false;
+        banner.className = 'github-status-banner banner-warning';
+        icon.textContent = '⚠️';
+        msg.innerHTML = '<b>Non connecté à GitHub :</b> Vos modifications restent locales et ne sont <u>pas publiées</u> sur votre site Vercel.';
+        btn.textContent = '🔑 Connecter ma Clé GitHub';
+        btn.style.display = 'inline-block';
+        return;
       }
 
-      // 1. Priorité Cloud : Enregistrement direct sur GitHub si un token est configuré
-      if (ghToken) {
-        showToast("⏳ Connexion à GitHub...");
-        try {
-          // A. Téléversement de tous les médias en attente
-          if (pendingMediaUploads.size > 0) {
-            let count = 0;
-            const total = pendingMediaUploads.size;
-            for (const [filename, file] of pendingMediaUploads.entries()) {
-              count++;
-              showToast(`⏳ Envoi de ${filename} (${count}/${total}) vers GitHub...`);
-              await uploadMediaFileToGitHub(ghToken, file);
-            }
-            pendingMediaUploads.clear();
+      banner.className = 'github-status-banner banner-warning';
+      icon.textContent = '🔄';
+      msg.textContent = 'Vérification de votre Clé GitHub en cours...';
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/zwakr/portfolio?t=${Date.now()}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
           }
+        });
 
-          // B. Envoi de data.js
-          showToast("⏳ Enregistrement de data.js sur GitHub...");
-          const success = await saveToGitHub(ghToken, jsCode);
-          if (success) {
-            markSaved();
-            showToast("🚀 Photos & data.js envoyés sur GitHub ! Vercel met à jour le site...");
-            return;
-          }
-        } catch(e) {
-          console.warn("Échec GitHub API, bascule vers sauvegarde locale", e);
-          alert("⚠️ Erreur lors de l'envoi sur GitHub :\n" + (e.message || e) + "\n\nVos modifications vont être sauvegardées localement.");
+        if (res.ok) {
+          isGitHubTokenValid = true;
+          banner.className = 'github-status-banner banner-success';
+          icon.textContent = '🟢';
+          msg.innerHTML = '<b>Connecté à GitHub (zwakr/portfolio) :</b> Sauvegarde directe &amp; publication Vercel 100% active.';
+          btn.textContent = '⚙️ Gérer la Clé';
+          btn.style.display = 'inline-block';
+        } else if (res.status === 401 || res.status === 403) {
+          isGitHubTokenValid = false;
+          banner.className = 'github-status-banner banner-error';
+          icon.textContent = '🔴';
+          msg.innerHTML = '<b>Attention — Clé GitHub expirée :</b> Vos modifications ne peuvent plus s\'envoyer vers Vercel. Cliquez pour renouveler la clé.';
+          btn.textContent = '🔄 Renouveler ma Clé en 1 clic';
+          btn.style.display = 'inline-block';
+        } else {
+          isGitHubTokenValid = false;
+          banner.className = 'github-status-banner banner-warning';
+          icon.textContent = '⚠️';
+          msg.innerHTML = `Accès GitHub limité (HTTP ${res.status}).`;
+          btn.textContent = 'Vérifier la Clé';
         }
-      } else if (pendingMediaUploads.size > 0) {
-        alert("⚠️ Note importante :\nVous n'avez pas configuré votre Clé GitHub. Vos fichiers images doivent être copiés manuellement dans le dossier de votre projet pour être visibles en ligne !");
+      } catch (err) {
+        isGitHubTokenValid = false;
+        banner.className = 'github-status-banner banner-warning';
+        icon.textContent = '⚠️';
+        msg.innerHTML = 'Impossible de contacter GitHub API (vérifiez votre connexion internet).';
+        btn.textContent = 'Réessayer';
+      }
+    }
+
+    function openTokenModal() {
+      const modal = document.getElementById('tokenModal');
+      const input = document.getElementById('modal-gh-token');
+      const feedback = document.getElementById('modal-token-feedback');
+      if (feedback) feedback.style.display = 'none';
+      if (input) input.value = localStorage.getItem('portfolio_gh_token') || '';
+      if (modal) modal.style.display = 'flex';
+      if (input) input.focus();
+    }
+
+    function closeTokenModal() {
+      const modal = document.getElementById('tokenModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function verifyAndSaveToken() {
+      const input = document.getElementById('modal-gh-token');
+      const feedback = document.getElementById('modal-token-feedback');
+      const btn = document.getElementById('btn-verify-save-token');
+      const tokenVal = (input.value || '').trim();
+
+      if (!tokenVal) {
+        feedback.style.display = 'block';
+        feedback.style.background = '#ffebee';
+        feedback.style.color = '#c62828';
+        feedback.textContent = 'Veuillez coller votre clé GitHub commençant par ghp_';
+        return;
       }
 
-      // 2. Sauvegarde directe locale via File System Access API
-      if ('showSaveFilePicker' in window && !fileHandle) {
-        try {
-          fileHandle = await window.showSaveFilePicker({
-            suggestedName: 'data.js',
-            types: [{ description: 'Fichier JavaScript', accept: { 'text/javascript': ['.js'] } }]
-          });
-        } catch(err) {}
+      btn.disabled = true;
+      btn.textContent = '⏳ Test en cours...';
+      feedback.style.display = 'block';
+      feedback.style.background = '#e3f2fd';
+      feedback.style.color = '#1565c0';
+      feedback.textContent = 'Test de connexion avec GitHub API...';
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/zwakr/portfolio?t=${Date.now()}`, {
+          headers: {
+            'Authorization': `Bearer ${tokenVal}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+
+        if (res.ok) {
+          localStorage.setItem('portfolio_gh_token', tokenVal);
+          isGitHubTokenValid = true;
+          feedback.style.background = '#e8f5e9';
+          feedback.style.color = '#1b5e20';
+          feedback.innerHTML = '✅ <b>Clé GitHub valide et connectée !</b> Synchronisation en cours...';
+          await checkGitHubTokenHealth();
+          setTimeout(() => {
+            closeTokenModal();
+            savePortfolioData(false);
+          }, 900);
+        } else {
+          feedback.style.background = '#ffebee';
+          feedback.style.color = '#c62828';
+          if (res.status === 401) {
+            feedback.innerHTML = '❌ <b>Clé refusée par GitHub (Bad credentials)</b>. Assurez-vous d\'avoir bien copié tout le code sans espace.';
+          } else {
+            feedback.innerHTML = `❌ Erreur GitHub HTTP ${res.status}. Assurez-vous que le token a bien les droits 'repo'.`;
+          }
+        }
+      } catch(e) {
+        feedback.style.background = '#ffebee';
+        feedback.style.color = '#c62828';
+        feedback.textContent = 'Erreur réseau : ' + (e.message || e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '✅ Vérifier & Connecter';
+      }
+    }
+
+    function disconnectToken() {
+      if (confirm("Déconnecter votre clé GitHub de ce navigateur ?")) {
+        localStorage.removeItem('portfolio_gh_token');
+        isGitHubTokenValid = false;
+        checkGitHubTokenHealth();
+        closeTokenModal();
+        showToast("Clé GitHub déconnectée.");
+      }
+    }
+
+    function configureGitHubToken() {
+      openTokenModal();
+    }
+
+    async function savePortfolioData(isAuto = false) {
+      syncInfoInputs();
+
+      const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
+      let ghToken = (localStorage.getItem('portfolio_gh_token') || '').trim();
+
+      // Si pas de token et clic manuel, ouvrir immédiatement la fenêtre de connexion
+      if (!ghToken) {
+        if (!isAuto) {
+          openTokenModal();
+          showToast("⚠️ Connectez votre clé GitHub pour publier sur Vercel !");
+        }
+        return;
       }
 
-      if (fileHandle) {
-        try {
-          const writable = await fileHandle.createWritable();
-          await writable.write(jsCode);
-          await writable.close();
+      const status = document.getElementById('saveStatus');
+      if (status) {
+        status.textContent = "⏳ Publication Vercel...";
+        status.className = "save-indicator";
+      }
+      if (!isAuto) showToast("⏳ Envoi des modifications sur GitHub...");
+
+      try {
+        // A. Téléversement de tous les médias en attente
+        if (pendingMediaUploads.size > 0) {
+          let count = 0;
+          const total = pendingMediaUploads.size;
+          for (const [filename, file] of pendingMediaUploads.entries()) {
+            count++;
+            showToast(`⏳ Envoi média ${filename} (${count}/${total})...`);
+            await uploadMediaFileToGitHub(ghToken, file);
+          }
+          pendingMediaUploads.clear();
+        }
+
+        // B. Envoi de data.js
+        const success = await saveToGitHub(ghToken, jsCode);
+        if (success) {
           markSaved();
-          showToast("💾 Enregistré directement dans data.js !");
+          showToast("🚀 Publié sur GitHub ! Vercel met à jour votre site dans ~30 secondes.");
           return;
-        } catch(e) {
-          fileHandle = null;
+        }
+      } catch(e) {
+        console.error("Échec GitHub API :", e);
+        if (e.message === 'TOKEN_EXPIRED') {
+          isGitHubTokenValid = false;
+          checkGitHubTokenHealth();
+          if (!isAuto) {
+            openTokenModal();
+            alert("🔴 Votre Clé GitHub a expiré ! Veuillez en générer une nouvelle en 1 clic pour continuer à publier sur Vercel.");
+          }
+        } else {
+          if (status) {
+            status.textContent = "⚠️ Échec envoi Vercel";
+            status.className = "save-indicator unsaved";
+          }
+          if (!isAuto) {
+            alert("⚠️ Erreur lors de l'envoi sur GitHub :\n" + (e.message || e));
+          }
         }
       }
-
-      // 3. Repli standard : Téléchargement Blob propre
-      downloadBlob(jsCode, "data.js");
-      markSaved();
-      showToast("💾 data.js téléchargé ! Remplacez-le dans votre dossier.");
     }
 
     async function saveToGitHub(token, content) {
@@ -2341,39 +2628,44 @@
       const repo = "portfolio";
       const path = "data.js";
       
-      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      // 1. Récupération du SHA frais sans cache
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Cache-Control': 'no-cache, no-store'
+        }
       });
-      if (!getRes.ok) throw new Error("Fichier introuvable sur GitHub");
+
+      if (getRes.status === 401 || getRes.status === 403) {
+        throw new Error('TOKEN_EXPIRED');
+      }
+      if (!getRes.ok) throw new Error("Fichier data.js introuvable sur GitHub (HTTP " + getRes.status + ")");
       const fileData = await getRes.json();
       
+      // 2. Mise à jour de data.js
       const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
         },
         body: JSON.stringify({
-          message: "Mise à jour portfolio via CMS",
+          message: "Mise à jour portfolio via CMS [publication directe]",
           content: btoa(unescape(encodeURIComponent(content))),
           sha: fileData.sha
         })
       });
-      return putRes.ok;
-    }
 
-    function configureGitHubToken() {
-      const current = localStorage.getItem('portfolio_gh_token') || '';
-      const token = prompt("Collez votre Token secret GitHub (ghp_...) pour sauvegarder en direct sur le cloud :", current);
-      if (token !== null) {
-        if (token.trim()) {
-          localStorage.setItem('portfolio_gh_token', token.trim());
-          alert("✅ Token GitHub enregistré ! Vos futures sauvegardes s'enverront directement sur GitHub.");
-        } else {
-          localStorage.removeItem('portfolio_gh_token');
-          alert("Token supprimé.");
-        }
+      if (putRes.status === 401 || putRes.status === 403) {
+        throw new Error('TOKEN_EXPIRED');
       }
+      if (!putRes.ok) {
+        const errJson = await putRes.json().catch(() => ({}));
+        throw new Error(errJson.message || ("Erreur GitHub HTTP " + putRes.status));
+      }
+      return true;
     }
 
     function downloadBackup() {
@@ -2398,9 +2690,10 @@
 
     function showToast(msg) {
       const toast = document.getElementById('saveToast');
+      if (!toast) return;
       toast.textContent = msg;
       toast.style.display = 'flex';
-      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+      setTimeout(() => { toast.style.display = 'none'; }, 4500);
     }
   </script>
 </body>
