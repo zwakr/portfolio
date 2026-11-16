@@ -41,7 +41,7 @@ window.PORTFOLIO_DATA = {
         "websiteUrl": "http://glyphsapp.com",
         "websiteLabel": "Visit the Glyphs website here",
         "brief": "La Ligue Nationale de Football Amateur (LNFA) joue un rôle important dans le football marocain, mais son identité visuelle manquait de modernité et de cohérence. L’objectif de ce projet de fin d’études était de repenser son image pour mieux représenter la passion, la diversité et le dynamisme du football amateur au Maroc.",
-        "solution": "The new website centers itself in the community that surrounds Glyphs, simplifying the architecture for ease of navigation, enhancing access to Tutorials and resources and showcasing type designers’ projects in a dynamic way. The website uses a single Variable font by ABC Dinamo, drawn and developed entirely within Glyphs. The logo and identity simplify and reimagine the app, giving the entirety of the focus on the content itself: the typographic expression made possible with Glyphs.",
+        "solution": "Créer une nouvelle identité visuelle forte et cohérente, avec un logo repensé, une palette de couleurs, une typographie et un univers graphique distinctif. Le projet se décline sur différents supports de communication afin de donner à la LNFA une image plus moderne, dynamique et reconnaissable.",
         "role": "Design & creative direction",
         "discipline": "Identity, Technology",
         "client": "Glyphs App — Georg & Rainer",
