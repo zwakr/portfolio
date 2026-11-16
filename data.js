@@ -23,78 +23,6 @@ window.PORTFOLIO_DATA = {
   ],
   "projects": [
     {
-      "id": "proj_016",
-      "type": "image",
-      "layout": "col-6",
-      "aspectRatio": "aspect-auto",
-      "media": "gif lnfa motion design reveal.gif",
-      "title": "45 Degrés",
-      "category": "direction",
-      "link": "project-detail.html?id=proj_016",
-      "textContent": "",
-      "detail": {
-        "template": "glyphs-case-study",
-        "caseStudyNo": "Case Study No. 04",
-        "title": "45 Degrés",
-        "subtitle": "Brand Identity & strategy",
-        "partner": "Designed in partnership with Matteo Bologna of Mucca",
-        "websiteUrl": "http://glyphsapp.com",
-        "websiteLabel": "Visit the Glyphs website here",
-        "brief": "La Ligue Nationale de Football Amateur (LNFA) joue un rôle important dans le football marocain, mais son identité visuelle manquait de modernité et de cohérence. L’objectif de ce projet de fin d’études était de repenser son image pour mieux représenter la passion, la diversité et le dynamisme du football amateur au Maroc.",
-        "solution": "Créer une nouvelle identité visuelle forte et cohérente, avec un logo repensé, une palette de couleurs, une typographie et un univers graphique distinctif. Le projet se décline sur différents supports de communication afin de donner à la LNFA une image plus moderne, dynamique et reconnaissable.",
-        "role": "Design & creative direction",
-        "discipline": "Identity, Technology",
-        "client": "Glyphs App — Georg & Rainer",
-        "year": "November 2020",
-        "pressBadges": [
-          "Brand New",
-          "The Brand Identity",
-          "Mindsparkle",
-          "Httpster"
-        ],
-        "specs": [
-          {
-            "label": "Role",
-            "val": "Design & creative direction"
-          },
-          {
-            "label": "Field",
-            "val": "Identity, Technology"
-          },
-          {
-            "label": "Typefaces",
-            "val": "ABC Arizona VF by ABC Dinamo"
-          },
-          {
-            "label": "Development",
-            "val": "Chris Corby"
-          },
-          {
-            "label": "Special Thanks",
-            "val": "Georg & Rainer, Fabian & Johannes"
-          },
-          {
-            "label": "Published",
-            "val": "November 2020"
-          }
-        ],
-        "blocks": [
-          {
-            "id": "blk_1794867386901",
-            "type": "full-media",
-            "media": "gif lnfa motion design reveal.gif",
-            "mediaType": "image",
-            "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
-          },
-          {
-            "id": "blk_1794867386902",
-            "type": "narrative",
-            "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
-          }
-        ]
-      }
-    },
-    {
       "id": "proj_1790374376519",
       "type": "image",
       "layout": "col-6",
@@ -144,54 +72,12 @@ window.PORTFOLIO_DATA = {
       "link": "project-detail.html?id=proj_021",
       "textContent": "",
       "detail": {
-        "template": "case-study-45degres",
-        "caseStudyNo": "Case Study No. 02",
-        "title": "45 DEGRÉS",
+        "title": "45 Degrés",
         "subtitle": "Exploration Visuelle &amp; Recherche en Direction Artistique — Construction d’un langage graphique fondé sur la géométrie oblique et le contraste spatial.",
-        "partner": "Direction Artistique &amp; Typographie — Studio <strong style=\"font-weight:600;\">Zakaria Bait</strong>",
-        "websiteUrl": "#",
-        "websiteLabel": "Voir l'étude &amp; les déclinaisons",
         "discipline": "Direction Artistique, Exploration 3D, Typographie",
         "year": "2026",
         "client": "Marrakech — Projet Studio",
-        "role": "Direction Artistique &amp; Typographie",
-        "pressBadges": [
-          "Swiss Graphic Awards",
-          "Type Directors Club",
-          "It's Nice That",
-          "Brand New",
-          "Étapes: Magazine"
-        ],
-        "specs": [
-          {
-            "label": "Role",
-            "val": "Direction Artistique & Typographie"
-          },
-          {
-            "label": "Field",
-            "val": "Identité Visuelle, Typographie, Affiche"
-          },
-          {
-            "label": "Geometry",
-            "val": "45.00° Oblique Grid System"
-          },
-          {
-            "label": "Typefaces",
-            "val": "Monument Extended & Satoshi"
-          },
-          {
-            "label": "Format",
-            "val": "B1 Poster (700 × 1000 mm) & 4K Digital"
-          },
-          {
-            "label": "Client",
-            "val": "Marrakech — Projet Studio"
-          },
-          {
-            "label": "Published",
-            "val": "2026"
-          }
-        ],
+        "role": "Direction Artistique &amp; Design",
         "brief": "Comment réinventer la rigueur de la grille suisse traditionnelle en introduisant une rupture angulaire radicale ? L’objectif était d’expérimenter la géométrie oblique à 45° comme vecteur d’énergie et de tension spatiale à travers le design éditorial et le mouvement.",
         "solution": "Un système graphique fondé sur un dialogue audacieux entre typographie monumentale, surfaces texturales brutes et cadrages asymétriques. Le langage modulaire se décline à la fois en affiches éditoriales grand format, en séquences motion design et en modélisations 3D sculpturales.",
         "blocks": [
