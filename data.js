@@ -35,7 +35,7 @@ window.PORTFOLIO_DATA = {
       "detail": {
         "template": "glyphs-case-study",
         "caseStudyNo": "Case Study No. 04",
-        "title": "016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.",
+        "title": "45 Degrés",
         "subtitle": "Brand Identity & strategy",
         "partner": "Designed in partnership with Matteo Bologna of Mucca",
         "websiteUrl": "http://glyphsapp.com",
