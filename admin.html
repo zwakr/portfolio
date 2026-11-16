@@ -1024,6 +1024,9 @@
       if (sectionId === 'detail-page') {
         populateDetailProjectPicker();
       }
+      if (sectionId === 'info') {
+        populateInfoFields();
+      }
     }
 
     // ==========================================
@@ -2335,26 +2338,50 @@
     }
 
     function syncInfoInputs() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value : null;
+      };
+
+      const frProfil = getVal('info-fr-profil');
+      if (frProfil === null) return; // Les champs ne sont pas présents dans le DOM
+
+      if (!state.info) state.info = {};
+
       if (!state.info.fr) state.info.fr = {};
-      state.info.fr.profil = document.getElementById('info-fr-profil').value;
-      state.info.fr.approche = document.getElementById('info-fr-approche').value;
-      state.info.fr.cvExp = document.getElementById('info-fr-cvexp').value;
-      state.info.fr.cvEdu = document.getElementById('info-fr-cvedu').value;
-      state.info.fr.contact = document.getElementById('info-fr-contact').value;
+      if (frProfil !== null) state.info.fr.profil = frProfil;
+      const frApp = getVal('info-fr-approche');
+      if (frApp !== null) state.info.fr.approche = frApp;
+      const frExp = getVal('info-fr-cvexp');
+      if (frExp !== null) state.info.fr.cvExp = frExp;
+      const frEdu = getVal('info-fr-cvedu');
+      if (frEdu !== null) state.info.fr.cvEdu = frEdu;
+      const frCont = getVal('info-fr-contact');
+      if (frCont !== null) state.info.fr.contact = frCont;
 
       if (!state.info.en) state.info.en = {};
-      state.info.en.profil = document.getElementById('info-en-profil').value;
-      state.info.en.approche = document.getElementById('info-en-approche').value;
-      state.info.en.cvExp = document.getElementById('info-en-cvexp').value;
-      state.info.en.cvEdu = document.getElementById('info-en-cvedu').value;
-      state.info.en.contact = document.getElementById('info-en-contact').value;
+      const enProf = getVal('info-en-profil');
+      if (enProf !== null) state.info.en.profil = enProf;
+      const enApp = getVal('info-en-approche');
+      if (enApp !== null) state.info.en.approche = enApp;
+      const enExp = getVal('info-en-cvexp');
+      if (enExp !== null) state.info.en.cvExp = enExp;
+      const enEdu = getVal('info-en-cvedu');
+      if (enEdu !== null) state.info.en.cvEdu = enEdu;
+      const enCont = getVal('info-en-contact');
+      if (enCont !== null) state.info.en.contact = enCont;
 
       if (!state.info.ar) state.info.ar = {};
-      state.info.ar.profil = document.getElementById('info-ar-profil').value;
-      state.info.ar.approche = document.getElementById('info-ar-approche').value;
-      state.info.ar.cvExp = document.getElementById('info-ar-cvexp').value;
-      state.info.ar.cvEdu = document.getElementById('info-ar-cvedu').value;
-      state.info.ar.contact = document.getElementById('info-ar-contact').value;
+      const arProf = getVal('info-ar-profil');
+      if (arProf !== null) state.info.ar.profil = arProf;
+      const arApp = getVal('info-ar-approche');
+      if (arApp !== null) state.info.ar.approche = arApp;
+      const arExp = getVal('info-ar-cvexp');
+      if (arExp !== null) state.info.ar.cvExp = arExp;
+      const arEdu = getVal('info-ar-cvedu');
+      if (arEdu !== null) state.info.ar.cvEdu = arEdu;
+      const arCont = getVal('info-ar-contact');
+      if (arCont !== null) state.info.ar.contact = arCont;
     }
 
     function fileToBase64(file) {

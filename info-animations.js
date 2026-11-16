@@ -61,14 +61,14 @@
     // Micro-glissement doux et fondu pour révéler la nouvelle langue
     gsap.fromTo(units, 
       { 
-        opacity: 0, 
-        y: 10 
+        opacity: 0.15, 
+        y: 6 
       }, 
       { 
         opacity: 1, 
         y: 0, 
-        duration: 1.8, 
-        stagger: 0.04, 
+        duration: 0.35, 
+        stagger: 0.02, 
         ease: "power2.out",
         overwrite: "auto"
       }

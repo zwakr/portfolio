@@ -288,28 +288,47 @@
 
   function getMergedContent() {
     let content = JSON.parse(JSON.stringify(siteContent));
+
+    const isCorrupted = (obj) => {
+      if (!obj) return false;
+      const str = typeof obj === 'string' ? obj : JSON.stringify(obj);
+      return str.includes('section-title') || str.includes('project-block') || str.includes('expertise-item');
+    };
+
     // 1. Données synchronisées depuis data.js
     if (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.info) {
       ['fr', 'en', 'ar'].forEach(lang => {
-        if (window.PORTFOLIO_DATA.info[lang]) {
-          content[lang] = Object.assign({}, content[lang], window.PORTFOLIO_DATA.info[lang]);
+        const src = window.PORTFOLIO_DATA.info[lang];
+        if (src && !isCorrupted(src)) {
+          Object.keys(src).forEach(k => {
+            if (src[k] && typeof src[k] === 'string' && src[k].trim() !== '') {
+              content[lang][k] = src[k];
+            }
+          });
         }
       });
     }
-    // 2. Priorité absolue au brouillon CMS en direct (localStorage)
+
+    // 2. Brouillon CMS en direct (localStorage)
     try {
       const draft = localStorage.getItem('portfolio_cms_draft');
       if (draft) {
         const parsed = JSON.parse(draft);
         if (parsed && parsed.info) {
           ['fr', 'en', 'ar'].forEach(lang => {
-            if (parsed.info[lang]) {
-              content[lang] = Object.assign({}, content[lang], parsed.info[lang]);
+            const src = parsed.info[lang];
+            if (src && !isCorrupted(src)) {
+              Object.keys(src).forEach(k => {
+                if (src[k] && typeof src[k] === 'string' && src[k].trim() !== '') {
+                  content[lang][k] = src[k];
+                }
+              });
             }
           });
         }
       }
     } catch(e) {}
+
     return content;
   }
 
@@ -324,17 +343,18 @@
     document.getElementById('txt-profil').innerHTML = data.profil;
     document.getElementById('txt-approche').innerHTML = data.approche;
     
-    // Ajout de la section parcours restaurée
+    // Section parcours
     document.getElementById('txt-cv-title').innerHTML = data.cvTitle;
     document.getElementById('txt-cv-exp').innerHTML = data.cvExp;
     document.getElementById('txt-cv-edu').innerHTML = data.cvEdu;
 
+    // Expertises et Projets
     document.getElementById('txt-exp-title').innerHTML = data.expTitle || '';
-    document.getElementById('txt-exp-col1').innerHTML = data.expCol1 || data.expLeft || '';
-    document.getElementById('txt-exp-col2').innerHTML = data.expCol2 || data.expRight || '';
+    document.getElementById('txt-exp-col1').innerHTML = data.expCol1 || '';
+    document.getElementById('txt-exp-col2').innerHTML = data.expCol2 || '';
     document.getElementById('txt-proj-title').innerHTML = data.projTitle || '';
-    document.getElementById('txt-proj-col1').innerHTML = data.projCol1 || data.projLeft || '';
-    document.getElementById('txt-proj-col2').innerHTML = data.projCol2 || data.projRight || '';
+    document.getElementById('txt-proj-col1').innerHTML = data.projCol1 || '';
+    document.getElementById('txt-proj-col2').innerHTML = data.projCol2 || '';
     document.getElementById('txt-caption').innerHTML = data.caption || '';
 
     // Gestion du sens de lecture (RTL pour l'arabe, LTR sinon)
