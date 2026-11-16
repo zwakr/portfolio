@@ -40,7 +40,7 @@ window.PORTFOLIO_DATA = {
         "partner": "Designed in partnership with Matteo Bologna of Mucca",
         "websiteUrl": "http://glyphsapp.com",
         "websiteLabel": "Visit the Glyphs website here",
-        "brief": "Glyphs App is a Mac font editor and a project of type designers and software developers Georg Seifert and Rainer Erich Scheichelbauer. For the 2020 launch of their highly anticipated Glyphs 3, Georg & Rainer were looking to relaunch their website and brand identity in order to better communicate what Glyphs does and bring new energy to the release.",
+        "brief": "La Ligue Nationale de Football Amateur (LNFA) joue un rôle important dans le football marocain, mais son identité visuelle manquait de modernité et de cohérence. L’objectif de ce projet de fin d’études était de repenser son image pour mieux représenter la passion, la diversité et le dynamisme du football amateur au Maroc.",
         "solution": "The new website centers itself in the community that surrounds Glyphs, simplifying the architecture for ease of navigation, enhancing access to Tutorials and resources and showcasing type designers’ projects in a dynamic way. The website uses a single Variable font by ABC Dinamo, drawn and developed entirely within Glyphs. The logo and identity simplify and reimagine the app, giving the entirety of the focus on the content itself: the typographic expression made possible with Glyphs.",
         "role": "Design & creative direction",
         "discipline": "Identity, Technology",
@@ -78,7 +78,20 @@ window.PORTFOLIO_DATA = {
             "val": "November 2020"
           }
         ],
-        "blocks": []
+        "blocks": [
+          {
+            "id": "blk_1794867386901",
+            "type": "full-media",
+            "media": "gif lnfa motion design reveal.gif",
+            "mediaType": "image",
+            "caption": "01 / 01    016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor."
+          },
+          {
+            "id": "blk_1794867386902",
+            "type": "narrative",
+            "text": "Le projet <b>016 TEST CAPTION, Lorem ipsum dolar sit amet sed a suscipit tortor.</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
+          }
+        ]
       }
     },
     {
