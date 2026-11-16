@@ -85,10 +85,10 @@ window.PORTFOLIO_DATA = {
       "id": "proj_1790374376519",
       "type": "image",
       "layout": "col-6",
-      "aspectRatio": "aspect-auto",
-      "media": "",
-      "title": "NOUVEAU PROJET",
-      "category": "branding",
+      "aspectRatio": "aspect-1-1",
+      "media": "Artboard 1@2x.png",
+      "title": "VIVALDI",
+      "category": "direction",
       "link": "project-detail.html?id=proj_1790374376519",
       "subtitle": "Direction Artistique & Exploration Graphique",
       "year": "2026",
@@ -96,7 +96,7 @@ window.PORTFOLIO_DATA = {
       "narrative": "",
       "openInNewTab": false,
       "detail": {
-        "title": "NOUVEAU PROJET",
+        "title": "VIVALDI",
         "subtitle": "Direction Artistique & Exploration Graphique",
         "discipline": "Direction Artistique, Design",
         "year": "2026",
@@ -105,7 +105,7 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_1790374376519",
             "type": "full-media",
-            "media": "",
+            "media": "Artboard 1@2x.png",
             "mediaType": "image",
             "caption": "01 / 01    NOUVEAU PROJET"
           },
@@ -114,7 +114,10 @@ window.PORTFOLIO_DATA = {
             "type": "narrative",
             "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
           }
-        ]
+        ],
+        "role": "Direction Artistique & Design",
+        "brief": "",
+        "solution": ""
       }
     },
     {
