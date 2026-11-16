@@ -28,7 +28,7 @@ window.PORTFOLIO_DATA = {
       "layout": "col-6",
       "aspectRatio": "aspect-1-1",
       "media": "Artboard 1@2x.png",
-      "title": "NOUVEAU PROJET",
+      "title": "VIVALDI",
       "category": "direction",
       "link": "project-detail.html?id=proj_1790374376519",
       "subtitle": "Direction Artistique & Exploration Graphique",
@@ -37,7 +37,7 @@ window.PORTFOLIO_DATA = {
       "narrative": "",
       "openInNewTab": false,
       "detail": {
-        "title": "NOUVEAU PROJET",
+        "title": "VIVALDI",
         "subtitle": "Direction Artistique & Exploration Graphique",
         "discipline": "Direction Artistique, Design",
         "year": "2026",
