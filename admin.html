@@ -2370,21 +2370,35 @@
       });
     }
 
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
     async function uploadMediaFileToGitHub(token, file) {
       if (file.size > 25 * 1024 * 1024) {
         throw new Error(`Le fichier "${file.name}" dépasse 25 Mo (${(file.size / (1024*1024)).toFixed(1)} Mo). Veuillez le compresser avant de l'ajouter.`);
       }
 
+      const cleanToken = (token || '').trim();
       const owner = "zwakr";
       const repo = "portfolio";
-      const path = file.name;
+      const encodedPath = file.name.split('/').map(encodeURIComponent).join('/');
       
       const base64Content = await fileToBase64(file);
       
       let sha;
       try {
-        const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
+        const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?t=${Date.now()}`, {
+          headers: { 
+            'Authorization': `Bearer ${cleanToken}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
         });
         if (getRes.ok) {
           const fileData = await getRes.json();
@@ -2398,11 +2412,12 @@
       };
       if (sha) bodyData.sha = sha;
 
-      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+      const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${cleanToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
         },
         body: JSON.stringify(bodyData)
       });
@@ -2611,12 +2626,21 @@
         }
       } catch(e) {
         console.error("Échec GitHub API :", e);
-        if (e.message === 'TOKEN_EXPIRED') {
+        const errMsg = e.message || String(e);
+        if (errMsg === 'TOKEN_EXPIRED') {
           isGitHubTokenValid = false;
           checkGitHubTokenHealth();
           if (!isAuto) {
             openTokenModal();
             alert("🔴 Votre Clé GitHub a expiré ! Veuillez en générer une nouvelle en 1 clic pour continuer à publier sur Vercel.");
+          }
+        } else if (errMsg.includes('Failed to fetch')) {
+          if (status) {
+            status.textContent = "⚠️ Échec connexion GitHub";
+            status.className = "save-indicator unsaved";
+          }
+          if (!isAuto) {
+            alert("⚠️ Impossible de contacter GitHub (Failed to fetch).\n\n1. Vérifiez votre connexion internet.\n2. Si vous utilisez Brave ou un bloqueur de pub (Shields), vérifiez qu'il n'interdit pas l'API GitHub.\n3. Vos modifications restent enregistrées localement dans ce navigateur.");
           }
         } else {
           if (status) {
@@ -2624,7 +2648,7 @@
             status.className = "save-indicator unsaved";
           }
           if (!isAuto) {
-            alert("⚠️ Erreur lors de l'envoi sur GitHub :\n" + (e.message || e));
+            alert("⚠️ Erreur lors de l'envoi sur GitHub :\n" + errMsg);
           }
         }
       }
@@ -2634,13 +2658,13 @@
       const owner = "zwakr";
       const repo = "portfolio";
       const path = "data.js";
+      const cleanToken = (token || '').trim();
       
-      // 1. Récupération du SHA frais sans cache
+      // 1. Récupération du SHA frais (timestamp query param anti-cache)
       const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?t=${Date.now()}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache, no-store'
+          'Authorization': `Bearer ${cleanToken}`,
+          'Accept': 'application/vnd.github.v3+json'
         }
       });
 
@@ -2654,13 +2678,13 @@
       const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${cleanToken}`,
           'Content-Type': 'application/json',
           'Accept': 'application/vnd.github.v3+json'
         },
         body: JSON.stringify({
           message: "Mise à jour portfolio via CMS [publication directe]",
-          content: btoa(unescape(encodeURIComponent(content))),
+          content: utf8ToBase64(content),
           sha: fileData.sha
         })
       });
