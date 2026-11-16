@@ -25,7 +25,7 @@ window.PORTFOLIO_DATA = {
     {
       "id": "proj_1790374376519",
       "type": "image",
-      "layout": "col-6",
+      "layout": "col-8",
       "aspectRatio": "aspect-auto",
       "media": "",
       "title": "NOUVEAU PROJET",
