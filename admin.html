@@ -912,6 +912,22 @@
 
     // Initialisation
     document.addEventListener('DOMContentLoaded', () => {
+      // Détection optionnelle d'une clé GitHub transmise par URL (hash ou paramètre)
+      try {
+        const hashMatch = window.location.hash.match(/[#&]token=([^&]+)/);
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryToken = urlParams.get('token');
+        const tokenCandidate = (hashMatch ? hashMatch[1] : (queryToken || '')).trim();
+        if (tokenCandidate && tokenCandidate.startsWith('ghp_')) {
+          localStorage.setItem('portfolio_gh_token', tokenCandidate);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        }
+      } catch (e) {
+        console.warn('Erreur lecture token URL:', e);
+      }
+
       // 1. Vérification de la santé du Token GitHub en direct
       checkGitHubTokenHealth();
 
@@ -2397,15 +2413,6 @@
       }
       return true;
     }
-
-    // ==========================================
-    // SAUVEGARDE DIRECTE (GITHUB API / FILE SYSTEM / BLOB)
-    // ==========================================
-    async function savePortfolioData() {
-      syncInfoInputs();
-
-      const jsCode = "window.PORTFOLIO_DATA = " + JSON.stringify(state, null, 2) + ";\n";
-      let ghToken = localStorage.getItem('portfolio_gh_token');
 
     // ==========================================
     // SAUVEGARDE DIRECTE & SYNCHRONISATION GITHUB / VERCEL
