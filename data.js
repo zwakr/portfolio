@@ -54,11 +54,6 @@ window.PORTFOLIO_DATA = {
             "id": "blk_1790374376520",
             "type": "narrative",
             "text": "Le projet <b>NOUVEAU PROJET</b> explore l'identité visuelle et le langage graphique à travers une direction artistique soignée."
-          },
-          {
-            "id": "blk_1794915398209",
-            "type": "narrative",
-            "text": ""
           }
         ],
         "role": "Direction Artistique & Design",
