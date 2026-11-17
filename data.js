@@ -66,7 +66,7 @@ window.PORTFOLIO_DATA = {
       "type": "image",
       "layout": "col-6",
       "aspectRatio": "aspect-auto",
-      "media": "poster_45_degres_01.svg",
+      "media": "banner copie.png",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
       "category": "direction",
       "link": "project-detail.html?id=proj_021",
@@ -84,7 +84,7 @@ window.PORTFOLIO_DATA = {
           {
             "id": "blk_1",
             "type": "full-media",
-            "media": "poster_45_degres_01.svg",
+            "media": "banner copie.png",
             "mediaType": "image",
             "caption": "01 / 05 &nbsp; &nbsp;Affiche principale 45° : Déconstruction géométrique et grille oblique"
           },
