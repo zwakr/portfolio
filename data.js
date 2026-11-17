@@ -65,7 +65,7 @@ window.PORTFOLIO_DATA = {
       "id": "proj_021",
       "type": "image",
       "layout": "col-6",
-      "aspectRatio": "aspect-auto",
+      "aspectRatio": "aspect-16-9",
       "media": "banner copie.png",
       "title": "021 &nbsp; &nbsp;45 DEGRÉS, Direction Artistique & Typographie.",
       "category": "direction",
