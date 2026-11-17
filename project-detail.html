@@ -264,6 +264,27 @@
       border-radius: 0px;
     }
 
+    .video-embed-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      background: #000000;
+      border: 1px solid var(--cs-hairline-dark, #27272a);
+    }
+
+    .video-embed-wrapper iframe,
+    .video-embed-wrapper object,
+    .video-embed-wrapper embed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+    }
+
     figcaption {
       margin-top: 0.55rem;
       font-family: 'Satoshi', sans-serif;
@@ -1016,7 +1037,9 @@
       // SI LE PROJET CONTIENT DES BLOCS MODULAIRES ÉDITÉS DANS LE CMS
       if (Array.isArray(detail.blocks) && detail.blocks.length > 0) {
         detail.blocks.forEach((block, idx) => {
-          if (block.type === 'full-media') {
+          if (block.type === 'vimeo-embed' || block.type === 'embed') {
+            flow.appendChild(createEmbedElement(block, idx));
+          } else if (block.type === 'full-media') {
             flow.appendChild(createFullMediaElement(block, idx));
           } else if (block.type === 'editorial-duo') {
             flow.appendChild(createEditorialDuoElement(block));
@@ -1037,13 +1060,20 @@
         });
       } else {
         // MODE PAR DÉFAUT TRABUC (Si le projet n'a pas encore de blocs personnalisés)
-        const mainMedia = project.media || project.image || '';
-        const isVideo = project.type === 'video';
+        if (detail.embedCode && detail.embedCode.trim()) {
+          const embedFig = document.createElement('figure');
+          embedFig.className = 'media-full';
+          embedFig.innerHTML = formatVimeoEmbedHtml(detail.embedCode, rawTitle);
+          flow.appendChild(embedFig);
+        } else {
+          const mainMedia = project.media || project.image || '';
+          const isVideo = project.type === 'video';
 
-        const heroFig = document.createElement('figure');
-        heroFig.className = 'media-full';
-        heroFig.innerHTML = renderMediaHtml(mainMedia, isVideo, rawTitle, '01 / 01 &nbsp; &nbsp; ' + rawTitle);
-        flow.appendChild(heroFig);
+          const heroFig = document.createElement('figure');
+          heroFig.className = 'media-full';
+          heroFig.innerHTML = renderMediaHtml(mainMedia, isVideo, rawTitle, '01 / 01 &nbsp; &nbsp; ' + rawTitle);
+          flow.appendChild(heroFig);
+        }
 
         const narrativeText = project.narrative || project.textContent || `Le projet <b>${rawTitle}</b> explore la stratégie visuelle et l'identité de marque à travers un langage graphique singulier et précis, articulé autour de la composition et du contraste typographique.`;
         const narrativeDiv = document.createElement('div');
@@ -1077,8 +1107,76 @@
     });
 
     // Fonctions d'aide pour générer les blocs HTML Trabuc Style
+    function isEmbedMedia(src, type) {
+      if (type === 'embed') return true;
+      if (typeof src === 'string') {
+        const s = src.trim();
+        return s.includes('<iframe') || s.includes('vimeo.com') || s.includes('youtube.com') || s.includes('youtu.be');
+      }
+      return false;
+    }
+
+    function formatVimeoEmbedHtml(input, caption = '') {
+      if (!input || !input.trim()) return '';
+      const trimmed = input.trim();
+      let iframeHtml = '';
+
+      // Cas 1 : Code Iframe complet
+      if (trimmed.includes('<iframe')) {
+        let clean = trimmed;
+        if (!clean.includes('style=')) {
+          clean = clean.replace('<iframe', '<iframe style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"');
+        } else {
+          clean = clean.replace(/style="([^"]*)"/, 'style="$1; position:absolute; top:0; left:0; width:100%; height:100%; border:0;"');
+        }
+        iframeHtml = clean;
+      }
+      // Cas 2 : Lien ou ID Vimeo
+      else if (trimmed.includes('player.vimeo.com')) {
+        iframeHtml = `<iframe src="${trimmed}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      }
+      else if (trimmed.includes('vimeo.com')) {
+        const vimeoMatch = trimmed.match(/vimeo\.com\/(?:.*\/)?(\d+)(?:\/([a-zA-Z0-9]+))?(?:\?h=([a-zA-Z0-9]+))?/);
+        if (vimeoMatch) {
+          const vidId = vimeoMatch[1];
+          const hashVal = vimeoMatch[2] || vimeoMatch[3];
+          const hashParam = hashVal ? `?h=${hashVal}` : '';
+          const sep = hashParam ? '&' : '?';
+          iframeHtml = `<iframe src="https://player.vimeo.com/video/${vidId}${hashParam}${sep}color=22c55e&title=0&byline=0&portrait=0" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+          iframeHtml = `<iframe src="${trimmed}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        }
+      }
+      // Cas 3 : Lien YouTube
+      else if (trimmed.includes('youtube.com') || trimmed.includes('youtu.be')) {
+        const ytMatch = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        if (ytMatch) {
+          iframeHtml = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+          iframeHtml = `<iframe src="${trimmed}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allowfullscreen></iframe>`;
+        }
+      }
+      // Cas 4 : Identifiant numérique seul
+      else if (/^\d+$/.test(trimmed)) {
+        iframeHtml = `<iframe src="https://player.vimeo.com/video/${trimmed}?color=22c55e&title=0&byline=0&portrait=0" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      }
+      else {
+        iframeHtml = trimmed;
+      }
+
+      return `
+        <div class="video-embed-wrapper" style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; background:#000000; border:1px solid #27272a; width:100%;">
+          ${iframeHtml}
+        </div>
+        ${caption ? `<figcaption style="margin-top:0.75rem; font-family:'Satoshi',monospace; font-size:11px; color:#71717a;">${caption}</figcaption>` : ''}
+      `;
+    }
+
     function renderMediaHtml(src, isVideo, alt, caption) {
-      const isVid = isVideo || (typeof src === 'string' && src.match(/\.(mp4|webm|mov)$/i));
+      if (isEmbedMedia(src, isVideo)) {
+        return formatVimeoEmbedHtml(src, caption);
+      }
+      const isVid = isVideo === 'video' || isVideo === true || (typeof src === 'string' && src.match(/\.(mp4|webm|mov)$/i));
       let mediaTag = '';
       if (isVid) {
         mediaTag = src 
@@ -1095,18 +1193,32 @@
     function createFullMediaElement(block, idx) {
       const fig = document.createElement('figure');
       fig.className = 'media-full';
-      fig.innerHTML = renderMediaHtml(block.media, block.mediaType === 'video', 'Visuel', block.caption);
+      if (block.type === 'vimeo-embed' || block.type === 'embed' || block.mediaType === 'embed' || block.embedCode || isEmbedMedia(block.media, block.mediaType)) {
+        fig.innerHTML = formatVimeoEmbedHtml(block.embedCode || block.media, block.caption);
+      } else {
+        fig.innerHTML = renderMediaHtml(block.media, block.mediaType === 'video', 'Visuel', block.caption);
+      }
+      return fig;
+    }
+
+    function createEmbedElement(block, idx) {
+      const fig = document.createElement('figure');
+      fig.className = 'media-full';
+      fig.innerHTML = formatVimeoEmbedHtml(block.embedCode || block.media, block.caption);
       return fig;
     }
 
     function createEditorialDuoElement(block) {
       const div = document.createElement('div');
       div.className = `trabuc-duo ${block.reverse ? 'reversed' : ''}`;
+      const isEmbed = block.mediaType === 'embed' || block.embedCode || isEmbedMedia(block.media, block.mediaType);
+      const mediaHtml = isEmbed
+        ? formatVimeoEmbedHtml(block.embedCode || block.media, block.caption)
+        : `<figure>${renderMediaHtml(block.media, block.mediaType === 'video', block.title, block.caption)}</figure>`;
+
       div.innerHTML = `
         <div class="trabuc-duo-media">
-          <figure>
-            ${renderMediaHtml(block.media, block.mediaType === 'video', block.title, block.caption)}
-          </figure>
+          ${mediaHtml}
         </div>
         <div class="trabuc-duo-text">
           ${block.title ? `<h2>${block.title}</h2>` : ''}
@@ -1422,19 +1534,24 @@
             </div>
           </section>
 
-          <!-- Section 7: Full Video Loop Showcase -->
+          <!-- Section 7: Full Video Loop Showcase (Vimeo Embed ou MP4) -->
           <section class="cs-section">
             <figure style="margin:0; width:100%;">
-              <div style="position:relative; background:#000000; border:1px solid var(--cs-hairline-dark); overflow:hidden;">
-                <video src="video_404.mp4" autoplay loop muted playsinline style="width:100%; height:auto; display:block; max-height:85vh; object-fit:contain; margin:auto;"></video>
-                <div style="position:absolute; top:1rem; right:1rem; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15); padding:0.35rem 0.85rem; font-family:'Satoshi',monospace; font-size:10.5px; color:var(--cs-green); display:flex; align-items:center; gap:0.5rem;">
-                  <span class="cs-pulse-dot" style="width:6px; height:6px;"></span>
-                  <span>4K CINEMATIC LOOP</span>
+              ${(detail.embedCode && detail.embedCode.trim())
+                ? formatVimeoEmbedHtml(detail.embedCode, "05 / 05 &nbsp; &nbsp; Déploiement vidéo Vimeo")
+                : `
+                <div style="position:relative; background:#000000; border:1px solid var(--cs-hairline-dark); overflow:hidden;">
+                  <video src="video_404.mp4" autoplay loop muted playsinline style="width:100%; height:auto; display:block; max-height:85vh; object-fit:contain; margin:auto;"></video>
+                  <div style="position:absolute; top:1rem; right:1rem; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15); padding:0.35rem 0.85rem; font-family:'Satoshi',monospace; font-size:10.5px; color:var(--cs-green); display:flex; align-items:center; gap:0.5rem;">
+                    <span class="cs-pulse-dot" style="width:6px; height:6px;"></span>
+                    <span>4K CINEMATIC LOOP</span>
+                  </div>
                 </div>
-              </div>
-              <figcaption style="margin-top:0.85rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
-                05 / 05 &nbsp; &nbsp; Déploiement vidéo cinématique en boucle continue — Déclinaison grand format
-              </figcaption>
+                <figcaption style="margin-top:0.85rem; font-family:'Satoshi',monospace; font-size:11px; color:var(--cs-text-muted);">
+                  05 / 05 &nbsp; &nbsp; Déploiement vidéo cinématique en boucle continue — Déclinaison grand format
+                </figcaption>
+                `
+              }
             </figure>
           </section>
 

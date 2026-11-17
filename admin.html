@@ -788,6 +788,22 @@
           <label>Solution éditoriale (Style Trabuc.co)</label>
           <textarea id="dp-solution" oninput="updateDetailHeader('solution', this.value)" onchange="updateDetailHeader('solution', this.value)" style="min-height:80px;" placeholder="Démarche créative, solution typographique et direction artistique..."></textarea>
         </div>
+
+        <!-- Encart Code Embed / Vidéo Vimeo Principale -->
+        <div class="form-group col-span-12" style="background:#f8f9fb; border:1.5px solid #dcdce8; border-radius:8px; padding:1.1rem; margin-top:0.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.5rem;">
+            <label style="font-weight:800; font-size:12.5px; color:#1a1b22; display:flex; align-items:center; gap:0.5rem; margin:0;">
+              <span>🎥 Vidéo Vimeo Principale / Code Embed</span>
+              <span style="font-size:10px; background:#0070f3; color:#fff; padding:2px 7px; border-radius:3px; text-transform:uppercase; font-weight:700;">Vimeo &bull; Iframe</span>
+            </label>
+            <span style="font-size:11px; color:var(--text-muted);">Optionnel : pour afficher votre lecteur Vimeo en haut ou dans le projet</span>
+          </div>
+          <p style="font-size:11.5px; color:#555; margin:0 0 0.6rem 0; line-height:1.45;">
+            Collez ici votre <b>code embed iframe Vimeo</b> (ex: <code>&lt;iframe src="https://player.vimeo.com/video/..." ...&gt;&lt;/iframe&gt;</code>) ou simplement le <b>lien direct Vimeo</b> (ex: <code>https://vimeo.com/123456789</code>).
+          </p>
+          <textarea id="dp-embed" oninput="updateDetailHeader('embedCode', this.value); renderDetailEmbedPreview(this.value);" onchange="updateDetailHeader('embedCode', this.value); renderDetailEmbedPreview(this.value);" style="min-height:75px; font-family:monospace; font-size:11.5px; width:100%; border:1.5px solid #ccc; border-radius:6px; padding:0.6rem;" placeholder='<iframe src="https://player.vimeo.com/video/123456789?h=abcd1234ef" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>'></textarea>
+          <div id="dp-embed-preview" style="margin-top:0.85rem;"></div>
+        </div>
       </div>
     </div>
 
@@ -829,6 +845,7 @@
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media', 'image')">🖼️ + Grande Image (100%)</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('full-media', 'video')">🎬 + Grande Vidéo MP4 (100%)</button>
+          <button class="btn btn-sm btn-outline" style="border-color:#0070f3; color:#0070f3; font-weight:700;" onclick="addDetailBlock('vimeo-embed')">🎥 + Vidéo Vimeo / Embed Code</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('editorial-duo')">📖 + Duo Éditorial Trabuc</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('offset-narrative')">💬 + Encart Typo Asymétrique</button>
           <button class="btn btn-sm btn-outline" onclick="addDetailBlock('grid-2')">👥 + Duo 2 Colonnes</button>
@@ -1413,8 +1430,68 @@
       });
     }
 
+    function getRawIframeHtml(input) {
+      if (!input || !input.trim()) return '';
+      const trimmed = input.trim();
+
+      // Cas 1 : Iframe complète collée
+      if (trimmed.includes('<iframe')) {
+        let clean = trimmed;
+        if (!clean.includes('style=')) {
+          clean = clean.replace('<iframe', '<iframe style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"');
+        } else {
+          clean = clean.replace(/style="([^"]*)"/, 'style="$1; position:absolute; top:0; left:0; width:100%; height:100%; border:0;"');
+        }
+        return clean;
+      }
+
+      // Cas 2 : Lien ou ID Vimeo
+      if (trimmed.includes('player.vimeo.com')) {
+        return `<iframe src="${trimmed}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      }
+      if (trimmed.includes('vimeo.com')) {
+        const vimeoMatch = trimmed.match(/vimeo\.com\/(?:.*\/)?(\d+)(?:\/([a-zA-Z0-9]+))?(?:\?h=([a-zA-Z0-9]+))?/);
+        if (vimeoMatch) {
+          const vidId = vimeoMatch[1];
+          const hashVal = vimeoMatch[2] || vimeoMatch[3];
+          const hashParam = hashVal ? `?h=${hashVal}` : '';
+          const sep = hashParam ? '&' : '?';
+          return `<iframe src="https://player.vimeo.com/video/${vidId}${hashParam}${sep}color=22c55e&title=0&byline=0&portrait=0" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+          return `<iframe src="${trimmed}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        }
+      }
+
+      // Cas 3 : Lien YouTube
+      const ytMatch = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      if (ytMatch) {
+        return `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      }
+
+      // Cas 4 : Identifiant numérique seul
+      if (/^\d+$/.test(trimmed)) {
+        return `<iframe src="https://player.vimeo.com/video/${trimmed}?color=22c55e&title=0&byline=0&portrait=0" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      }
+
+      return trimmed;
+    }
+
+    function getEmbedPreviewHtml(input) {
+      if (!input || !input.trim()) {
+        return '<div style="padding:1.5rem; text-align:center; color:#888; font-size:11.5px;">Collez votre code embed Vimeo pour prévisualiser le lecteur vidéo ici</div>';
+      }
+      return `
+        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; background:#000;">
+          ${getRawIframeHtml(input)}
+        </div>
+      `;
+    }
+
     function getPreviewHTML(media, type) {
       if (!media) return '<span style="color:#777; font-size:12px;">Aucun média spécifié</span>';
+      if (type === 'embed' || (typeof media === 'string' && (media.includes('<iframe') || media.includes('vimeo.com')))) {
+        return getEmbedPreviewHtml(media);
+      }
       const actualSrc = uploadedMediaFiles[media] || media;
       const isVid = (type === 'video') || (typeof media === 'string' && media.match(/\.(mp4|webm|mov)$/i));
       if (isVid) {
@@ -1864,8 +1941,48 @@
       const solutionEl = document.getElementById('dp-solution');
       if (solutionEl) solutionEl.value = proj.detail.solution || '';
 
+      const embedEl = document.getElementById('dp-embed');
+      if (embedEl) {
+        embedEl.value = proj.detail.embedCode || '';
+        renderDetailEmbedPreview(proj.detail.embedCode || '');
+      }
+
       renderDetailMediaGallery();
       renderDetailBlocksList(proj);
+    }
+
+    function renderDetailEmbedPreview(val) {
+      const container = document.getElementById('dp-embed-preview');
+      if (!container) return;
+      if (!val || !val.trim()) {
+        container.innerHTML = '<span style="font-size:11px; color:#888;">(Aucune vidéo Vimeo configurée en en-tête)</span>';
+        return;
+      }
+      container.innerHTML = `
+        <div style="max-width:560px; border:1px solid #ccc; border-radius:6px; overflow:hidden; background:#000;">
+          <div style="background:#222; color:#fff; font-size:10px; font-weight:700; padding:4px 8px; display:flex; justify-content:space-between; align-items:center;">
+            <span>APERÇU EN DIRECT DU LECTEUR VIMEO</span>
+            <span style="color:#22c55e;">● ACTIF</span>
+          </div>
+          <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+            ${getRawIframeHtml(val)}
+          </div>
+        </div>
+      `;
+    }
+
+    function updateBlockEmbed(idx, val) {
+      const proj = getCurrentDetailProject();
+      if (!proj || !proj.detail || !proj.detail.blocks[idx]) return;
+      proj.detail.blocks[idx].embedCode = val;
+      proj.detail.blocks[idx].media = val;
+      proj.detail.blocks[idx].mediaType = 'embed';
+      markUnsaved();
+
+      const prev = document.getElementById(`detail-prev-${idx}-embed`) || document.getElementById(`detail-prev-${idx}-media`);
+      if (prev) {
+        prev.innerHTML = getEmbedPreviewHtml(val);
+      }
     }
 
     function updateDetailHeader(field, val) {
@@ -1903,46 +2020,58 @@
         let formContent = '';
 
         if (block.type === 'full-media') {
-          const isVid = block.mediaType === 'video' || (typeof block.media === 'string' && block.media.match(/\.(mp4|webm|mov)$/i));
-          blockTitle = isVid ? '🎬 Grande Vidéo MP4 (100% Pleine largeur)' : '🖼️ Grande Image / Photo (100% Pleine largeur)';
+          const isEmbed = block.mediaType === 'embed' || (typeof block.media === 'string' && (block.media.includes('<iframe') || block.media.includes('vimeo.com')));
+          const isVid = !isEmbed && (block.mediaType === 'video' || (typeof block.media === 'string' && block.media.match(/\.(mp4|webm|mov)$/i)));
+          
+          if (isEmbed) blockTitle = '🎥 Grande Vidéo Vimeo / Embed Code (100% Pleine largeur)';
+          else if (isVid) blockTitle = '🎬 Grande Vidéo MP4 (100% Pleine largeur)';
+          else blockTitle = '🖼️ Grande Image / Photo (100% Pleine largeur)';
           
           formContent = `
             <div class="form-grid">
               <div class="form-group col-span-3">
                 <label>Type de média</label>
                 <select onchange="updateBlock(${idx}, 'mediaType', this.value); renderDetailBlocksList(getCurrentDetailProject());">
-                  <option value="image" ${!isVid ? 'selected' : ''}>📷 Image / Photo / GIF</option>
-                  <option value="video" ${isVid ? 'selected' : ''}>🎬 Vidéo (MP4/WebM)</option>
+                  <option value="image" ${(!isVid && !isEmbed) ? 'selected' : ''}>📷 Image / Photo / GIF</option>
+                  <option value="video" ${isVid ? 'selected' : ''}>🎬 Vidéo Fichier (MP4/WebM)</option>
+                  <option value="embed" ${isEmbed ? 'selected' : ''}>🎥 Vidéo Vimeo / Embed Code</option>
                 </select>
               </div>
 
-              <div class="form-group col-span-4">
-                <label>Choisir un média disponible</label>
-                <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media', this.value, 'mediaType'); }">
-                  <option value="">-- Médias disponibles --</option>
-                  ${availableMedia.map(m => `
-                    <option value="${m.name}" ${m.name === block.media ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
-                  `).join('')}
-                </select>
-              </div>
-
-              <div class="form-group col-span-5">
-                <label>Nom du fichier ou Parcourir</label>
-                <div style="display:flex; gap:0.4rem;">
-                  <input type="text" value="${block.media || ''}" oninput="updateBlockMedia(${idx}, 'media', this.value, 'mediaType')" placeholder="mon-image.jpg ou video.mp4" style="flex:1;">
-                  <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
-                    📁 Parcourir
-                    <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media', 'mediaType', this)">
-                  </label>
+              ${isEmbed ? `
+                <div class="form-group col-span-9">
+                  <label style="color:#0070f3; font-weight:700;">Code Embed Vimeo (iframe) ou Lien Vimeo direct</label>
+                  <textarea oninput="updateBlockEmbed(${idx}, this.value)" onchange="updateBlockEmbed(${idx}, this.value)" style="min-height:55px; font-family:monospace; font-size:11.5px; width:100%; border:1.5px solid #0070f3; border-radius:6px; padding:0.5rem;" placeholder='<iframe src="https://player.vimeo.com/video/..." ...></iframe> ou https://vimeo.com/123456789'>${block.embedCode || block.media || ''}</textarea>
                 </div>
-              </div>
-
-              <!-- Dropzone glisser-déposer -->
-              <div class="col-span-12">
-                <div class="media-dropzone" id="detail-dz-${idx}-media" style="min-height:75px; padding:0.6rem;">
-                  <span style="font-size:11.5px; color:#555;">📁 Glissez-déposez votre photo ou vidéo directement ici</span>
+              ` : `
+                <div class="form-group col-span-4">
+                  <label>Choisir un média disponible</label>
+                  <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media', this.value, 'mediaType'); }">
+                    <option value="">-- Médias disponibles --</option>
+                    ${availableMedia.map(m => `
+                      <option value="${m.name}" ${m.name === block.media ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
+                    `).join('')}
+                  </select>
                 </div>
-              </div>
+
+                <div class="form-group col-span-5">
+                  <label>Nom du fichier ou Parcourir</label>
+                  <div style="display:flex; gap:0.4rem;">
+                    <input type="text" value="${block.media || ''}" oninput="updateBlockMedia(${idx}, 'media', this.value, 'mediaType')" placeholder="mon-image.jpg ou video.mp4" style="flex:1;">
+                    <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
+                      📁 Parcourir
+                      <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media', 'mediaType', this)">
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Dropzone glisser-déposer -->
+                <div class="col-span-12">
+                  <div class="media-dropzone" id="detail-dz-${idx}-media" style="min-height:75px; padding:0.6rem;">
+                    <span style="font-size:11.5px; color:#555;">📁 Glissez-déposez votre photo ou vidéo directement ici</span>
+                  </div>
+                </div>
+              `}
 
               <div class="form-group col-span-7">
                 <label>Légende du média</label>
@@ -1952,7 +2081,33 @@
               <div class="form-group col-span-5">
                 <label>Aperçu en direct</label>
                 <div class="media-preview-container" id="detail-prev-${idx}-media">
-                  ${getPreviewHTML(block.media, block.mediaType)}
+                  ${isEmbed ? getEmbedPreviewHtml(block.embedCode || block.media) : getPreviewHTML(block.media, block.mediaType)}
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (block.type === 'vimeo-embed' || block.type === 'embed') {
+          blockTitle = '🎥 Vidéo Vimeo / Intégration Code Embed';
+          const currentCode = block.embedCode || block.media || '';
+          formContent = `
+            <div class="form-grid">
+              <div class="form-group col-span-12">
+                <label style="font-weight:700; color:#0070f3;">Code Embed Vimeo (iframe) ou Lien direct Vimeo</label>
+                <p style="font-size:11.5px; color:#666; margin:0.2rem 0 0.5rem 0;">
+                  Collez ici le code iframe fourni par Vimeo (<code>&lt;iframe src="https://player.vimeo.com/video/..." ...&gt;&lt;/iframe&gt;</code>) ou simplement le lien direct de la vidéo (ex: <code>https://vimeo.com/123456789</code>).
+                </p>
+                <textarea oninput="updateBlockEmbed(${idx}, this.value)" onchange="updateBlockEmbed(${idx}, this.value)" style="min-height:75px; font-family:monospace; font-size:11.5px; width:100%; border:1.5px solid #0070f3; border-radius:6px; padding:0.6rem;" placeholder='<iframe src="https://player.vimeo.com/video/123456789" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>'>${currentCode}</textarea>
+              </div>
+
+              <div class="form-group col-span-6">
+                <label>Légende sous la vidéo (Optionnelle)</label>
+                <input type="text" value="${block.caption || ''}" onchange="updateBlock(${idx}, 'caption', this.value)" placeholder="01 / 05    Déploiement vidéo cinématique">
+              </div>
+
+              <div class="form-group col-span-6">
+                <label>Aperçu du lecteur vidéo</label>
+                <div id="detail-prev-${idx}-embed" style="border:1px solid #dcdce2; border-radius:6px; overflow:hidden; background:#000; min-height:120px;">
+                  ${getEmbedPreviewHtml(currentCode)}
                 </div>
               </div>
             </div>
@@ -1966,39 +2121,50 @@
             </div>
           `;
         } else if (block.type === 'editorial-duo') {
-          const isVid = block.mediaType === 'video' || (typeof block.media === 'string' && block.media.match(/\.(mp4|webm|mov)$/i));
+          const isEmbed = block.mediaType === 'embed' || (typeof block.media === 'string' && (block.media.includes('<iframe') || block.media.includes('vimeo.com')));
+          const isVid = !isEmbed && (block.mediaType === 'video' || (typeof block.media === 'string' && block.media.match(/\.(mp4|webm|mov)$/i)));
           blockTitle = '📖 Duo Éditorial Trabuc (Média 50% + Récit 50%)';
           formContent = `
             <div class="form-grid">
               <div class="form-group col-span-6" style="background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:0.85rem;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-                  <label style="font-weight:700;">Média (Image ou Vidéo)</label>
+                  <label style="font-weight:700;">Média (Image, Vidéo ou Vimeo)</label>
                   <select onchange="updateBlock(${idx}, 'mediaType', this.value); renderDetailBlocksList(getCurrentDetailProject());" style="width:auto; font-size:11px;">
-                    <option value="image" ${!isVid ? 'selected' : ''}>📷 Image</option>
+                    <option value="image" ${(!isVid && !isEmbed) ? 'selected' : ''}>📷 Image</option>
                     <option value="video" ${isVid ? 'selected' : ''}>🎬 Vidéo</option>
+                    <option value="embed" ${isEmbed ? 'selected' : ''}>🎥 Vimeo / Embed</option>
                   </select>
                 </div>
-                <div style="margin-bottom:0.5rem;">
-                  <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media', this.value, 'mediaType'); }" style="font-size:11px;">
-                    <option value="">-- Média disponible --</option>
-                    ${availableMedia.map(m => `
-                      <option value="${m.name}" ${m.name === block.media ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
-                    `).join('')}
-                  </select>
-                </div>
-                <div style="display:flex; gap:0.4rem; margin-bottom:0.5rem;">
-                  <input type="text" value="${block.media || ''}" oninput="updateBlockMedia(${idx}, 'media', this.value, 'mediaType')" placeholder="image.jpg ou video.mp4" style="flex:1;">
-                  <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
-                    📁 Parcourir
-                    <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media', 'mediaType', this)">
-                  </label>
-                </div>
-                <div class="media-dropzone" id="detail-dz-${idx}-media" style="min-height:60px; padding:0.4rem; margin-bottom:0.5rem;">
-                  <span style="font-size:11px; color:#666;">📁 Glissez le média ici</span>
-                </div>
+
+                ${isEmbed ? `
+                  <div style="margin-bottom:0.5rem;">
+                    <label style="font-size:11px; font-weight:700; color:#0070f3;">Code Embed / Lien direct Vimeo :</label>
+                    <textarea oninput="updateBlockEmbed(${idx}, this.value)" onchange="updateBlockEmbed(${idx}, this.value)" style="min-height:55px; font-family:monospace; font-size:11px; width:100%; border:1px solid #0070f3; border-radius:4px; padding:0.4rem;" placeholder="<iframe ...> ou https://vimeo.com/...">${block.embedCode || block.media || ''}</textarea>
+                  </div>
+                ` : `
+                  <div style="margin-bottom:0.5rem;">
+                    <select onchange="if(this.value){ updateBlockMedia(${idx}, 'media', this.value, 'mediaType'); }" style="font-size:11px;">
+                      <option value="">-- Média disponible --</option>
+                      ${availableMedia.map(m => `
+                        <option value="${m.name}" ${m.name === block.media ? 'selected' : ''}>${m.type === 'video' ? '🎬' : '📷'} ${m.name}</option>
+                      `).join('')}
+                    </select>
+                  </div>
+                  <div style="display:flex; gap:0.4rem; margin-bottom:0.5rem;">
+                    <input type="text" value="${block.media || ''}" oninput="updateBlockMedia(${idx}, 'media', this.value, 'mediaType')" placeholder="image.jpg ou video.mp4" style="flex:1;">
+                    <label class="btn btn-sm btn-outline" style="cursor:pointer; display:inline-flex; align-items:center;">
+                      📁 Parcourir
+                      <input type="file" accept="image/*,video/mp4,video/webm" style="display:none;" onchange="handleBlockFileChange(${idx}, 'media', 'mediaType', this)">
+                    </label>
+                  </div>
+                  <div class="media-dropzone" id="detail-dz-${idx}-media" style="min-height:60px; padding:0.4rem; margin-bottom:0.5rem;">
+                    <span style="font-size:11px; color:#666;">📁 Glissez le média ici</span>
+                  </div>
+                `}
+
                 <input type="text" value="${block.caption || ''}" onchange="updateBlock(${idx}, 'caption', this.value)" placeholder="Légende du média">
                 <div class="media-preview-container" id="detail-prev-${idx}-media" style="margin-top:0.5rem; max-height:140px;">
-                  ${getPreviewHTML(block.media, block.mediaType)}
+                  ${isEmbed ? getEmbedPreviewHtml(block.embedCode || block.media) : getPreviewHTML(block.media, block.mediaType)}
                 </div>
               </div>
 
@@ -2274,7 +2440,13 @@
       ensureProjectDetailStructure(proj);
 
       let newBlock = { id: "blk_" + Date.now(), type: type };
-      if (type === 'full-media') {
+      if (type === 'vimeo-embed' || type === 'embed') {
+        newBlock.type = 'vimeo-embed';
+        newBlock.mediaType = 'embed';
+        newBlock.embedCode = "";
+        newBlock.media = "";
+        newBlock.caption = "";
+      } else if (type === 'full-media') {
         newBlock.media = "";
         newBlock.mediaType = mediaTypeHint || "image";
         newBlock.caption = "";
