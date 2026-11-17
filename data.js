@@ -47,7 +47,7 @@ window.PORTFOLIO_DATA = {
             "id": "blk_1790374376519",
             "type": "full-media",
             "media": "Artboard 1@2x.png",
-            "mediaType": "image",
+            "mediaType": "video",
             "caption": "01 / 01    NOUVEAU PROJET"
           },
           {
